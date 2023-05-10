@@ -4,10 +4,12 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -31,7 +33,7 @@ public class Calendar {
     @Id
     @Column(name = "SCH_CODE")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SCHEDULE_CODE_GENERATOR")
-    private int schCode;
+    private Long schCode;
 
 
     @Column(name = "SCH_TITLE")
@@ -43,16 +45,19 @@ public class Calendar {
     @Column(name = "SCH_DIV")
     private String schDiv;
 
+    @ManyToOne(fetch = FetchType.LAZY)
     @Column(name = "DEPT_CODE")
-    private DeptDto dept;
+    private Dept dept;
 
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EMP_CODE")
     @Column(name = "EMP_CODE")
-    private EmployeeDto employee;
+    private Employee employee;
 
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EMP_CODE")
     @Column(name = "SCH_WRITER")
-    private EmployeeDto schwriter;
+    private Employee schwriter;
 
     @Column(name = "SCH_START")
     private Date schStart;

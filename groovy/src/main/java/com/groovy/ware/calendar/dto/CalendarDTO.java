@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class CalendarDTO {
     
-    private int schCode;
+    private Long schCode;
     private String schTitle;
     private String schContext;
     private String schDiv;
