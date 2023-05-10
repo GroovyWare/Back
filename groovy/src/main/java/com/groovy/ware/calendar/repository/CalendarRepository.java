@@ -1,13 +1,16 @@
-package com.groovy.ware.calender.repository;
+package com.groovy.ware.calendar.repository;
 
 
 
-import org.springframework.data.jpa.repository.EntityGraph;
+import java.util.List;
+
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CalendarRepository extends JpaRepository {
+import com.groovy.ware.calendar.entity.Calendar;
+
+public interface CalendarRepository extends JpaRepository<Calendar, Long> {
     
-    @EntityGraph
-    
+    List<Calendar> findBySchTitle(String schTitle);
 
 }
