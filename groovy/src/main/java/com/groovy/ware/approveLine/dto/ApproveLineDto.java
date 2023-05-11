@@ -3,6 +3,7 @@ package com.groovy.ware.approveLine.dto;
 import java.util.Date;
 
 import com.groovy.ware.approval.dto.ApprovalDto;
+import com.groovy.ware.employee.dto.EmployeeDto;
 
 import lombok.Data;
 

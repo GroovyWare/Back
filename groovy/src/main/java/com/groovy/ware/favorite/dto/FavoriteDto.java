@@ -1,9 +1,9 @@
 package com.groovy.ware.favorite.dto;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
 import com.groovy.ware.document.dto.DocumentDto;
+import com.groovy.ware.employee.dto.EmployeeDto;
+
+import lombok.Data;
 
 @Data
 public class FavoriteDto {

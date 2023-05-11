@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.DynamicInsert;
 
 import com.groovy.ware.document.Entity.Document;
+import com.groovy.ware.employee.entity.Employee;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -41,11 +42,9 @@ public class Approval {
 	@Column(name="APV_END_DATE")
 	private Date apvEndDate;
 	
-	@OneToMany
 	@JoinColumn(name="EMP_CODE")
 	private Employee employee;
 	
-	@OneToMany
 	@JoinColumn(name="DOC_CODE")
 	private Document document;
 	
