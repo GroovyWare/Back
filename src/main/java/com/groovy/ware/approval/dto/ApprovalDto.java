@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.persistence.Column;
 
 import com.groovy.ware.document.dto.DocumentDto;
+import com.groovy.ware.employee.dto.EmployeeDto;
 
 import lombok.Data;
 

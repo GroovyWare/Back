@@ -15,6 +15,9 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 
+import com.groovy.ware.employee.entity.Department;
+import com.groovy.ware.employee.entity.Employee;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -47,7 +50,7 @@ public class Calendar {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Column(name = "DEPT_CODE")
-    private Dept dept;
+    private Department dept;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EMP_CODE")
