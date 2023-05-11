@@ -22,8 +22,6 @@ public class Document {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="DOCUMENT_SEQ_GENERATOR")
-	@ManyToOne
-	@JoinColumn(name="DOC_CODE")
 	public Long docCode;
 	
 	@Column(name="DOC_FILE")
