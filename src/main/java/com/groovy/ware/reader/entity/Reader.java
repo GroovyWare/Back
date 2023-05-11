@@ -1,6 +1,7 @@
 package com.groovy.ware.reader.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -15,8 +16,9 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name="GRV_READER")
-public class ReaderEntity {
+public class Reader {
 	
+	@Id
 	@ManyToOne
 	@JoinColumn(name="APV_CODE")
 	private Approval approval;

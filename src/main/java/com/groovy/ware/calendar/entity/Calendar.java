@@ -48,18 +48,15 @@ public class Calendar {
     @Column(name = "SCH_DIV")
     private String schDiv;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     @Column(name = "DEPT_CODE")
     private Department dept;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EMP_CODE")
-    @Column(name = "EMP_CODE")
     private Employee employee;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EMP_CODE")
-    @Column(name = "SCH_WRITER")
     private Employee schwriter;
 
     @Column(name = "SCH_START")
