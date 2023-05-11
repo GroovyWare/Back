@@ -18,8 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class EmployeeService {
 
-	private EmployeeRepository employeeRepository;
-	private ModelMapper modelMapper;
+	private final EmployeeRepository employeeRepository;
+	private final ModelMapper modelMapper;
 	
 	public EmployeeService(EmployeeRepository employeeRepository, ModelMapper modelMapper) {
 		this.employeeRepository = employeeRepository;

@@ -8,7 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -23,7 +23,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name="GRV_APPROAL")
+@Table(name="GRV_APPROVAL")
 @SequenceGenerator(name="APPROVAL_SEQ_GENERATOR", sequenceName="SEQ_APV_CODE", initialValue=1, allocationSize=1)
 @DynamicInsert
 public class Approval {
@@ -42,9 +42,11 @@ public class Approval {
 	@Column(name="APV_END_DATE")
 	private Date apvEndDate;
 	
+	@ManyToOne
 	@JoinColumn(name="EMP_CODE")
 	private Employee employee;
 	
+	@ManyToOne
 	@JoinColumn(name="DOC_CODE")
 	private Document document;
 	
