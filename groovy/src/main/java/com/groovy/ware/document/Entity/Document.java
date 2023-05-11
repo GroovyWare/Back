@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -19,8 +21,9 @@ import lombok.Setter;
 public class Document {
 	
 	@Id
-	@Column(name="DOC_CODE")
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="DOCUMENT_SEQ_GENERATOR")
+	@ManyToOne
+	@JoinColumn(name="DOC_CODE")
 	public Long docCode;
 	
 	@Column(name="DOC_FILE")
