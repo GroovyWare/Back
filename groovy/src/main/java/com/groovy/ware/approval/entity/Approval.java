@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.DynamicInsert;
 
 import com.groovy.ware.document.Entity.Document;
+import com.groovy.ware.employee.entity.Employee;
 
 import lombok.Getter;
 import lombok.Setter;

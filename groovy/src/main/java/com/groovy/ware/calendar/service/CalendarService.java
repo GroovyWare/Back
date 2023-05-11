@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.groovy.ware.calendar.dto.CalendarDTO;
 import com.groovy.ware.calendar.repository.CalendarRepository;
+import com.groovy.ware.member.repository.MemberRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,7 +31,6 @@ public class CalendarService {
     /* 1. 캘린더 메인에서 전체일정 보여주기  직원값을 가져와야한다.*/
     public CalendarDTO viewAllSchdule() {
         
-        List<
 
 
     }
