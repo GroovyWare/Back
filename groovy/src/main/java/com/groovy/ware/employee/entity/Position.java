@@ -13,6 +13,7 @@ import javax.persistence.Table;
 @SequenceGenerator(name="POSITION_SEQ_GENERATOR", sequenceName="SEQ_POS_CODE", initialValue=1, allocationSize=1)
 public class Position {
 
+	
 	@Id
 	@Column(name="POSITION_CODE")
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="POSITION_SEQ_GENERATOR")
