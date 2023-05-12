@@ -1,6 +1,6 @@
 # port config
 server:
-  port: 8001  
+  port: 8059  
   
 # datasource config
 spring:
@@ -21,8 +21,8 @@ spring:
         
 # image 관련 값 설정
 image: 
-  image-url: http://localhost:8001/productimgs/
-  image-dir: src/main/resources/static/productimgs
+  image-url: http://localhost:8001/imgs/
+  image-dir: src/main/resources/static/imgs
 
 
 # HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.

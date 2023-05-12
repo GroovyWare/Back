@@ -11,22 +11,24 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 public class FileUploadUtils {
-	
+						
 	public static String saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
 		
 		Path uploadPath = Paths.get(uploadDir);
 		
+	
 		if(!Files.exists(uploadPath)) {
-			Files.createDirectories(uploadPath);
+			Files.createDirectories(uploadPath);		
 		}
 		
+												
 		String replaceFileName = fileName + "." + FilenameUtils.getExtension(multipartFile.getOriginalFilename());
 		
 		try(InputStream inputStream = multipartFile.getInputStream()) {
-			Path filePath = uploadPath.resolve(replaceFileName);
-			Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-		} catch (IOException e) {
-			throw new IOException("파일을 저장하지 못하였습니다. filename : " + fileName);
+			Path filePath = uploadPath.resolve(replaceFileName); 
+			Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);			
+		} catch (IOException e) {  		       
+			throw new IOException("파일을 저장하지 못했습니다. filename : " + fileName);
 		}
 		
 		return replaceFileName;
@@ -40,16 +42,8 @@ public class FileUploadUtils {
 		try {
 			Files.delete(filePath);
 		} catch (IOException e) {
-			throw new IOException("파일을 삭제하지 못하였습니다. filename : " + fileName);
+			throw new IOException("파일을 저장하지 못했습니다. filename : " + fileName);
 		}
+		
 	}
 }
-
-
-
-
-
-
-
-
-

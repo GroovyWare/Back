@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class PositionDto {
 
-	private long positionCode;
+	private Long positionCode;
 	private String positionName;
 }
