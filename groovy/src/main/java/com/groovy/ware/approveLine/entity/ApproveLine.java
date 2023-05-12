@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.groovy.ware.approval.entity.Approval;
+import com.groovy.ware.employee.entity.Employee;
 
 import lombok.Getter;
 import lombok.Setter;
