@@ -24,7 +24,7 @@ public class Document {
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="DOCUMENT_SEQ_GENERATOR")
 	public Long docCode;
 	
-	@Column(name="DOC_FILE")
+	@Column(name="DOC_FILE", columnDefinition="CLOB")
 	public String docFile;
 
 }
