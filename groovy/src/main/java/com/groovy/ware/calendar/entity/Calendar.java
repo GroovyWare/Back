@@ -67,3 +67,5 @@ public class Calendar {
 
     
 }
+
+/* 수정용도 메소드는 별도 정의가 필요하다. */
