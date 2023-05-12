@@ -21,7 +21,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name="GRV_EMPLOYEE")
-@SequenceGenerator(name="EMPLOPYEE_SEQ_GENERATOR", sequenceName="SEQ_EMP_CODE", initialValue=1, allocationSize=1)
+@SequenceGenerator(name="EMPLOYEE_SEQ_GENERATOR", sequenceName="SEQ_EMP_CODE", initialValue=1, allocationSize=1)
 @DynamicInsert // 엔티티 내부의 null 값의 경우 구문을 생성할 때 제외한다. => Oracle DB에 설정된 data default 값을 사용할 수 있다.
 public class Employee {
 
@@ -42,12 +42,12 @@ public class Employee {
 	private String empEmail;
 	@Column(name="EMP_ADDRESS")
 	private String empAddress;
-	@Column(name="ENT_DATE")
+	@Column(name="EMP_ENT_DATE")
 	private Date entDate;
-	@Column(name="EX_DATE")
+	@Column(name="EMP_EX_DATE")
 	private Date exDate;
-	@Column(name="EMP_STATUS")
-	private String EmpStatus;
+	@Column(name="EMP_ENTIRE")
+	private String empEnitre;
 	@ManyToOne
 	@JoinColumn(name="DEPT_CODE")
 	private Department dept;
