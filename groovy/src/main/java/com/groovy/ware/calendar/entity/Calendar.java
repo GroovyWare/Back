@@ -60,10 +60,10 @@ public class Calendar {
     private Employee schwriter;
 
     @Column(name = "SCH_START")
-    private Date schStart;
+    private Timestamp schStart;
 
     @Column(name = "SCH_END")
-    private Date schEnd;
+    private Timestamp schEnd;
 
     
 }
