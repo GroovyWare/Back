@@ -1,4 +1,4 @@
-package com.groovy.ware.common;
+package com.groovy.ware.common.dto;
 
 import org.springframework.http.HttpStatus;
 
