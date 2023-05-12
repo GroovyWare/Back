@@ -14,7 +14,7 @@ import com.groovy.ware.document.Service.DocumentService;
 import com.groovy.ware.document.dto.DocumentDto;
 
 @RestController
-@RequestMapping("document")
+@RequestMapping("/document")
 public class DocumentController {
 	
 	private final DocumentService documentService;
@@ -24,10 +24,7 @@ public class DocumentController {
 	}
 	
 	@PostMapping("/save")
-	public ResponseEntity<ResponseDto> saveVacationHtml(@RequestBody String documentContent){
-		
-		DocumentDto documentDto = new DocumentDto();
-		documentDto.setDocFile(documentContent);
+	public ResponseEntity<ResponseDto> saveVacationHtml(@RequestBody DocumentDto documentDto){
 		
 		documentService.saveVacationHtml(documentDto);
 		
