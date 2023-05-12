@@ -1,9 +1,10 @@
 package com.groovy.ware.calendar.Controller;
 
+import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+// import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,7 +51,7 @@ public class CalendarController {
     
 
     /* 3. 일정 검색시 조회 */
-    @GetMapping("/schedule/list/")
+    @GetMapping("/schedule/list")
     public ResponseEntity<ResponseDto> selectScheduleListbyTitle(
         @RequestParam(name="list") String schTitle,
         @RequestParam(name="page", defaultValue="1") int page) {
@@ -74,6 +75,14 @@ public class CalendarController {
             return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
         }
 
+        /* 3-1 . 일정 상세를 보여주기 */
+     @GetMapping("/schedule/{schCode}/")
+     public ResponseEntity<ResponseDto> selectScheduleDetail(@PathVariable Long schCode){
+
+        return ResponseEntity
+				.ok().body(new ResponseDto(HttpStatus.OK, "상세 조회 성공", calendarService.selectOneSchedule(schCode)));
+
+     }
 
     /* 4. 기본적으로 존재하는 리스트 보여주기 */
     // @GetMapping("/")

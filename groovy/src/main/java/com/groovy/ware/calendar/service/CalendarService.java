@@ -60,12 +60,30 @@ public class CalendarService {
       Pageable pageable = PageRequest.of(page - 1, 5, Sort.by("schCode").descending());
 
       
-
       Page<Calendar> scheduleList = calendarRepository.findBySchTitle(pageable, schTitle);
       Page<CalendarDTO> scheduleDtoList = scheduleList.map(calendar -> modelMapper.map(calendar, CalendarDTO.class));
+      log.info("[CalenderService] scheduleList : {}", scheduleList);
       
       return scheduleDtoList;
    }
+
+
+
+
+
+   /* 3-1. 상세 일정 보여주기 */
+
+   public CalendarDTO selectOneSchedule(Long schCode) {
+
+
+      Calendar calendar = calendarRepository.findBySchCode(schCode)
+      .orElseThrow(() -> new IllegalArgumentException("해당 코드가 없습니다. schCode=" + schCode));
+
+      CalendarDTO calendarDTO = modelMapper.map(calendar, CalendarDTO.class);
+      
+
+      return calendarDTO;
+  }
 
    /* 3. 개인일정 수정하기 */
 
