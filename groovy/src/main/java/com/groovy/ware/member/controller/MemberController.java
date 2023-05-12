@@ -12,7 +12,7 @@ import com.groovy.ware.common.ResponseDto;
 import com.groovy.ware.common.paging.Pagenation;
 import com.groovy.ware.common.paging.PagingButtonInfo;
 import com.groovy.ware.common.paging.ResponseDtoWithPaging;
-import com.groovy.ware.member.dto.MemberDto;
+import com.groovy.ware.history.dto.HistoryDto;
 import com.groovy.ware.member.service.MemberService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +35,7 @@ public class MemberController {
 		log.info("[ProductController] : findMemberAll start ==================================== ");
 		log.info("[ProductController] : page : {}", page);
 		
-		Page<MemberDto> memberDtoList = memberSerivce.findMemberAll(page);
+		Page<HistoryDto> memberDtoList = memberSerivce.findMemberAll(page);
 
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(memberDtoList);
 		
@@ -50,8 +50,6 @@ public class MemberController {
 		
 		return ResponseEntity.ok()
 				.body(new ResponseDto(HttpStatus.OK, "회원조회가 완료되었습니다.", responseDtoWithPaging));
-		
-		
 		
 	}
 	

@@ -1,9 +1,7 @@
-package com.groovy.ware.approveLine.entity;
+package com.groovy.ware.reader.entity;
 
 import java.io.Serializable;
-import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -19,8 +17,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name="GRV_APPROVELINE")
-public class ApproveLine implements Serializable{
+@Table(name="GRV_READER")
+public class Reader implements Serializable{
 	
 	@Id
 	@ManyToOne
@@ -30,17 +28,5 @@ public class ApproveLine implements Serializable{
 	@ManyToOne
 	@JoinColumn(name="EMP_CODE")
 	private Employee employee;
-	
-	@Column(name="APL_NUM")
-	private String aplNum;
-	
-	@Column(name="APL_STATUS")
-	private String aplStatus;
-	
-	@Column(name="APL_DATE")
-	private Date aplDate;
-	
-	@Column(name="APL_YN")
-	private String aplYn;
 
 }
