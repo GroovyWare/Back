@@ -59,7 +59,6 @@ public class CalendarService {
    public Page<CalendarDTO> selectScheduleListbyTitle(int page, String schTitle) {
       Pageable pageable = PageRequest.of(page - 1, 5, Sort.by("schCode").descending());
 
-      
       Page<Calendar> scheduleList = calendarRepository.findBySchTitle(pageable, schTitle);
       Page<CalendarDTO> scheduleDtoList = scheduleList.map(calendar -> modelMapper.map(calendar, CalendarDTO.class));
       log.info("[CalenderService] scheduleList : {}", scheduleList);
