@@ -1,5 +1,7 @@
 package com.groovy.ware.reader.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -16,7 +18,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name="GRV_READER")
-public class Reader {
+public class Reader implements Serializable{
 	
 	@Id
 	@ManyToOne

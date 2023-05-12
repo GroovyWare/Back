@@ -1,5 +1,6 @@
 package com.groovy.ware.approveLine.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -19,14 +20,13 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name="GRV_APPROVELINE")
-public class ApproveLine {
+public class ApproveLine implements Serializable{
 	
 	@Id
 	@ManyToOne
 	@JoinColumn(name="APV_CODE")
 	private Approval approval;
 	
-	@Id
 	@ManyToOne
 	@JoinColumn(name="EMP_CODE")
 	private Employee employee;
