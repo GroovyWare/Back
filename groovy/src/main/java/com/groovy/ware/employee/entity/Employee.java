@@ -42,34 +42,16 @@ public class Employee {
 	private String empEmail;
 	@Column(name="EMP_ADDRESS")
 	private String empAddress;
-	@Column(name="ENT_DATE")
+	@Column(name="EMP_ENT_DATE")
 	private Date entDate;
-	@Column(name="EX_DATE")
+	@Column(name="EMP_EX_DATE")
 	private Date exDate;
-	@Column(name="EMP_STATUS")
-	private String EmpStatus;
 //	@ManyToOne
 //	@JoinColumn(name="DEPT_CODE")
 //	private Department dept;
 //	@ManyToOne
 //	@JoinColumn(name="POSITION_CODE")
 //	private Position position;
-	
-	
-	
-}
-	@Column(name="EMP_ENT_DATE")
-	private Date entDate;
-	@Column(name="EMP_EX_DATE")
-	private Date exDate;
-	@Column(name="EMP_ENTIRE")
-	private String empEnitre;
-	@ManyToOne
-	@JoinColumn(name="DEPT_CODE")
-	private Department dept;
-	@ManyToOne
-	@JoinColumn(name="POSITION_CODE")
-	private Position position;
 	
 	
 	
