@@ -21,7 +21,6 @@ import lombok.Setter;
 @Entity
 @Table(name="GRV_FILE")
 @SequenceGenerator(name="FILE_SEQ_GENERATOR", sequenceName="SEQ_FILE_CODE", initialValue=1, allocationSize=1)
-
 public class File {
 
 	@Id
@@ -30,8 +29,8 @@ public class File {
 	private Long fileCode;
 	@Column(name="FILE_DIV")
 	private String fileDiv;
-//	@Column(name="EMP_CODE")
-//	private Long empCode;
+	@Column(name="EMP_CODE", insertable=false, updatable=false)
+	private Long empCode;
 	@Column(name="ANN_CODE")
 	private Long annCode;
 	@Column(name="FILE_ORIGINAL_NAME")
@@ -43,9 +42,5 @@ public class File {
 	@JoinColumn(name="EMP_CODE")
 	private Employee employee;
 	
-//	@OneToOne(cascade = CascadeType.PERSIST, mappedBy="file")
-//	private Employee employee;
-	
 
-	
 }

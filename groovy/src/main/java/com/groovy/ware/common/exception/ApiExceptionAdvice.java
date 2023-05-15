@@ -10,13 +10,13 @@ import com.groovy.ware.common.exception.dto.ApiExceptionDto;
 @RestControllerAdvice
 public class ApiExceptionAdvice {
 	
-	@ExceptionHandler({UserNotFoundException.class, DuplicatedUserEmailException.class, LoginFailedException.class, IllegalArgumentException.class})
+	@ExceptionHandler({UserNotFoundException.class, DuplicatedEmpIdException.class, LoginFailedException.class, IllegalArgumentException.class})
 	public ResponseEntity<ApiExceptionDto> exceptionHandler(Exception e){
 		
 		return ResponseEntity
 				.status(HttpStatus.BAD_REQUEST)
 				.body(new ApiExceptionDto(HttpStatus.BAD_REQUEST, e.getMessage()));
-		
+
 	}
 	
 	@ExceptionHandler(RuntimeException.class)
