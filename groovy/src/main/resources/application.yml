@@ -1,6 +1,6 @@
 # port config
 server:
-  port: 8059  
+  port: 8059
   
 # datasource config
 spring:
