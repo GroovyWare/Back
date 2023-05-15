@@ -65,16 +65,9 @@ public class CalendarService {
    public void addSchedule(CalendarDTO calendarDTO) {
       log.info("[CalendarService] inserting event start");
       log.info("[CalenderService] calenderDto : {}", calendarDTO);
-
-
-      try {
+     
          calendarRepository.save(modelMapper.map(calendarDTO, Calendar.class));   
-      } catch (Exception e) {
-         e.printStackTrace();   
-      }
-      
-
-      
+  
       log.info("[CalendarService] inserting event end");
    }
 
@@ -97,31 +90,32 @@ public class CalendarService {
 
    /* 3-1. 상세 일정 보여주기 */
 
-   public CalendarDTO selectOneSchedule(Long schCode) {
-      Calendar calendar = calendarRepository.findBySchCode(schCode)
-      .orElseThrow(() -> new IllegalArgumentException("해당 코드가 없습니다. schCode=" + schCode));
+//    public CalendarDTO selectOneSchedule(Long schCode) {
+//       Calendar calendar = calendarRepository.findBySchCode(schCode.getSchCode())
+//       .orElseThrow(()-> new IllegalArgumentException("스케줄이 없습니다. schCode=" + calendarDTO.getSchCode()));
 
-      CalendarDTO calendarDTO = modelMapper.map(calendar, CalendarDTO.class);
+//       CalendarDTO calendarDTO = modelMapper.map(calendar, CalendarDTO.class);
       
 
-      return calendarDTO;
-  }
+//       return calendarDTO;
+//   }
 
    /* 4. 개인일정 수정하기 */
    @Transactional
    public void modifyCalendar(Long schCode, CalendarDTO calendarDTO) {
        log.info("[CalendarService] modify start");
        log.info("[CalendarService] calendarDto : {}" , calendarDTO);
-               
-       Calendar originCalendar = calendarRepository.findBySchCode(schCode)
-           .orElseThrow(() -> new IllegalArgumentException("그런 스케줄은 없습니다. schCode=" + schCode));
-   
-       originCalendar.update(
-           calendarDTO.getSchTitle(),
-           calendarDTO.getSchContext(),
-           calendarDTO.getSchStart(),
-           calendarDTO.getSchend()
-       );
+
+       Calendar originCalendar = calendarRepository.findById(calendarDTO.getSchCode())
+       .orElseThrow(()-> new IllegalArgumentException("그런 스케줄은 없습니다. schCode=" + calendarDTO.getSchCode()));
+
+
+
+
+       originCalendar.setSchTitle(calendarDTO.getSchTitle());
+       originCalendar.setSchContext(calendarDTO.getSchContext());
+       originCalendar.setSchStart(calendarDTO.getSchStart());
+       originCalendar.setSchEnd(calendarDTO.getSchEnd());
    
        log.info("[CalendarService] modify end");
    }
