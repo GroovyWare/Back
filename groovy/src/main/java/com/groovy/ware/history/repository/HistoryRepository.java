@@ -15,5 +15,8 @@ public interface HistoryRepository extends JpaRepository<History, Long> {
 	@EntityGraph(attributePaths={"pass"})
 	Page<History> findByMemCode(Pageable pageable, Long memCode);
 
+	/* 민경 회원 목록 조회 */
+	History findByEmployee(Long empCode);
+
 
 }
