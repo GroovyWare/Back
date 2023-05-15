@@ -1,8 +1,15 @@
 package com.groovy.ware.history.dto;
 
+
+
+
 import java.util.Date;
 
-import com.groovy.ware.member.dto.MemberDto;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.groovy.ware.pass.dto.PassDto;
 
 import lombok.Data;
@@ -11,14 +18,18 @@ import lombok.Data;
 @Data
 public class HistoryDto {
 	
-	private String resHistory;
+	private Long resHistory;
 	
-	private MemberDto memCode;
-
-	private PassDto passCode;
+	private Long memCode;
 	
+	private PassDto pass;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyMMdd")
 	private Date resStart;
-
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyMMdd")
 	private Date resEnd;
 
 }

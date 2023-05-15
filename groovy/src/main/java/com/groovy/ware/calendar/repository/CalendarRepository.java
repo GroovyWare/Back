@@ -20,7 +20,7 @@ public interface CalendarRepository extends JpaRepository<Calendar, Long> {
 
    /* 일정코드로 찾기? */
    @Query("SELECT s FROM Calendar s WHERE s.schCode = :schCode")
-   Optional<Calendar> findBySchCode(@Param("schCode") Long schCode);
+   Calendar findBySchCode(@Param("schCode") Long schCode);
 
    /* 캘린더 메인 */
    @Query("SELECT s FROM Calendar s WHERE s.schWriter.empCode = :empCode")

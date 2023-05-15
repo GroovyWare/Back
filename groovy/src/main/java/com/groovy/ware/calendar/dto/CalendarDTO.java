@@ -18,7 +18,7 @@ public class CalendarDTO {
     private DepartmentDto dept;
     private EmployeeDto schWriter;
     private Timestamp schStart;
-    private Timestamp schend;
+    private Timestamp schEnd;
 
 
 

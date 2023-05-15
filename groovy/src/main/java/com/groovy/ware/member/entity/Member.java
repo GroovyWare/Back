@@ -63,7 +63,7 @@ public class Member {
 	
 	@ManyToOne
 	@JoinColumn(name="EMP_CODE")
-	private Employee empCode;
+	private Employee employee;
 	
 	
 	/* Member entity 수정 용도의 메소드 */
@@ -77,12 +77,6 @@ public class Member {
 		this.memEndDate= memEndDate;
 	
 	}
-	
-	
-	
-	
-	
-	
 	
 	
 	
