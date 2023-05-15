@@ -4,7 +4,7 @@ import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+// import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 // import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,8 +53,12 @@ public class CalendarController {
 
     /* 2. 일정추가 */
     @PostMapping("/schedule")
-    public ResponseEntity<ResponseDto> addingSchedule(@RequestBody CalendarDTO calendarDto, EmployeeDto writer) {
+    public ResponseEntity<ResponseDto> addingSchedule(@RequestBody CalendarDTO calendarDto, /*
+                                                                                             * @AuthenticationPrincipal
+                                                                                             */ EmployeeDto writer) {
 
+        /* 로그인 처리가 완료 될때까지 임시로 부여한다. */
+        writer.setEmpCode(1L);
         calendarDto.setSchWriter(writer);
         calendarService.addSchedule(calendarDto);
 
@@ -87,16 +91,14 @@ public class CalendarController {
     }
 
     /* 3-1 . 일정 상세를 보여주기 */
-    @GetMapping("/schedule/{schCode}/")
-    public ResponseEntity<ResponseDto> selectScheduleDetail(@PathVariable Long schCode) {
-
-        return ResponseEntity
-                .ok().body(new ResponseDto(HttpStatus.OK, "상세 조회 성공", calendarService.selectOneSchedule(schCode)));
-
-    }
+    // @GetMapping("/schedule/{empCode}/{schCode}/")
+    // public ResponseEntity<ResponseDto> selectScheduleDetail(@PathVariable Long empCode, @PathVariable Long schCode) {
+    //     return ResponseEntity
+    //             .ok().body(new ResponseDto(HttpStatus.OK, "상세 조회 성공", calendarService.selectOneSchedule(schCode)));
+    // }
 
     /* 4. 일정 수정하기 */
-    @PutMapping("/schedule/{schcode}/")
+    @PutMapping("/schedule/modify/{schCode}")
     public ResponseEntity<ResponseDto> modifyCalendar(@PathVariable Long schCode,
             @ModelAttribute CalendarDTO calendarDTO) {
 
