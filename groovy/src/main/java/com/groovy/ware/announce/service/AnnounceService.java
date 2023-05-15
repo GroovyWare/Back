@@ -1,6 +1,8 @@
 package com.groovy.ware.announce.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -53,14 +55,15 @@ public class AnnounceService {
 
     @Transactional
     public void createAnnounce(AnnounceDto announceDto) {
-    	
-    	String imageName = UUID.randomUUID().toString().replace("-", "");
-    	
+        String imageName = UUID.randomUUID().toString().replace("-", "");
         try {
             String replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, announceDto.getAnnounceImage());
             FileDto fileSavedName = new FileDto();
             fileSavedName.setFileSavedName(replaceFileName);
-            announceDto.setFileSavedName(fileSavedName);
+            
+            List<FileDto> files = new ArrayList<>();
+            files.add(fileSavedName);
+            announceDto.setFiles(files);
 
             announceRepository.save(modelMapper.map(announceDto, Announce.class));
         } catch (IOException e) {
@@ -75,21 +78,24 @@ public class AnnounceService {
 
         try {
             /* 이미지를 변경하는 경우 */
-            if (announceDto.getFileSavedName() != null) {
-                /* 새로 입력 된 이미지 저장 */
-                String imageName = UUID.randomUUID().toString().replace("-", "");
-                String replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, announceDto.getAnnounceImage());
+        	if (announceDto.getFiles().get(0).getFileSavedName() != null) {
+        	    /* 새로 입력 된 이미지 저장 */
+        	    String imageName = UUID.randomUUID().toString().replace("-", "");
+        	    String replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, announceDto.getAnnounceImage());
 
-                /* 기존에 저장 된 이미지 삭제 */
-                FileUploadUtils.deleteFile(IMAGE_DIR, originAnnounce.getFileSavedName().getFileSavedName());
+        	    /* 기존에 저장 된 이미지 삭제 */
+        	    FileUploadUtils.deleteFile(IMAGE_DIR, originAnnounce.getFiles().get(0).getFileSavedName());
 
-                /* DB에 저장 될 imageUrl 값을 수정 */
-                File file = new File();
-                file.setFileOriginalName(announceDto.getFileOriginalName().getFileOriginalName());
-                file.setFileSavedName(replaceFileName);
-                fileRepository.save(file);
-                originAnnounce.setFileSavedName(file);
-            }
+        	    /* DB에 저장 될 imageUrl 값을 수정 */
+        	    File file = new File();
+        	    file.setFileOriginalName(announceDto.getFiles().get(0).getFileOriginalName());
+        	    file.setFileSavedName(replaceFileName);
+        	    fileRepository.save(file);
+        	    
+        	    List<File> files = new ArrayList<>();
+        	    files.add(file);
+        	    originAnnounce.setFiles(files);
+        	}
 
             /* 이미지를 변경하지 않는 경우에는 별도의 처리가 필요 없음 */
 

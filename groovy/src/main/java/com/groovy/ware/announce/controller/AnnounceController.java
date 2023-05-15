@@ -39,7 +39,7 @@ public class AnnounceController {
     }
 
     /* 공지사항 목록 */
-    @GetMapping("/list")
+    @GetMapping("/")
     public ResponseEntity<ResponseDto> getAnnounces(@RequestParam(name="page", defaultValue="1") int page,
             @RequestParam(name="size", defaultValue="10") int size) {
         log.info("[AnnounceController] : getAnnounces start ==================================== ");
@@ -59,7 +59,7 @@ public class AnnounceController {
         log.info("[AnnounceController] : getAnnounces end ==================================== ");
 
         return ResponseEntity.ok()
-                .body(new ResponseDto(HttpStatus.OK, "공지사항 조회가 완료되었습니다.", responseDtoWithPaging));
+                .body(new ResponseDto(HttpStatus.OK, "공지사항 목록 조회가 완료되었습니다.", responseDtoWithPaging));
     }
     
     /* 공지사항 검색 */
@@ -84,7 +84,7 @@ public class AnnounceController {
     }
     
     /* 공지사항 등록 */
-    @PostMapping("/write")
+    @PostMapping("/")
     public ResponseEntity<ResponseDto> createAnnounce(@RequestBody AnnounceDto announceDto) {
         announceService.createAnnounce(announceDto);
         return ResponseEntity.ok()
@@ -92,7 +92,7 @@ public class AnnounceController {
     }
 
     /* 공지사항 수정 */
-    @PutMapping("/{annCode}")
+    @PutMapping("/")
     public ResponseEntity<ResponseDto> updateAnnounce(@PathVariable Long annCode, @RequestBody AnnounceDto announceDto) {
         announceService.updateAnnounce(announceDto);
         return ResponseEntity.ok()
@@ -100,7 +100,7 @@ public class AnnounceController {
     }
 
     /* 공지사항 삭제 */
-    @DeleteMapping("/{annCode}")
+    @DeleteMapping("/")
     public ResponseEntity<ResponseDto> deleteAnnounce(@PathVariable Long annCode) {
         announceService.deleteAnnounce(annCode);
         return ResponseEntity.ok()

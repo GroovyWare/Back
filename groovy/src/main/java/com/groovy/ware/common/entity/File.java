@@ -7,6 +7,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+import com.groovy.ware.announce.entity.Announce;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -31,8 +36,11 @@ public class File {
 	private String fileDiv;
 	@Column(name="EMP_CODE", insertable=false, updatable=false)
 	private Long empCode;
-	@Column(name="ANN_CODE")
-	private Long annCode;
+	
+	@ManyToOne
+	@JoinColumn(name="ANN_CODE")
+	private Announce announce;
+
 	@Column(name="FILE_ORIGINAL_NAME")
 	private String fileOriginalName;
 	@Column(name="FILE_SAVED_NAME")

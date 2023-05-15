@@ -1,6 +1,7 @@
 package com.groovy.ware.announce.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,7 +24,9 @@ public class AnnounceDto {
 	@JsonIgnore
 	private MultipartFile announceImage;
 	
-	private FileDto fileOriginalName;	// 파일 원본명
-	private FileDto fileSavedName;		// 파일 저장명
+	private List<FileDto> files;
+	
+//	private FileDto fileOriginalName;	// 파일 원본명
+//	private FileDto fileSavedName;		// 파일 저장명
 
 }
