@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.DynamicInsert;
 
 import com.groovy.ware.employee.entity.Department;
+
 import com.groovy.ware.employee.entity.Employee;
 
 import lombok.Getter;
@@ -36,9 +37,10 @@ public class Calendar {
 
     @Id
     @Column(name = "SCH_CODE")
+
+
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SCHEDULE_CODE_GENERATOR")
     private Long schCode;
-
 
     @Column(name = "SCH_TITLE")
     private String schTitle;
@@ -53,17 +55,18 @@ public class Calendar {
     @JoinColumn(name = "DEPT_CODE")
     private Department dept;
 
-
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SCH_WRITER")
-    private Employee schwriter;
+    private Employee schWriter;
 
     @Column(name = "SCH_START")
     private Timestamp schStart;
 
     @Column(name = "SCH_END")
     private Timestamp schEnd;
+
+    public void update(String schTitle2, String schContext2, Timestamp schStart2, Timestamp schend2) {
+    }
 
     
 }

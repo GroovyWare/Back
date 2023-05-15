@@ -23,6 +23,7 @@ import com.groovy.ware.employee.entity.Position;
 import com.groovy.ware.employee.repository.EmployeeRepository;
 import com.groovy.ware.util.FileUploadUtils;
 
+
 import io.jsonwebtoken.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -163,4 +164,8 @@ public class EmployeeService {
 
 	
 }
+
+	public EmployeeDto getEmployeeByEmpCode(Long empCode) {
+		return null;
+	}
 }
