@@ -155,4 +155,8 @@ public class EmployeeService {
 
 	
 }
+
+	public EmployeeDto getEmployeeByEmpCode(Long empCode) {
+		return null;
+	}
 }
