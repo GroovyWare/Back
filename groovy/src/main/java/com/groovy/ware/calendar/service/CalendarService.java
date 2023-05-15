@@ -100,25 +100,42 @@ public class CalendarService {
 //       return calendarDTO;
 //   }
 
-   /* 4. 개인일정 수정하기 */
-   @Transactional
-   public void modifyCalendar(Long schCode, CalendarDTO calendarDTO) {
-       log.info("[CalendarService] modify start");
-       log.info("[CalendarService] calendarDto : {}" , calendarDTO);
+//    /* 4. 개인일정 수정하기 */
+//    @Transactional
+//    public void modifyCalendar(Long schCode, CalendarDTO calendarDTO) {
+//        log.info("[CalendarService] modify start");
+//        log.info("[CalendarService] calendarDto : {}" , calendarDTO);
 
-       Calendar originCalendar = calendarRepository.findById(calendarDTO.getSchCode())
-       .orElseThrow(()-> new IllegalArgumentException("그런 스케줄은 없습니다. schCode=" + calendarDTO.getSchCode()));
+//        Calendar originCalendar = calendarRepository.findById(calendarDTO.getSchCode())
+//        .orElseThrow(()-> new IllegalArgumentException("그런 스케줄은 없습니다. schCode=" + calendarDTO.getSchCode()));
 
-
-
-
-       originCalendar.setSchTitle(calendarDTO.getSchTitle());
-       originCalendar.setSchContext(calendarDTO.getSchContext());
-       originCalendar.setSchStart(calendarDTO.getSchStart());
-       originCalendar.setSchEnd(calendarDTO.getSchEnd());
+//        originCalendar.setSchTitle(calendarDTO.getSchTitle());
+//        originCalendar.setSchContext(calendarDTO.getSchContext());
+//        originCalendar.setSchStart(calendarDTO.getSchStart());
+//        originCalendar.setSchEnd(calendarDTO.getSchEnd());
    
-       log.info("[CalendarService] modify end");
-   }
+//        log.info("[CalendarService] modify end");
+//    }
+
+/* 4. 개인일정 수정하기 */
+@Transactional
+public void modifyCalendar(CalendarDTO calendarDTO) {
+    log.info("[CalendarService] modify start");
+    log.info("[CalendarService] calendarDto : {}", calendarDTO);
+
+    Calendar originCalendar = calendarRepository.findById(calendarDTO.getSchCode())
+            .orElseThrow(() -> new IllegalArgumentException("그런 스케줄은 없습니다" + calendarDTO.getSchCode()));
+
+    originCalendar.setSchCode(calendarDTO.getSchCode());
+    originCalendar.setSchTitle(calendarDTO.getSchTitle());
+    originCalendar.setSchContext(calendarDTO.getSchContext());
+    originCalendar.setSchStart(calendarDTO.getSchStart());
+    originCalendar.setSchEnd(calendarDTO.getSchEnd());
+
+    log.info("[CalendarService] modify end");
+}
+
+
    
 
    /* 5. 일정 삭제하기 */
