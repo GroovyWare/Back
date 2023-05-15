@@ -23,9 +23,9 @@ public class EmployeeDto {
 	private String EmpStatus;
 	private DepartmentDto dept;
 	private PositionDto position;
-	private FileDto file;
-	
-	@JsonIgnore
-	private MultipartFile imgUrl;
+//	private FileDto file;
+//	
+//	@JsonIgnore
+//	private MultipartFile imgUrl;
 }
 
