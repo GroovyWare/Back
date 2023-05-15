@@ -102,13 +102,13 @@ public class MemberService {
 		
 		log.info("[MemberService] : originMember : {}", findMember);
 		
-		findMember.modify(
-				memberDto.getMemName(), 
-				memberDto.getMemPhone(), 
-				memberDto.getMemDeleteDate(), 
-				memberDto.getMemStartDate(), 
-				memberDto.getMemEndDate()
-				);
+		// findMember.modify(
+		// 		memberDto.getMemName(), 
+		// 		memberDto.getMemPhone(), 
+		// 		memberDto.getMemDeleteDate(), 
+		// 		memberDto.getMemStartDate(), 
+		// 		memberDto.getMemEndDate()
+		// 		);
 	
 		log.info("[MemberService] : modifyMember end ==================================== ");
 		

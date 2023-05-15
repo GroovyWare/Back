@@ -16,7 +16,7 @@ public interface MemberRepository extends JpaRepository<Member, Long>{
 	Page<Member> findAll(Pageable pageable);
 
 	/* 2. 회원 조회 리스트(민경) */ 
-	Page<Member> findByEmpCode(Pageable pageable, Employee employee);
+	// Page<Member> findByEmpCode(Pageable pageable, Employee employee);
 
 
 	
