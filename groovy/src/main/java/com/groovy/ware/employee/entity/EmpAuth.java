@@ -2,6 +2,8 @@ package com.groovy.ware.employee.entity;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -15,5 +17,9 @@ public class EmpAuth {
 	
 	@EmbeddedId
 	private EmpAuthPK EmpAuthPK;
+	
+	@ManyToOne
+	@JoinColumn(name="AUTH_CODE", insertable=false, updatable=false)
+	private Authority auth;
 	
 }

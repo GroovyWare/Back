@@ -2,6 +2,7 @@ package com.groovy.ware.employee.dto;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.groovy.ware.common.dto.FileDto;
+import com.groovy.ware.employee.entity.EmpAuth;
 
 import lombok.Data;
 
@@ -27,6 +29,7 @@ public class EmployeeDto implements UserDetails{
 	private DepartmentDto dept;
 	private PositionDto position;
 	private FileDto file;
+	private List<EmpAuthDto> auths;
 	
 	@JsonIgnore
 	private MultipartFile imgUrl;
