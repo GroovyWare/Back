@@ -9,20 +9,24 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 
+import com.groovy.ware.common.entity.File;
+
 import lombok.Getter;
 import lombok.Setter;
+
 
 @Getter
 @Setter
 @Entity
 @Table(name="GRV_EMPLOYEE")
 @SequenceGenerator(name="EMPLOYEE_SEQ_GENERATOR", sequenceName="SEQ_EMP_CODE", initialValue=1, allocationSize=1)
-@DynamicInsert // 엔티티 내부의 null 값의 경우 구문을 생성할 때 제외한다. => Oracle DB에 설정된 data default 값을 사용할 수 있다.
+@DynamicInsert 
 public class Employee {
 
 
@@ -43,16 +47,36 @@ public class Employee {
 	@Column(name="EMP_ADDRESS")
 	private String empAddress;
 	@Column(name="EMP_ENT_DATE")
-	private Date entDate;
+	private Date empEntDate;
 	@Column(name="EMP_EX_DATE")
-	private Date exDate;
-//	@ManyToOne
-//	@JoinColumn(name="DEPT_CODE")
-//	private Department dept;
-//	@ManyToOne
-//	@JoinColumn(name="POSITION_CODE")
-//	private Position position;
+	private Date empExDate;
+	@Column(name="EMP_STATUS")
+	private String EmpStatus;
+	@ManyToOne
+	@JoinColumn(name="DEPT_CODE")
+	private Department dept;
+	@ManyToOne
+	@JoinColumn(name="POSITION_CODE")
+	private Position position;
 	
+	@OneToOne(mappedBy="employee")
+	private File file;
+	
+//	@OneToOne(cascade = CascadeType.PERSIST)
+//	@JoinColumn(name="FILE_CODE", insertable=false, updatable=false)
+//	private File file;
+
+
+	public void update(String empName, String empPhone, String empEmail, String empAddress, Date empExDate, Department dept, Position position, File file) {
+		this.empName = empName;
+		this.empPhone = empPhone;
+		this.empEmail = empEmail;
+		this.empAddress = empAddress;
+		this.empExDate = empExDate;
+		this.dept = dept;
+		this.position = position;
+		this.file = file;
+	}
 	
 	
 }
