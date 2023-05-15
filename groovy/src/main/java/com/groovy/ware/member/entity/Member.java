@@ -21,6 +21,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 
+import com.groovy.ware.employee.entity.Employee;
 import com.groovy.ware.history.entity.History;
 
 import lombok.Getter;
@@ -62,7 +63,7 @@ public class Member {
 	
 	@ManyToOne
 	@Column(name="EMP_CODE")
-	private Long empCode;
+	private Employee empCode;
 	
 	
 	/* Member entity 수정 용도의 메소드 */

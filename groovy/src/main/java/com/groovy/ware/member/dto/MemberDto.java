@@ -8,8 +8,8 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.groovy.ware.employee.dto.EmployeeDto;
 import com.groovy.ware.history.dto.HistoryDto;
-import com.groovy.ware.history.entity.History;
 
 import lombok.Data;
 
@@ -37,7 +37,7 @@ public class MemberDto {
 	
 	private List<HistoryDto> history;
 	
-	private Long empCode;
+	private EmployeeDto empCode;
 	
 	
 
