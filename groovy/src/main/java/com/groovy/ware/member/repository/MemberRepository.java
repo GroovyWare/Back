@@ -4,6 +4,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.groovy.ware.employee.entity.Employee;
 import com.groovy.ware.member.entity.Member;
 import com.groovy.ware.play.entity.Play;
 
