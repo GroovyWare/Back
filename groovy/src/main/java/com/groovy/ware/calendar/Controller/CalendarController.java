@@ -21,6 +21,7 @@ import com.groovy.ware.common.paging.PagingButtonInfo;
 import com.groovy.ware.common.paging.ResponseDtoWithPaging;
 import com.groovy.ware.employee.dto.EmployeeDto;
 import com.groovy.ware.employee.entity.Employee;
+import com.groovy.ware.employee.service.EmployeeService;
 import com.groovy.ware.member.dto.MemberDto;
 
 import lombok.extern.slf4j.Slf4j;
