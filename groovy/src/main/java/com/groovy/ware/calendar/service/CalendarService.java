@@ -1,6 +1,8 @@
 package com.groovy.ware.calendar.service;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -15,6 +17,9 @@ import org.springframework.stereotype.Service;
 import com.groovy.ware.calendar.dto.CalendarDTO;
 import com.groovy.ware.calendar.entity.Calendar;
 import com.groovy.ware.calendar.repository.CalendarRepository;
+import com.groovy.ware.employee.dto.EmployeeDto;
+import com.groovy.ware.employee.entity.Department;
+import com.groovy.ware.member.dto.MemberDto;
 import com.groovy.ware.member.repository.MemberRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +44,20 @@ public class CalendarService {
 
    
    /* 1. 캘린더 메인에서 전체일정 보여주기  직원값을 가져와야한다.*/
+   public CalendarDTO viewAllSchedule(EmployeeDto employeeDto) {
+      Long empCode = employeeDto.getEmpCode();
+      Calendar empSchedule = calendarRepository.findByAllscheduleswithEmpCode();
+    
+      
+      CalendarDTO calendarDTO = modelMapper.map(empSchedule, CalendarDTO.class);
+      return calendarDTO;
+      
+      
+   }
+   
+
+      
+
 
 
    /* 2. 개인일정 생성하기 */
@@ -46,10 +65,9 @@ public class CalendarService {
    public void addSchedule(CalendarDTO calendarDTO) {
       log.info("[CalendarService] inserting event start");
       log.info("[CalenderService] calenderDto : {}", calendarDTO);
-
-      calendarRepository.save(modelMapper.map(calendarDTO, Calendar.class));
-
-
+     
+         calendarRepository.save(modelMapper.map(calendarDTO, Calendar.class));   
+  
       log.info("[CalendarService] inserting event end");
    }
 
@@ -72,24 +90,48 @@ public class CalendarService {
 
    /* 3-1. 상세 일정 보여주기 */
 
-   public CalendarDTO selectOneSchedule(Long schCode) {
+//    public CalendarDTO selectOneSchedule(Long schCode) {
+//       Calendar calendar = calendarRepository.findBySchCode(schCode.getSchCode())
+//       .orElseThrow(()-> new IllegalArgumentException("스케줄이 없습니다. schCode=" + calendarDTO.getSchCode()));
 
-
-      Calendar calendar = calendarRepository.findBySchCode(schCode)
-      .orElseThrow(() -> new IllegalArgumentException("해당 코드가 없습니다. schCode=" + schCode));
-
-      CalendarDTO calendarDTO = modelMapper.map(calendar, CalendarDTO.class);
+//       CalendarDTO calendarDTO = modelMapper.map(calendar, CalendarDTO.class);
       
 
-      return calendarDTO;
-  }
+//       return calendarDTO;
+//   }
 
-   /* 3. 개인일정 수정하기 */
+   /* 4. 개인일정 수정하기 */
+   @Transactional
+   public void modifyCalendar(Long schCode, CalendarDTO calendarDTO) {
+       log.info("[CalendarService] modify start");
+       log.info("[CalendarService] calendarDto : {}" , calendarDTO);
 
-   /* 4. 일정 삭제하기 */
+       Calendar originCalendar = calendarRepository.findById(calendarDTO.getSchCode())
+       .orElseThrow(()-> new IllegalArgumentException("그런 스케줄은 없습니다. schCode=" + calendarDTO.getSchCode()));
 
 
 
+
+       originCalendar.setSchTitle(calendarDTO.getSchTitle());
+       originCalendar.setSchContext(calendarDTO.getSchContext());
+       originCalendar.setSchStart(calendarDTO.getSchStart());
+       originCalendar.setSchEnd(calendarDTO.getSchEnd());
+   
+       log.info("[CalendarService] modify end");
+   }
+   
+
+   /* 5. 일정 삭제하기 */
+   @Transactional
+   public void deleteSchedule(Long schCode) {
+       log.info("[CalendarService] deletestart");
+       log.info("[CalendarService] schCode : {}", schCode);
+      
+         calendarRepository.deleteById(schCode);
+   
+       log.info("[CalendarService] delete end");
+   }
+   
 
 
 
