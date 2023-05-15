@@ -4,10 +4,14 @@ import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 // import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,7 +26,6 @@ import com.groovy.ware.common.paging.ResponseDtoWithPaging;
 import com.groovy.ware.employee.dto.EmployeeDto;
 import com.groovy.ware.employee.entity.Employee;
 import com.groovy.ware.employee.service.EmployeeService;
-import com.groovy.ware.member.dto.MemberDto;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,21 +34,21 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/groovy")
 public class CalendarController {
 
-    private final EmployeeService empservice;
+    private final EmployeeService empService;
     private final CalendarService calendarService;
 
-    public CalendarController(CalendarService calendarService) {
+    public CalendarController(CalendarService calendarService, EmployeeService empService) {
         this.calendarService = calendarService;
+        this.empService = empService;
 
     }
 
     /* 1. 캘린더 메인 */
-    @GetMapping("/schedules/{empCode}")
+    @GetMapping("/schedule/{empCode}")
     public ResponseEntity<ResponseDto> getAllSchedules(@PathVariable Long empCode) {
-        EmployeeDto employeeDto = employeeService.getEmployeeByEmpCode(empCode);
+        EmployeeDto employeeDto = empService.getEmployeeByEmpCode(empCode);
         CalendarDTO scheduleDto = calendarService.viewAllSchedule(employeeDto);
-        ResponseDto responseDto = new ResponseDto(true, scheduleDto, "일정 조회 성공");
-        return ResponseEntity.ok().body(responseDto);
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회완료!"));
     }
 
     /* 2. 일정추가 */
@@ -63,7 +66,8 @@ public class CalendarController {
     @GetMapping("/schedule/list")
     public ResponseEntity<ResponseDto> selectScheduleListbyTitle(
             @RequestParam(name = "list") String schTitle,
-            @RequestParam(name = "page", defaultValue = "1") int page) {
+            @RequestParam(name = "page", defaultValue = "1") int page,
+            Employee employee) {
         log.info("[CalendarController] start ============================");
         log.info("[CalendarController] schedule " + schTitle);
         log.info("[CalendarController] page" + page);
@@ -91,8 +95,23 @@ public class CalendarController {
 
     }
 
-    /* 4. 기본적으로 존재하는 리스트 보여주기 */
+    /* 4. 일정 수정하기 */
+    @PutMapping("/schedule/{schcode}/")
+    public ResponseEntity<ResponseDto> modifyCalendar(@PathVariable Long schCode,
+            @ModelAttribute CalendarDTO calendarDTO) {
 
-    /* 5. 일정 상세 */
+        /* schCode로 값을 받아서 수정 */
+        calendarService.modifyCalendar(schCode, calendarDTO);
+
+        return ResponseEntity.ok()
+                .body(new ResponseDto(HttpStatus.OK, "수정 완료"));
+    }
+
+    /* 5. 일정 삭제하기 */
+    @DeleteMapping("/schedule/{schCode}")
+    public ResponseEntity<ResponseDto> deleteSchedule(@PathVariable Long schCode) {
+        calendarService.deleteSchedule(schCode);
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "삭제 완료"));
+    }
 
 }

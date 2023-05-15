@@ -129,7 +129,7 @@ public class CalendarService {
 
    /* 5. 일정 삭제하기 */
    @Transactional
-   public void deleteCalendar(Long schCode) {
+   public void deleteSchedule(Long schCode) {
        log.info("[CalendarService] deletestart");
        log.info("[CalendarService] schCode : {}", schCode);
       
