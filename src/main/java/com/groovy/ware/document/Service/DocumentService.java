@@ -1,5 +1,7 @@
 package com.groovy.ware.document.Service;
 
+import javax.transaction.Transactional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ public class DocumentService {
 	}
 	
 
+	@Transactional
 	public void saveVacationHtml(DocumentDto documentDto) {
 		
 		documentRepository.save(modelMapper.map(documentDto, Document.class));

@@ -33,3 +33,5 @@ build/
 .vscode/
 /pom.xml
 /.DS_Store
+
+/application.yml

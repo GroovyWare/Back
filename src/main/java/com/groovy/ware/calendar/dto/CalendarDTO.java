@@ -1,6 +1,7 @@
 package com.groovy.ware.calendar.dto;
 
-import java.util.Date;
+import java.sql.Timestamp;
+
 
 import com.groovy.ware.employee.dto.DepartmentDto;
 import com.groovy.ware.employee.dto.EmployeeDto;
@@ -15,10 +16,9 @@ public class CalendarDTO {
     private String schContext;
     private String schDiv;
     private DepartmentDto dept;
-    private EmployeeDto employee;
-    private EmployeeDto schwriter;
-    private Date schStart;
-    private Date schend;
+    private EmployeeDto schWriter;
+    private Timestamp schStart;
+    private Timestamp schend;
 
 
 
