@@ -1,9 +1,5 @@
 package com.groovy.ware.member.entity;
 
-
-
-
-
 import java.util.Date;
 import java.util.List;
 
