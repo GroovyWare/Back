@@ -62,17 +62,6 @@ public class EmployeeController {
 				.body(new ResponseDto(HttpStatus.OK, "직원의 상세 정보 조회되었습니다.", employeeService.selectEmployee(empCode)));
 	}
 
-	/* 직원 정보 수정 */
-	@PutMapping("/emp/{empCode}")
-	public ResponseEntity<ResponseDto> updateEmployee(@ModelAttribute EmployeeDto employeeDto) {
-		
-		employeeService.updateEmployee(employeeDto);
-		
-		return ResponseEntity
-				.ok()
-				.body(new ResponseDto(HttpStatus.OK, "직원 정보 수정되었습니다."));
-	}
-	
 	/* 직원 등록 */
 	@PostMapping("/emp")
 	public ResponseEntity<ResponseDto> insertEmployee(@ModelAttribute EmployeeDto employeeDto) {
@@ -83,5 +72,17 @@ public class EmployeeController {
 				.ok()
 				.body(new ResponseDto(HttpStatus.OK, "직원 정보가 등록되었습니다."));
 	}
+	
+	/* 직원 정보 수정 */
+	@PutMapping("/emp")
+	public ResponseEntity<ResponseDto> updateEmployee(@ModelAttribute EmployeeDto employeeDto) {
+		
+		employeeService.updateEmployee(employeeDto);
+		
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDto(HttpStatus.OK, "해당 직원 정보가 수정되었습니다."));
+	}
+	
 	
 }

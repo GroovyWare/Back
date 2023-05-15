@@ -1,6 +1,7 @@
 package com.groovy.ware.employee.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -28,7 +30,6 @@ import lombok.Setter;
 @SequenceGenerator(name="EMPLOYEE_SEQ_GENERATOR", sequenceName="SEQ_EMP_CODE", initialValue=1, allocationSize=1)
 @DynamicInsert 
 public class Employee {
-
 
 	@Id
 	@Column(name="EMP_CODE")
@@ -58,15 +59,11 @@ public class Employee {
 	@ManyToOne
 	@JoinColumn(name="POSITION_CODE")
 	private Position position;
-	
 	@OneToOne(mappedBy="employee")
 	private File file;
+	@OneToMany(mappedBy="emp")
+	private List<EmpAuth> auths;
 	
-//	@OneToOne(cascade = CascadeType.PERSIST)
-//	@JoinColumn(name="FILE_CODE", insertable=false, updatable=false)
-//	private File file;
-
-
 	public void update(String empName, String empPhone, String empEmail, String empAddress, Date empExDate, Department dept, Position position, File file) {
 		this.empName = empName;
 		this.empPhone = empPhone;
@@ -77,6 +74,7 @@ public class Employee {
 		this.position = position;
 		this.file = file;
 	}
+
 	
-	
+
 }
