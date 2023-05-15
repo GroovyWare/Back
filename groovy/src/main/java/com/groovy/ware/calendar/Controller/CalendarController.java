@@ -97,13 +97,16 @@ public class CalendarController {
     //             .ok().body(new ResponseDto(HttpStatus.OK, "상세 조회 성공", calendarService.selectOneSchedule(schCode)));
     // }
 
+
+
+    /* 리퀘스트 바디를 사용하여 json형식으로 보낸다. */
     /* 4. 일정 수정하기 */
-    @PutMapping("/schedule/modify/{schCode}")
-    public ResponseEntity<ResponseDto> modifyCalendar(@PathVariable Long schCode,
-            @ModelAttribute CalendarDTO calendarDTO) {
+    @PutMapping("/schedule/modify")
+    public ResponseEntity<ResponseDto> modifyCalendar(
+            @RequestBody CalendarDTO calendarDTO) {
 
         /* schCode로 값을 받아서 수정 */
-        calendarService.modifyCalendar(schCode, calendarDTO);
+        calendarService.modifyCalendar(calendarDTO);
 
         return ResponseEntity.ok()
                 .body(new ResponseDto(HttpStatus.OK, "수정 완료"));
