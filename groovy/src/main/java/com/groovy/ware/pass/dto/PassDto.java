@@ -1,5 +1,7 @@
 package com.groovy.ware.pass.dto;
 
+
+
 import lombok.Data;
 
 @Data

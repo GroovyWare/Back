@@ -39,7 +39,7 @@ public class Member {
 	
 	@Id
 	@Column(name="MEM_CODE")
-@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="MEM_SEQ_GENERATOR")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="MEM_SEQ_GENERATOR")
 	private Long memCode;
 	
 	@Column(name="MEM_NAME")
@@ -62,8 +62,8 @@ public class Member {
 	private List<History> history;
 	
 	@ManyToOne
-	@Column(name="EMP_CODE")
-	private Employee empCode;
+	@JoinColumn(name="EMP_CODE")
+	private Employee employee;
 	
 	
 	/* Member entity 수정 용도의 메소드 */
@@ -77,12 +77,6 @@ public class Member {
 		this.memEndDate= memEndDate;
 	
 	}
-	
-	
-	
-	
-	
-	
 	
 	
 	
