@@ -61,9 +61,9 @@ public class Member {
 	@JoinColumn(name="MEM_CODE")
 	private List<History> history;
 	
-	@ManyToOne
-	@Column(name="EMP_CODE")
-	private Employee empCode;
+//	@ManyToOne
+//	@Column(name="EMP_CODE")
+//	private Employee empCode;
 	
 	
 	/* Member entity 수정 용도의 메소드 */

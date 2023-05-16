@@ -12,7 +12,7 @@ import com.groovy.ware.employee.dto.EmployeeDto;
 import com.groovy.ware.employee.service.AuthService;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping
 public class AuthController {
 
 	private final AuthService authService;

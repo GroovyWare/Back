@@ -18,8 +18,6 @@ import com.groovy.ware.calendar.dto.CalendarDTO;
 import com.groovy.ware.calendar.entity.Calendar;
 import com.groovy.ware.calendar.repository.CalendarRepository;
 import com.groovy.ware.employee.dto.EmployeeDto;
-import com.groovy.ware.employee.entity.Department;
-import com.groovy.ware.member.dto.MemberDto;
 import com.groovy.ware.member.repository.MemberRepository;
 
 import lombok.extern.slf4j.Slf4j;
