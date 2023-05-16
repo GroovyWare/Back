@@ -17,7 +17,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 
-import com.groovy.ware.employee.entity.Employee;
 import com.groovy.ware.pass.entity.Pass;
 
 import lombok.Getter;
@@ -51,9 +50,5 @@ public class History {
 
 	@Column(name="RES_END")
 	private Date resEnd;
-	
-	@ManyToOne
-	@JoinColumn(name="EMP_CODE")
-	private Employee employee;
 
 }
