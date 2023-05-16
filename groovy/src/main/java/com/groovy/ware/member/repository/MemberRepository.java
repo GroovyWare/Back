@@ -5,11 +5,27 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.groovy.ware.employee.entity.Employee;
 import com.groovy.ware.member.entity.Member;
 
 public interface MemberRepository extends JpaRepository<Member, Long>{
 
-	/* 1. 회원 전체 조회 리스트 */
+	/* 전체 회원 리스트 */
+	@EntityGraph(attributePaths={"history", "employee"})
 	Page<Member> findAll(Pageable pageable);
+
+	/* 민경 운동량 회원 목록 조회 */
+	Page<Member> findByMemCode(Pageable pageable, Long memCode);
+
+
 	
+	/* 회원 상세 조회 */
+	
+	
+	/* 회원 등록 */
+	
+
+	/* 회원 수정 */
+
+
 }

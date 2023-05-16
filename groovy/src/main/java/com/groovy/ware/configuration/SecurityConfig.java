@@ -1,6 +1,8 @@
 package com.groovy.ware.configuration;
 
+
 import java.util.Arrays;
+
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -11,10 +13,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
 
 import com.groovy.ware.jwt.JwtAccessDeniedHandler;
 import com.groovy.ware.jwt.JwtAuthenticationEntryPoint;
@@ -38,21 +42,23 @@ public class SecurityConfig {
 		this.tokenProvider = tokenProvider;
 	}
 
-	// 외부에서 이미지 파일에 접근 가능 하도록 설정
-	@Bean
-	public WebSecurityCustomizer configure() {
-		return (web) -> web.ignoring().antMatchers("/productimgs/**");
-	}
+
+ 	// 외부에서 이미지 파일에 접근 가능 하도록 설정
+ 	@Bean
+ 	public WebSecurityCustomizer configure() {
+ 		return (web) -> web.ignoring().antMatchers("/productimgs/**");
+ 	}
 	
-	// 비밀번호 암호화를 위한 빈 등록
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+ 	// 비밀번호 암호화를 위한 빈 등록
+ 	@Bean
+ 	public PasswordEncoder passwordEncoder() {
+ 		return new BCryptPasswordEncoder();
+ 	}
 	
-	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+ 	@Bean
+ 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		
+
 		 return http
 		         .csrf()
 		         	.disable()
@@ -79,8 +85,9 @@ public class SecurityConfig {
 		         .and()
 		         	.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 		         .build();
+
 		 
-	}
+ 	}
 	
 	/* CORS(cross-origin-resource-sharing) : 교차 출처 자원 공유 
 	 * 예전에는 자원 저장 서버와 웹 페이지가 하나의 서버에서 만들어졌기 때문에 해당 서버의 자원을 해당 도메인에서만 요청함
@@ -101,4 +108,4 @@ public class SecurityConfig {
         return source;
     }
 
-}
+ }

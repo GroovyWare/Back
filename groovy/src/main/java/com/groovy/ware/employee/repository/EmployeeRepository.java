@@ -26,5 +26,5 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@EntityGraph(attributePaths={"dept", "position", "file", "auths", "auths.auth"})
 	Optional<Employee> findByEmpId(String empId);
 	
-	
+
 }

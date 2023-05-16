@@ -1,10 +1,15 @@
 package com.groovy.ware.pass.entity;
 
+
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
+import org.hibernate.annotations.DynamicInsert;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,10 +17,15 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name="GRV_PASS")
+@DynamicInsert
+@SequenceGenerator(name="PAS_SEQ_GENERATOR",
+				   sequenceName="SEQ_PASS_CODE",
+				   initialValue=1, allocationSize=1)
 public class Pass {
 	
 	@Id
 	@Column(name="PASS_CODE")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="PAS_SEQ_GENERATOR")
 	private Long passCode;
 	
 	@Column(name="PASS_TYPE")
@@ -29,5 +39,15 @@ public class Pass {
 	
 	@Column(name="PASS_ETC")
 	private String passEtc;
+	
+	/* 회원권 수정을 위한 메소드 */
+	public void modify(String passType, Long passPrice, Long passAmount, String passEtc) {
+		
+		this.passType = passType;
+		this.passPrice = passPrice;
+		this.passAmount = passAmount;
+		this.passEtc = passEtc;
+		
+	}
 
 }

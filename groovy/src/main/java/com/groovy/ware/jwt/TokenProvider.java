@@ -60,6 +60,7 @@ public class TokenProvider {
 		return new TokenDto(BEARER_TYPE, employee.getEmpName(), accessToken, accessTokenExpiresIn.getTime());
 	}
 	
+
 	public boolean validateToken(String jwt) {
 		
 		Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);
@@ -81,3 +82,4 @@ public class TokenProvider {
 	}
 	
 }
+

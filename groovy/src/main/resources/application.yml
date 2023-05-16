@@ -21,7 +21,7 @@ spring:
         
 # image 관련 값 설정
 image: 
-  image-url: http://localhost:8001/imgs/
+  image-url: http://localhost:8059/imgs/
   image-dir: src/main/resources/static/imgs
 
 
@@ -29,16 +29,3 @@ image:
 # Secret 값은 특정 문자열을 Base64 로 인코딩한 값 사용
 jwt:
   secret: asdfjp298pafo1320efqw0udvnh0er0h412r08byfdq9dsvh02143908hfeqwn80fdqs0nfdqs0n412013rq0nqefn08dfas0das730732g86923
-
-
-
-
-
-
-
-
-
-
-
-
-
