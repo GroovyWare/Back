@@ -7,7 +7,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.groovy.ware.employee.dto.EmployeeDto;
+import com.groovy.ware.employee.entity.Employee;
 import com.groovy.ware.employee.repository.EmployeeRepository;
+import com.groovy.ware.history.entity.History;
+import com.groovy.ware.history.repository.HistoryRepository;
 import com.groovy.ware.member.dto.MemberDto;
 import com.groovy.ware.member.entity.Member;
 import com.groovy.ware.member.repository.MemberRepository;
@@ -22,35 +26,37 @@ public class PlayService {
 	private PlayRepository playRepository;
 	private EmployeeRepository employeeRepository;
 	private MemberRepository memberRepository;
+	private HistoryRepository historyRepository;
 	private ModelMapper modelMapper;
 	
-	public PlayService(PlayRepository playRepository, ModelMapper modelMapper, EmployeeRepository employeeRepository, MemberRepository memberRepository) {
+	public PlayService(PlayRepository playRepository, ModelMapper modelMapper, EmployeeRepository employeeRepository, MemberRepository memberRepository, HistoryRepository historyRepository) {
 		this.playRepository = playRepository;
 		this.modelMapper = modelMapper;
 		this.employeeRepository = employeeRepository;
 		this.memberRepository = memberRepository;
+		this.historyRepository = historyRepository;
 	}
-
-	public Page<MemberDto> selectMemberList(int page) {
+	
+	public Page<MemberDto> selectMemberList(int page, String empId) {
+		
+		log.info("service start==========================");
 		
 		Pageable pageable = PageRequest.of(page -1,  10, Sort.by("memCode").descending());
-	
-		Page<Member> playMemberList = memberRepository.findAll(pageable);
-		Page<MemberDto> playDtoMemberList = playMemberList.map(member -> modelMapper.map(member, MemberDto.class));
+		
+		Employee findTrainer = employeeRepository.findByEmpId(empId).orElseThrow(() -> new IllegalArgumentException("일치하는 직원 목록이 없습니다."));
+		log.info("findTrainer {}", findTrainer);
+		
+		History findPlayMember = historyRepository.findByEmployee(findTrainer);
+		log.info("findPlayMember {}", findPlayMember);
+		
+		Page<Member> playMemberList = memberRepository.findByMemCode(pageable, findPlayMember.getMemCode());
+		Page<MemberDto> playDtoMemberList = playMemberList.map(row -> modelMapper.map(row, MemberDto.class));
+		
+		log.info("playMemberList {}", playMemberList);
+		
+		log.info("service start==========================");
 		
 		return playDtoMemberList;
 	}
-	
-//	public Page<MemberDto> selectMemberList(int page) {
-//		
-//		Pageable pageable = PageRequest.of(page -1,  10, Sort.by("playCode").descending());
-//		
-//		Employee findMember = employeeRepository.findAll().orElseThrow(() -> new IllegalArgumentException("해당 멤버가 없습니다."));
-//		
-//		Page<Member> playMemberList = memberRepository.findByEmpCode(pageable, findMember);
-//		Page<MemberDto> playDtoMemberList = playMemberList.map(row -> modelMapper.map(row, MemberDto.class));
-//		
-//		return playDtoMemberList;
-//	}
 
 }

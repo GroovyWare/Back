@@ -14,6 +14,9 @@ public interface MemberRepository extends JpaRepository<Member, Long>{
 	@EntityGraph(attributePaths={"history", "employee"})
 	Page<Member> findAll(Pageable pageable);
 
+	/* 민경 운동량 회원 목록 조회 */
+	Page<Member> findByMemCode(Pageable pageable, Long memCode);
+
 
 	
 	/* 회원 상세 조회 */
