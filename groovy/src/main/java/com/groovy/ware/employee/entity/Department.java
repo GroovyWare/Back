@@ -8,6 +8,9 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +19,9 @@ import lombok.Setter;
 @Entity
 @Table(name="GRV_DEPARTMENT")
 @SequenceGenerator(name="DEPARTMENT_SEQ_GENERATOR", sequenceName="SEQ_DEPT_CODE", initialValue=1, allocationSize=1)
+@JsonIdentityInfo(
+		  generator = ObjectIdGenerators.PropertyGenerator.class, 
+		  property = "deptCode")
 public class Department {
 
 	@Id

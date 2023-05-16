@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.groovy.ware.announce.dto.AnnounceDto;
 import com.groovy.ware.announce.entity.Announce;
@@ -39,7 +41,7 @@ public class AnnounceController {
     }
 
     /* 공지사항 목록 */
-    @GetMapping("/list")
+    @GetMapping
     public ResponseEntity<ResponseDto> getAnnounces(@RequestParam(name="page", defaultValue="1") int page,
             @RequestParam(name="size", defaultValue="10") int size) {
         log.info("[AnnounceController] : getAnnounces start ==================================== ");
@@ -59,7 +61,7 @@ public class AnnounceController {
         log.info("[AnnounceController] : getAnnounces end ==================================== ");
 
         return ResponseEntity.ok()
-                .body(new ResponseDto(HttpStatus.OK, "공지사항 조회가 완료되었습니다.", responseDtoWithPaging));
+                .body(new ResponseDto(HttpStatus.OK, "공지사항 목록 조회가 완료되었습니다.", responseDtoWithPaging));
     }
     
     /* 공지사항 검색 */
@@ -83,20 +85,31 @@ public class AnnounceController {
         }
     }
     
-    /* 공지사항 등록 */
-    @PostMapping("/write")
-    public ResponseEntity<ResponseDto> createAnnounce(@RequestBody AnnounceDto announceDto) {
-        announceService.createAnnounce(announceDto);
-        return ResponseEntity.ok()
-                .body(new ResponseDto(HttpStatus.OK, "공지사항이 등록되었습니다."));
+    @PostMapping
+    public ResponseEntity<ResponseDto> createAnnounce(@ModelAttribute AnnounceDto announceDto, @RequestParam(required = false) MultipartFile multipartFile) {
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            // 파일이 존재하는 경우에 대한 처리 로직
+            String filename = multipartFile.getOriginalFilename();
+            // 파일 업로드 및 저장 로직 등을 수행합니다.
+        }
+
+        announceService.createAnnounce(announceDto, multipartFile);
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "공지사항이 등록되었습니다."));
     }
 
     /* 공지사항 수정 */
     @PutMapping("/{annCode}")
-    public ResponseEntity<ResponseDto> updateAnnounce(@PathVariable Long annCode, @RequestBody AnnounceDto announceDto) {
+    public ResponseEntity<ResponseDto> updateAnnounce(@PathVariable Long annCode, @RequestBody AnnounceDto announceDto, @RequestParam(required = false) MultipartFile multipartFile) {
+        announceDto.setAnnCode(annCode);
+
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            // 파일이 존재하는 경우에 대한 처리 로직
+            String filename = multipartFile.getOriginalFilename();
+            // 파일 업로드 및 저장 로직 등을 수행합니다.
+        }
+
         announceService.updateAnnounce(announceDto);
-        return ResponseEntity.ok()
-                .body(new ResponseDto(HttpStatus.OK, "공지사항이 수정되었습니다."));
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "공지사항이 수정되었습니다."));
     }
 
     /* 공지사항 삭제 */

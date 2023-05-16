@@ -37,10 +37,6 @@ public class MemberDto {
 	
 	private List<HistoryDto> history;
 	
-	private EmployeeDto empCode;
 	
-	
-
-
 
 }

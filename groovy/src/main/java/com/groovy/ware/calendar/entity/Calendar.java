@@ -15,6 +15,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.groovy.ware.employee.entity.Department;
 
@@ -60,15 +61,41 @@ public class Calendar {
     private Employee schWriter;
 
     @Column(name = "SCH_START")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     private Timestamp schStart;
 
     @Column(name = "SCH_END")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     private Timestamp schEnd;
 
-    public void update(String schTitle2, String schContext2, Timestamp schStart2, Timestamp schend2) {
-    }
-
+    /* 수정용도 메소드는 별도 정의가 필요하다. */
+public void update(String schTitle, String schContext, Timestamp schStart, Timestamp schEnd) {
+    this.schTitle = schTitle;
+    this.schContext = schContext;
+    this.schStart = schStart;
+    this.schEnd = schEnd;
     
+
+
+
+
 }
 
-/* 수정용도 메소드는 별도 정의가 필요하다. */
+
+public Calendar(String schTitle, String schContext, String schDiv, Department dept, Employee schWriter, Timestamp schStart, Timestamp schEnd) {
+    this.schTitle = schTitle;
+    this.schContext = schContext;
+    this.schDiv = schDiv;
+    this.dept = dept;
+    this.schWriter = schWriter;
+    this.schStart = schStart;
+    this.schEnd = schEnd;
+}
+
+
+public Calendar() {}
+
+
+}
+
+

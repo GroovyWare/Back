@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.groovy.ware.calendar.entity.Calendar;
+import com.groovy.ware.employee.entity.Employee;
 
 public interface CalendarRepository extends JpaRepository<Calendar, Long> {
    /* 제목으로 찾기 */
@@ -20,10 +21,14 @@ public interface CalendarRepository extends JpaRepository<Calendar, Long> {
 
    /* 일정코드로 찾기? */
    @Query("SELECT s FROM Calendar s WHERE s.schCode = :schCode")
-   Optional<Calendar> findBySchCode(@Param("schCode") Long schCode);
+   Calendar findBySchCode(@Param("schCode") Long schCode);
 
    /* 캘린더 메인 */
-   @Query("SELECT s FROM Calendar s WHERE s.schWriter.empCode = :empCode")
-   Calendar findByAllscheduleswithEmpCode();
-
+   // @EntityGraph(attributePaths = {"schWriter"})
+   // @Query("SELECT s FROM Calendar s WHERE s.schWriter = :employee")
+   // List<Calendar> findByAllscheduleswithEmpCode(@Param("empCode") Long employee);
+   
+   @Query("SELECT s FROM Calendar s WHERE s.schDiv ='전체' OR (s.schDiv = '부서' AND s.dept.deptCode = :deptCode) OR s.schWriter.empCode = :empCode")
+   List<Calendar> findByAllSchedulesWithEmpCode(@Param("empCode") Long empCode, @Param("deptCode") Long deptCode);
+   
 }
