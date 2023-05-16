@@ -1,6 +1,7 @@
 package com.groovy.ware.employee.repository;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -20,5 +21,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	Optional<Employee> findByEmpId(String empId);
 	
 	Employee findByEmpCode(String empCode);
+
+	/* 민경 조직도 조회 (검색) */
+	List<Employee> findByempName(String empName);
 
 }
