@@ -1,9 +1,12 @@
 package com.groovy.ware.calendar.Controller;
 
+import java.util.List;
+
 import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 // import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 // import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,6 +26,7 @@ import com.groovy.ware.common.ResponseDto;
 import com.groovy.ware.common.paging.Pagenation;
 import com.groovy.ware.common.paging.PagingButtonInfo;
 import com.groovy.ware.common.paging.ResponseDtoWithPaging;
+import com.groovy.ware.employee.dto.DepartmentDto;
 import com.groovy.ware.employee.dto.EmployeeDto;
 import com.groovy.ware.employee.entity.Employee;
 import com.groovy.ware.employee.service.EmployeeService;
@@ -31,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
-@RequestMapping("/groovy")
+@RequestMapping("/calendar")
 public class CalendarController {
 
     private final EmployeeService empService;
@@ -43,13 +47,27 @@ public class CalendarController {
 
     }
 
-    /* 1. 캘린더 메인 */
-    @GetMapping("/schedule/{empCode}")
-    public ResponseEntity<ResponseDto> getAllSchedules(@PathVariable Long empCode) {
-        EmployeeDto employeeDto = empService.getEmployeeByEmpCode(empCode);
-        CalendarDTO scheduleDto = calendarService.viewAllSchedule(employeeDto);
-        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회완료!"));
-    }
+/* 1. 캘린더 메인 */
+@GetMapping("/schedule")
+
+public ResponseEntity<ResponseDto> getAllSchedules(@AuthenticationPrincipal EmployeeDto writer) {
+    log.info("[CalendarController] start ============================");
+    
+    /* 테스트용임 아래 5코드는 추후 지울것 + empDTO 새로 짜서 필요한 정보만 가져오는게 효율며7ㄴ에서 이득 */
+    writer= new EmployeeDto();
+    writer.setEmpCode(1L);
+    DepartmentDto dept = new DepartmentDto();
+    dept.setDeptCode(1L);
+    writer.setDept(dept);
+    
+    
+    log.info("[CalendarController] writer " + writer);
+
+    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회완료!", calendarService.viewAllSchedule(writer)));
+}
+
+
+
 
     /* 2. 일정추가 */
     @PostMapping("/schedule")
@@ -71,7 +89,7 @@ public class CalendarController {
     public ResponseEntity<ResponseDto> selectScheduleListbyTitle(
             @RequestParam(name = "list") String schTitle,
             @RequestParam(name = "page", defaultValue = "1") int page,
-            Employee employee) {
+            EmployeeDto employee) {
         log.info("[CalendarController] start ============================");
         log.info("[CalendarController] schedule " + schTitle);
         log.info("[CalendarController] page" + page);
@@ -91,11 +109,11 @@ public class CalendarController {
     }
 
     /* 3-1 . 일정 상세를 보여주기 */
-    // @GetMapping("/schedule/{empCode}/{schCode}/")
-    // public ResponseEntity<ResponseDto> selectScheduleDetail(@PathVariable Long empCode, @PathVariable Long schCode) {
-    //     return ResponseEntity
-    //             .ok().body(new ResponseDto(HttpStatus.OK, "상세 조회 성공", calendarService.selectOneSchedule(schCode)));
-    // }
+    @GetMapping("/schedule/detail/{schCode}")
+    public ResponseEntity<ResponseDto> selectScheduleDetail(@PathVariable Long schCode) {
+        return ResponseEntity
+                .ok().body(new ResponseDto(HttpStatus.OK, "상세 조회 성공", calendarService.selectScheduleDetail(schCode)));
+    }
 
 
 
@@ -113,7 +131,7 @@ public class CalendarController {
     }
 
     /* 5. 일정 삭제하기 */
-    @DeleteMapping("/schedule/{schCode}")
+    @DeleteMapping("/schedule/delete/{schCode}")
     public ResponseEntity<ResponseDto> deleteSchedule(@PathVariable Long schCode) {
         calendarService.deleteSchedule(schCode);
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "삭제 완료"));

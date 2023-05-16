@@ -103,7 +103,7 @@ public class MemberService {
 		Member findMember = memberRepository.findById(memCode).orElseThrow();
 		
 		log.info("[MemberService] : originMember : {}", findMember);
-		
+
 		findMember.modify(
 				memberDto.getMemName(), 
 				memberDto.getMemPhone(), 
