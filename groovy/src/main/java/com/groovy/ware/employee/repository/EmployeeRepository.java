@@ -19,5 +19,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	/* 아이디 중복 확인시 조회 */
 	Optional<Employee> findByEmpId(String empId);
 	
+	Employee findByEmpCode(String empCode);
 
 }

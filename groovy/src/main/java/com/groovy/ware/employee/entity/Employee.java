@@ -17,6 +17,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.groovy.ware.common.entity.File;
 
 import lombok.Getter;
@@ -28,7 +30,10 @@ import lombok.Setter;
 @Entity
 @Table(name="GRV_EMPLOYEE")
 @SequenceGenerator(name="EMPLOYEE_SEQ_GENERATOR", sequenceName="SEQ_EMP_CODE", initialValue=1, allocationSize=1)
-@DynamicInsert 
+@DynamicInsert
+@JsonIdentityInfo(
+		  generator = ObjectIdGenerators.PropertyGenerator.class, 
+		  property = "empCode")
 public class Employee {
 
 	@Id

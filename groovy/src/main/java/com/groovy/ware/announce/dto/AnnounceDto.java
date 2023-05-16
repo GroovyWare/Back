@@ -25,8 +25,5 @@ public class AnnounceDto {
 	private MultipartFile announceImage;
 	
 	private List<FileDto> files;
-	
-//	private FileDto fileOriginalName;	// 파일 원본명
-//	private FileDto fileSavedName;		// 파일 저장명
 
 }
