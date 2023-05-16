@@ -3,6 +3,7 @@ package com.groovy.ware.calendar.service;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -47,19 +48,18 @@ public class CalendarService {
 
    
    /* 1. 캘린더 메인에서 전체일정 보여주기  직원값을 가져와야한다.*/
-   public CalendarDTO viewAllSchedule(Long writer) {
-
-
-
-      Employee employee = employeeRepository.findById(writer)
-      .orElseThrow(() -> new UserNotFoundException("직원이 없습니다!"));
-      Calendar empSchedule = calendarRepository.findByAllscheduleswithEmpCode();
-    
-      CalendarDTO calendarDTO = modelMapper.map(empSchedule, CalendarDTO.class);
-      return calendarDTO;
+   public List<CalendarDTO> viewAllSchedule(EmployeeDto writer) {
+      // Employee employee = employeeRepository.findById(writer.getEmpCode())
+      //         .orElseThrow(() -> new UserNotFoundException("직원이 없습니다!"));
       
-      
-   }
+      List<Calendar> empSchedules = calendarRepository.findByAllSchedulesWithEmpCode(writer.getEmpCode(), writer.getDept().getDeptCode());
+      List<CalendarDTO> calendarDTOList = empSchedules.stream()
+              .map(calendar -> modelMapper.map(calendar, CalendarDTO.class))
+              .collect(Collectors.toList());
+  
+      return calendarDTOList;
+  }
+  
    
 
       

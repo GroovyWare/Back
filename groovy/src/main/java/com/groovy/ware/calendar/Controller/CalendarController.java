@@ -1,5 +1,7 @@
 package com.groovy.ware.calendar.Controller;
 
+import java.util.List;
+
 import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,7 @@ import com.groovy.ware.common.ResponseDto;
 import com.groovy.ware.common.paging.Pagenation;
 import com.groovy.ware.common.paging.PagingButtonInfo;
 import com.groovy.ware.common.paging.ResponseDtoWithPaging;
+import com.groovy.ware.employee.dto.DepartmentDto;
 import com.groovy.ware.employee.dto.EmployeeDto;
 import com.groovy.ware.employee.entity.Employee;
 import com.groovy.ware.employee.service.EmployeeService;
@@ -32,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
-@RequestMapping("/groovy")
+@RequestMapping("/calendar")
 public class CalendarController {
 
     private final EmployeeService empService;
@@ -44,15 +47,27 @@ public class CalendarController {
 
     }
 
-    /* 1. 캘린더 메인 */
-    @GetMapping("/schedule")
-    public ResponseEntity<ResponseDto> getAllSchedules(@RequestBody CalendarDTO calendarDTO, @AuthenticationPrincipal EmployeeDto writer) {
-    
-        calendarDTO.setSchWriter(writer);
-        CalendarDTO result =  calendarService.viewAllSchedule(writer.getEmpCode());
+/* 1. 캘린더 메인 */
+@GetMapping("/schedule")
 
-        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회완료!", result));
-    }
+public ResponseEntity<ResponseDto> getAllSchedules(@AuthenticationPrincipal EmployeeDto writer) {
+    log.info("[CalendarController] start ============================");
+    
+    /* 테스트용임 아래 5코드는 추후 지울것 + empDTO 새로 짜서 필요한 정보만 가져오는게 효율며7ㄴ에서 이득 */
+    writer= new EmployeeDto();
+    writer.setEmpCode(1L);
+    DepartmentDto dept = new DepartmentDto();
+    dept.setDeptCode(1L);
+    writer.setDept(dept);
+    
+    
+    log.info("[CalendarController] writer " + writer);
+
+    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회완료!", calendarService.viewAllSchedule(writer)));
+}
+
+
+
 
     /* 2. 일정추가 */
     @PostMapping("/schedule")
@@ -116,7 +131,7 @@ public class CalendarController {
     }
 
     /* 5. 일정 삭제하기 */
-    @DeleteMapping("/schedule/{schCode}")
+    @DeleteMapping("/schedule/delete/{schCode}")
     public ResponseEntity<ResponseDto> deleteSchedule(@PathVariable Long schCode) {
         calendarService.deleteSchedule(schCode);
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "삭제 완료"));
