@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.groovy.ware.employee.entity.Employee;
 import com.groovy.ware.member.entity.Member;
-import com.groovy.ware.play.entity.Play;
 
 public interface MemberRepository extends JpaRepository<Member, Long>{
 
@@ -15,8 +14,8 @@ public interface MemberRepository extends JpaRepository<Member, Long>{
 	@EntityGraph(attributePaths={"history", "employee"})
 	Page<Member> findAll(Pageable pageable);
 
-	/* 2. 회원 조회 리스트(민경) */ 
-//	Page<Member> findByEmpCode(Pageable pageable, Employee employee);
+	/* 민경 운동량 회원 목록 조회 */
+	Page<Member> findByMemCode(Pageable pageable, Long memCode);
 
 
 	

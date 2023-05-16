@@ -1,11 +1,14 @@
 package com.groovy.ware.jwt;
 
 import java.security.Key;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
@@ -40,8 +43,10 @@ public class TokenProvider {
 
 		Claims claims = Jwts.claims().setSubject(employee.getEmpId());
 		// 권한도 claims에 담기
-//		List<String> roles = Collections.singletonList(employee.getEmployeeRole());
-//		claims.put(AUTHORITIES_KEY, roles);
+		List<String> roles = employee.getAuths().stream().map(auth -> auth.getAuth().getAuthName())
+				.collect(Collectors.toList());
+
+		claims.put(AUTHORITIES_KEY, roles);
 		
 		long now = new Date().getTime();
 		Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
@@ -55,5 +60,5 @@ public class TokenProvider {
 		
 		return new TokenDto(BEARER_TYPE, employee.getEmpName(), accessToken, accessTokenExpiresIn.getTime());
 	}
-
+	
 }

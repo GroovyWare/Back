@@ -64,9 +64,12 @@ public class Employee {
 	@ManyToOne
 	@JoinColumn(name="POSITION_CODE")
 	private Position position;
+	
 	@OneToOne(mappedBy="employee")
 	private File file;
-	@OneToMany(mappedBy="EmpAuthPK.emp")
+	
+	@OneToMany
+	@JoinColumn(name="EMP_CODE")
 	private List<EmpAuth> auths;
 	
 	public void update(String empName, String empPhone, String empEmail, String empAddress, Date empExDate, Department dept, Position position, File file) {
@@ -79,8 +82,4 @@ public class Employee {
 		this.position = position;
 		this.file = file;
 	}
-
-	
-
 }
-

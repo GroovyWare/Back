@@ -57,24 +57,22 @@ public class Member {
 	@Column(name="MEM_END_DATE")
 	private Date memEndDate;
 	
-	@OneToMany(cascade = CascadeType.PERSIST)
+	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="MEM_CODE")
 	private List<History> history;
 	
-	@ManyToOne
-	@JoinColumn(name="EMP_CODE")
-	private Employee employee;
-	
+
 	
 	/* Member entity 수정 용도의 메소드 */
 	public void modify(String memName, String memPhone, Date memDeleteDate, Date memStartDate,
-			Date memEndDate) {
+			Date memEndDate, List<History> history) {
 		
 		this.memName = memName;
 		this.memPhone = memPhone;
 		this.memDeleteDate = memDeleteDate;
 		this.memStartDate = memStartDate;
 		this.memEndDate= memEndDate;
+		this.history = history;
 	
 	}
 	
