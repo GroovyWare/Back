@@ -1,6 +1,7 @@
 package com.groovy.ware.member.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.groovy.ware.employee.entity.Employee;
 import com.groovy.ware.history.entity.History;
 import com.groovy.ware.history.repository.HistoryRepository;
 import com.groovy.ware.member.dto.MemberDto;
@@ -101,19 +103,19 @@ public class MemberService {
 		Member findMember = memberRepository.findById(memCode).orElseThrow();
 		
 		log.info("[MemberService] : originMember : {}", findMember);
-		
-		// findMember.modify(
-		// 		memberDto.getMemName(), 
-		// 		memberDto.getMemPhone(), 
-		// 		memberDto.getMemDeleteDate(), 
-		// 		memberDto.getMemStartDate(), 
-		// 		memberDto.getMemEndDate()
-		// 		);
+
+		findMember.modify(
+				memberDto.getMemName(), 
+				memberDto.getMemPhone(), 
+				memberDto.getMemDeleteDate(), 
+				memberDto.getMemStartDate(), 
+				memberDto.getMemEndDate(),
+				memberDto.getHistory().stream().map(history -> modelMapper.map(history, History.class)).collect(Collectors.toList())
+				);
 	
 		log.info("[MemberService] : modifyMember end ==================================== ");
 		
 	}
-	
 	
 
 }
