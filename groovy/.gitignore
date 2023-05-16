@@ -12,6 +12,9 @@ target/
 .settings
 .springBeans
 .sts4-cache
+.application.yml
+.DS_Store
+.pom.xml
 
 ### IntelliJ IDEA ###
 .idea
@@ -33,5 +36,4 @@ build/
 .vscode/
 /pom.xml
 /.DS_Store
-
 /application.yml
