@@ -32,7 +32,6 @@ public class TokenProvider {
 	
 	private final UserDetailsService userDetailsService;
 
-	
 	public TokenProvider(@Value("${jwt.secret}") String secretKey, UserDetailsService userDetailsService) {
 		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
 		this.key = Keys.hmacShaKeyFor(keyBytes);
@@ -42,7 +41,7 @@ public class TokenProvider {
 	public TokenDto generateToken(EmployeeDto employee) {
 
 		Claims claims = Jwts.claims().setSubject(employee.getEmpId());
-		// 권한도 claims에 담기
+		
 		List<String> roles = employee.getAuths().stream().map(auth -> auth.getAuth().getAuthName())
 				.collect(Collectors.toList());
 
@@ -61,4 +60,26 @@ public class TokenProvider {
 		return new TokenDto(BEARER_TYPE, employee.getEmpName(), accessToken, accessTokenExpiresIn.getTime());
 	}
 	
+
+	public boolean validateToken(String jwt) {
+		
+		Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);
+
+		return true;
+	}
+
+	public Authentication getAuthentication(String jwt) {
+		
+		Claims claims = parseClaims(jwt);
+		UserDetails userDetails = userDetailsService.loadUserByUsername(claims.getSubject());
+		
+		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+	}
+
+	private Claims parseClaims(String jwt) {
+		
+		return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
+	}
+	
 }
+

@@ -10,12 +10,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.groovy.ware.common.dto.FileDto;
-import com.groovy.ware.employee.entity.EmpAuth;
 
 import lombok.Data;
 
 @Data
-public class EmployeeDto implements UserDetails{
+public class EmployeeDto implements UserDetails {
+	
 	private Long empCode;	
 	private String empId;
 	private String empPassword;
