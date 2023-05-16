@@ -10,6 +10,7 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.groovy.ware.employee.dto.EmployeeDto;
 import com.groovy.ware.pass.dto.PassDto;
 
 import lombok.Data;
@@ -31,5 +32,7 @@ public class HistoryDto {
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyMMdd")
 	private Date resEnd;
+	
+	private EmployeeDto employee;
 
 }
