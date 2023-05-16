@@ -57,6 +57,3 @@ public class History {
 	private Employee employee;
 
 }
-
-
-

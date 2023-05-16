@@ -5,8 +5,8 @@ import javax.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.groovy.ware.pass.dto.PassDto;
@@ -61,33 +61,6 @@ public class PassService {
 		return passDtoList;
 	}
 	
-	/* 회원권 수정 */
-	@Transactional
-	public void modifyPass(PassDto passDto, Long passCode) {
-		log.info("[PassService] modifyPass start =====================================");
-		log.info("[PassService] passDto : {}", passDto);
-		
-		Pass originPass = passRepository.findById(passCode).orElseThrow();
-		
-		originPass.modify(
-				
-				passDto.getPassType(), 
-				passDto.getPassPrice(), 
-				passDto.getPassAmount(), 
-				passDto.getPassEtc()
-				
-		);
-		
-	}
-	
-	/* 회원권 삭제 */
-	@Transactional
-	public void deletePass(Long passCode) {
-		log.info("[PassService] deletePass start =====================================");
-
-		passRepository.deleteById(passCode);
-		
-	}
 	
 	
 	
