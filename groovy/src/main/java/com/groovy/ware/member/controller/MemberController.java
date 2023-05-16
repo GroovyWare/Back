@@ -91,12 +91,16 @@ public class MemberController {
 		
 		return ResponseEntity.ok()
 				.body(new ResponseDto(HttpStatus.OK, "회원 수정 성공"));
-		
 	}
 	
  
 		
 		
+	
+	
+
+	
+	
 	
 	
 	
