@@ -16,10 +16,9 @@ public class CalendarDTO {
     private String schContext;
     private String schDiv;
     private DepartmentDto dept;
-    private EmployeeDto employee;
     private EmployeeDto schWriter;
     private Timestamp schStart;
-    private Timestamp schend;
+    private Timestamp schEnd;
 
 
 

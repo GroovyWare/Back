@@ -21,6 +21,5 @@ public class ResponseDto {
 		this.status = status.value();
 		this.message = message;
 		this.data = data;		
-	}
-
+  }
 }
