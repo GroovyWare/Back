@@ -17,7 +17,7 @@ public class EmployeeDto {
 	private String empAddress;
 	private Date entDate;
 	private Date exDate;
-	private String empEntire;
+	private String empStatus;
 	private DepartmentDto department;
 	private PositionDto position;
 }

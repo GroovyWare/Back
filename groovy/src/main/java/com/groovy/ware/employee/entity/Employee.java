@@ -46,8 +46,8 @@ public class Employee {
 	private Date entDate;
 	@Column(name="EMP_EX_DATE")
 	private Date exDate;
-	@Column(name="EMP_ENTIRE")
-	private String empEnitre;
+	@Column(name="EMP_STATUS")
+	private String empStatus;
 	@ManyToOne
 	@JoinColumn(name="DEPT_CODE")
 	private Department dept;
