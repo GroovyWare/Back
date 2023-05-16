@@ -1,5 +1,7 @@
 package com.groovy.ware.member.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -16,6 +18,7 @@ public interface MemberRepository extends JpaRepository<Member, Long>{
 
 	/* 민경 운동량 회원 목록 조회 */
 	Page<Member> findByMemCode(Pageable pageable, Long memCode);
+
 
 
 	
