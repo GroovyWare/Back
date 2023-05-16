@@ -66,11 +66,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
  		              * 이 때 OPTIONS 메서드로 서버에 사전 요청을 보내 요청 권한이 있는지 확인 */
  		             .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
  		             .antMatchers("/auth/**").permitAll()
- 		             .antMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
- 		             .antMatchers("/api/v1/products/**").hasRole("ADMIN")
- 		             .antMatchers("/api/v1/products-management/**").hasRole("ADMIN")
- 		             .antMatchers(HttpMethod.GET, "/api/v1/reviews/**").permitAll()
- 		             .antMatchers("/api/**").hasAnyRole("USER", "ADMIN")  // 나머지 API 는 전부 인증 필요
  		         .and()
  		         	.cors()
  		         // 실제 요청에 대해서 적용할 JwtFilter 설정
