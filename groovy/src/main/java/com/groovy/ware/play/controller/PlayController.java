@@ -3,9 +3,7 @@ package com.groovy.ware.play.controller;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +18,6 @@ import com.groovy.ware.play.service.PlayService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@CrossOrigin(origins="*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/play")
 public class PlayController {
@@ -32,10 +29,12 @@ public class PlayController {
 	}
 	
 	/* 1.각 트레이너별 회원 목록 조회 */
-	@GetMapping("/memberList/{empCode}")
-	public ResponseEntity<ResponseDto> selectMemberList(@RequestParam(name="page", defaultValue="1") int page, @PathVariable Long empCode){
+	@GetMapping("/memberList")
+	public ResponseEntity<ResponseDto> selectMemberList(@RequestParam(name="page", defaultValue="1") int page){
 		
-		Page<MemberDto> memberList = playService.selectMemberList(page, empCode);
+		Page<MemberDto> memberList = playService.selectMemberList(page);
+		
+		log.info("memberList {}", memberList);
 		
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(memberList);
 		
@@ -45,5 +44,20 @@ public class PlayController {
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 	}
+	
+//	/* 1.각 트레이너별 회원 목록 조회 */
+//	@GetMapping("/memberList/{empCode}")
+//	public ResponseEntity<ResponseDto> selectMemberList(@RequestParam(name="page", defaultValue="1") int page, @PathVariable Long empCode){
+//		
+//		Page<MemberDto> memberList = playService.selectMemberList(page, empCode);
+//		
+//		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(memberList);
+//		
+//		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+//		responseDtoWithPaging.setPageInfo(pageInfo);
+//		responseDtoWithPaging.setData(memberList.getContent());
+//		
+//		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+//	}
 
 }

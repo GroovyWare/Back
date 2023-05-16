@@ -1,41 +1,8 @@
-<<<<<<< HEAD
-HELP.md
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+groovy/src/main/java/com/groovy/ware/calendar/service/CalendarService.java
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-.DS_Store
-.pom.xml
-.application.yml
-
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
 .vscode/
-/pom.xml
 
 
+groovy\pom.xml
 
+groovy\src\main\resources\application.yml
