@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.groovy.ware.common.entity.File;
 import com.groovy.ware.employee.entity.Employee;
 
@@ -39,7 +40,7 @@ public class Announce {
 
     @ManyToOne
     @JoinColumn(name="EMP_CODE")
-    private Employee empCode;		// 직원 코드
+    private Employee employee;		// 직원 코드
 
     @Column(name="ANN_CONTENT")
     private String annContent;		// 내용
@@ -50,8 +51,8 @@ public class Announce {
     @Column(name="ANN_DELETE")
     private String annDelete; 		// 삭제 여부
 
-    @OneToMany
-    @JoinColumn(name="FILE_CODE")
+    @OneToMany(mappedBy="announce")
+    @JsonManagedReference
     private List<File> files;
 
     public void update(String annTitle, String annContent) {

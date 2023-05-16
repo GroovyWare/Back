@@ -1,6 +1,7 @@
 package com.groovy.ware.common.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.groovy.ware.announce.dto.AnnounceDto;
 import com.groovy.ware.employee.dto.EmployeeDto;
 
 import lombok.Data;
@@ -17,5 +18,8 @@ public class FileDto {
 	
 	@JsonIgnore
 	private EmployeeDto employee;
+	
+	@JsonIgnore
+	private AnnounceDto announce;
 }
 
