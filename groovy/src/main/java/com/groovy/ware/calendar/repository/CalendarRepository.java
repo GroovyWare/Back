@@ -23,7 +23,9 @@ public interface CalendarRepository extends JpaRepository<Calendar, Long> {
    Calendar findBySchCode(@Param("schCode") Long schCode);
 
    /* 캘린더 메인 */
+   @EntityGraph(attributePaths = "schWriter")
    @Query("SELECT s FROM Calendar s WHERE s.schWriter.empCode = :empCode")
    Calendar findByAllscheduleswithEmpCode();
+   
 
 }
