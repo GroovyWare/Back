@@ -23,7 +23,6 @@ import com.groovy.ware.employee.service.EmployeeService;
 
 import lombok.extern.slf4j.Slf4j;
 
-@CrossOrigin(origins="*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/auth")
 @Slf4j
