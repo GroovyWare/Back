@@ -31,15 +31,13 @@ public class SecurityConfig {
 	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 	private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 	private final JwtFilter jwtFilter;
-	private final TokenProvider tokenProvider;
+
 	
 	public SecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, 
-			JwtAccessDeniedHandler jwtAccessDeniedHandler, JwtFilter jwtFilter,
-			TokenProvider tokenProvider) {
+			JwtAccessDeniedHandler jwtAccessDeniedHandler, JwtFilter jwtFilter) {
 		this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
 		this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
 		this.jwtFilter = jwtFilter;
-		this.tokenProvider = tokenProvider;
 	}
 
 
@@ -96,6 +94,7 @@ public class SecurityConfig {
 	 * 표준인 CORS를 만듦
 	 * 기본적으로 서버에서 클라이언트를 대상으로 리소스의 허용 여부를 결정함.
 	 * */
+ 	
     @Bean
     CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
