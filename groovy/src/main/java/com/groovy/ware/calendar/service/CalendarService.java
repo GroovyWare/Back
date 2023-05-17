@@ -53,12 +53,7 @@ public class CalendarService {
   }
   
    
-
-      
-
-
-
-   /* 2. 개인일정 생성하기 */
+   /* 2. 일정 생성하기 */
    @Transactional
    public void addSchedule(CalendarDTO calendarDTO) {
       log.info("[CalendarService] inserting event start");
@@ -127,10 +122,10 @@ public void modifyCalendar(CalendarDTO calendarDTO) {
             .orElseThrow(() -> new IllegalArgumentException("그런 스케줄은 없습니다" + calendarDTO.getSchCode()));
 
     originCalendar.setSchCode(calendarDTO.getSchCode());
-    originCalendar.setSchTitle(calendarDTO.getSchTitle());
-    originCalendar.setSchContext(calendarDTO.getSchContext());
-    originCalendar.setSchStart(calendarDTO.getSchStart());
-    originCalendar.setSchEnd(calendarDTO.getSchEnd());
+    originCalendar.setTitle(calendarDTO.getTitle());
+    originCalendar.setContext(calendarDTO.getContext());
+    originCalendar.setStart(calendarDTO.getStart());
+    originCalendar.setEnd(calendarDTO.getEnd());
 
     log.info("[CalendarService] modify end");
 }

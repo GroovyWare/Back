@@ -12,13 +12,13 @@ import lombok.Data;
 public class CalendarDTO {
     
     private Long schCode;
-    private String schTitle;
-    private String schContext;
+    private String Title;
+    private String Context;
     private String schDiv;
     private DepartmentDto dept;
     private EmployeeDto schWriter;
-    private Timestamp schStart;
-    private Timestamp schEnd;
+    private Timestamp Start;
+    private Timestamp End;
 
 
 

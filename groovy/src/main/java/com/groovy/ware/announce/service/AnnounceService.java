@@ -115,9 +115,9 @@ public class AnnounceService {
         switch (condition) {
             case "annTitle":
                 return announceRepository.findByAnnTitleContaining(keyword, pageable);
-            case "employee":
-                Employee employee = employeeRepository.findByEmpCode(keyword);
-                return announceRepository.findByEmployee(employee, pageable);
+            // case "employee":
+            //     Employee employee = employeeRepository.findByEmpCode(keyword);
+            //     return announceRepository.findByEmployee(employee, pageable);
             case "annContent":
                 return announceRepository.findByAnnContentContaining(keyword, pageable);
             case "annTitleAndContent":

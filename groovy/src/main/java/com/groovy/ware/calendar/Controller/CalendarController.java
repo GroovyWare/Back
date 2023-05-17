@@ -54,11 +54,11 @@ public ResponseEntity<ResponseDto> getAllSchedules(@AuthenticationPrincipal Empl
     log.info("[CalendarController] start ============================");
     
     /* 테스트용임 아래 5코드는 추후 지울것 + empDTO 새로 짜서 필요한 정보만 가져오는게 효율며7ㄴ에서 이득 */
-    writer= new EmployeeDto();
-    writer.setEmpCode(1L);
-    DepartmentDto dept = new DepartmentDto();
-    dept.setDeptCode(1L);
-    writer.setDept(dept);
+    // writer= new EmployeeDto();
+    // writer.setEmpCode(1L);
+    // DepartmentDto dept = new DepartmentDto();
+    // dept.setDeptCode(1L);
+    // writer.setDept(dept);
     
     
     log.info("[CalendarController] writer " + writer);
@@ -71,12 +71,10 @@ public ResponseEntity<ResponseDto> getAllSchedules(@AuthenticationPrincipal Empl
 
     /* 2. 일정추가 */
     @PostMapping("/schedule")
-    public ResponseEntity<ResponseDto> addingSchedule(@RequestBody CalendarDTO calendarDto, /*
-                                                                                             * @AuthenticationPrincipal
-                                                                                             */ EmployeeDto writer) {
-
+    public ResponseEntity<ResponseDto> addingSchedule(@RequestBody CalendarDTO calendarDto, 
+    @AuthenticationPrincipal  EmployeeDto writer) {
         /* 로그인 처리가 완료 될때까지 임시로 부여한다. */
-        writer.setEmpCode(1L);
+        // writer.setEmpCode(1L);
         calendarDto.setSchWriter(writer);
         calendarService.addSchedule(calendarDto);
 
@@ -109,7 +107,7 @@ public ResponseEntity<ResponseDto> getAllSchedules(@AuthenticationPrincipal Empl
     }
 
     /* 3-1 . 일정 상세를 보여주기 */
-    @GetMapping("/schedule/detail/{schCode}")
+    @GetMapping("/schedule/{schCode}")
     public ResponseEntity<ResponseDto> selectScheduleDetail(@PathVariable Long schCode) {
         return ResponseEntity
                 .ok().body(new ResponseDto(HttpStatus.OK, "상세 조회 성공", calendarService.selectScheduleDetail(schCode)));
@@ -119,7 +117,7 @@ public ResponseEntity<ResponseDto> getAllSchedules(@AuthenticationPrincipal Empl
 
     /* 리퀘스트 바디를 사용하여 json형식으로 보낸다. */
     /* 4. 일정 수정하기 */
-    @PutMapping("/schedule/modify")
+    @PutMapping("/schedule/{schCode}")
     public ResponseEntity<ResponseDto> modifyCalendar(
             @RequestBody CalendarDTO calendarDTO) {
 

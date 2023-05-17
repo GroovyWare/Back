@@ -44,10 +44,10 @@ public class Calendar {
     private Long schCode;
 
     @Column(name = "SCH_TITLE")
-    private String schTitle;
+    private String Title;
 
     @Column(name = "SCH_CONTEXT")
-    private String schContext;
+    private String Context;
 
     @Column(name = "SCH_DIV")
     private String schDiv;
@@ -62,18 +62,18 @@ public class Calendar {
 
     @Column(name = "SCH_START")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-    private Timestamp schStart;
+    private Timestamp Start;
 
     @Column(name = "SCH_END")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-    private Timestamp schEnd;
+    private Timestamp End;
 
     /* 수정용도 메소드는 별도 정의가 필요하다. */
 public void update(String schTitle, String schContext, Timestamp schStart, Timestamp schEnd) {
-    this.schTitle = schTitle;
-    this.schContext = schContext;
-    this.schStart = schStart;
-    this.schEnd = schEnd;
+    this.Title = schTitle;
+    this.Context = schContext;
+    this.Start = schStart;
+    this.End = schEnd;
     
 
 
@@ -83,13 +83,13 @@ public void update(String schTitle, String schContext, Timestamp schStart, Times
 
 
 public Calendar(String schTitle, String schContext, String schDiv, Department dept, Employee schWriter, Timestamp schStart, Timestamp schEnd) {
-    this.schTitle = schTitle;
-    this.schContext = schContext;
+    this.Title = schTitle;
+    this.Context = schContext;
     this.schDiv = schDiv;
     this.dept = dept;
     this.schWriter = schWriter;
-    this.schStart = schStart;
-    this.schEnd = schEnd;
+    this.Start = schStart;
+    this.End = schEnd;
 }
 
 
