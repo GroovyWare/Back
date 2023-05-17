@@ -71,12 +71,10 @@ public ResponseEntity<ResponseDto> getAllSchedules(@AuthenticationPrincipal Empl
 
     /* 2. 일정추가 */
     @PostMapping("/schedule")
-    public ResponseEntity<ResponseDto> addingSchedule(@RequestBody CalendarDTO calendarDto, /*
-                                                                                             * @AuthenticationPrincipal
-                                                                                             */ EmployeeDto writer) {
-
+    public ResponseEntity<ResponseDto> addingSchedule(@RequestBody CalendarDTO calendarDto, 
+    @AuthenticationPrincipal  EmployeeDto writer) {
         /* 로그인 처리가 완료 될때까지 임시로 부여한다. */
-        writer.setEmpCode(1L);
+        // writer.setEmpCode(1L);
         calendarDto.setSchWriter(writer);
         calendarService.addSchedule(calendarDto);
 

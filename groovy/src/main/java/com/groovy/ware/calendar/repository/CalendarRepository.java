@@ -16,8 +16,8 @@ import com.groovy.ware.employee.entity.Employee;
 
 public interface CalendarRepository extends JpaRepository<Calendar, Long> {
    /* 제목으로 찾기 */
-   @Query("SELECT s FROM Calendar s WHERE s.schTitle LIKE %:schTitle%")
-   Page<Calendar> findBySchTitle(Pageable pageable, String schTitle);
+   @Query("SELECT s FROM Calendar s WHERE s.Title LIKE %:Title%")
+   Page<Calendar> findBySchTitle(Pageable pageable, String Title);
 
    /* 일정코드로 찾기? */
    @Query("SELECT s FROM Calendar s WHERE s.schCode = :schCode")
