@@ -11,15 +11,12 @@ public class FileDto {
 
 	private Long fileCode;
 	private String fileDiv;
-	private Long empCode;
-	private Long annCode;
+	@JsonIgnore
+	private EmployeeDto employee;
+	@JsonIgnore
+	private AnnounceDto announce;
 	private String fileOriginalName;
 	private String fileSavedName;
 	
-	@JsonIgnore
-	private EmployeeDto employee;
-	
-	@JsonIgnore
-	private AnnounceDto announce;
 }
 
