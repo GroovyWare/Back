@@ -53,7 +53,7 @@ public class CalendarService {
   }
   
    
-   /* 2. 개인일정 생성하기 */
+   /* 2. 일정 생성하기 */
    @Transactional
    public void addSchedule(CalendarDTO calendarDTO) {
       log.info("[CalendarService] inserting event start");
