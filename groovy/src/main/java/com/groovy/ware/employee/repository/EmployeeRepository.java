@@ -27,7 +27,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@EntityGraph(attributePaths={"dept", "position", "file", "auths", "auths.auth"})
 	Optional<Employee> findByEmpId(String empId);
 	
-
 	/* 민경 조직도 조회 (검색) */
 	List<Employee> findByempName(String empName);
 	

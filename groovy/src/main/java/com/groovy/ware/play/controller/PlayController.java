@@ -37,7 +37,7 @@ public class PlayController {
 		log.info("controller start==========================");
 		log.info("employeeDto {}", employeeDto.toString());
 		
-		Page<MemberDto> memberList = playService.selectMemberList(page, employeeDto.getEmpId());
+		Page<MemberDto> memberList = playService.selectMemberList(page, employeeDto.getEmpCode());
 		
 		log.info("memberList {}", memberList);
 		

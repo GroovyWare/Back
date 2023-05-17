@@ -17,7 +17,7 @@ public interface HistoryRepository extends JpaRepository<History, Long> {
 	Page<History> findByMemCode(Pageable pageable, Long memCode);
 
 	/* 민경 회원 목록 조회 */
-	History findByEmployee(Employee findMember);
+	History findByEmployeeEmpCode(Long empCode);
 
 
 }

@@ -21,6 +21,7 @@ public interface MemberRepository extends JpaRepository<Member, Long>{
 
 
 
+
 	
 	/* 회원 상세 조회 */
 	
