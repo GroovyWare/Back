@@ -1,14 +1,11 @@
 package com.groovy.ware.calendar.service;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,11 +15,8 @@ import org.springframework.stereotype.Service;
 import com.groovy.ware.calendar.dto.CalendarDTO;
 import com.groovy.ware.calendar.entity.Calendar;
 import com.groovy.ware.calendar.repository.CalendarRepository;
-import com.groovy.ware.common.exception.UserNotFoundException;
 import com.groovy.ware.employee.dto.EmployeeDto;
-
-
-import com.groovy.ware.member.repository.MemberRepository;
+import com.groovy.ware.employee.repository.EmployeeRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
