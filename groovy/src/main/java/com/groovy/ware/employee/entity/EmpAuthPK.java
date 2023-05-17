@@ -2,44 +2,54 @@ package com.groovy.ware.employee.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+
 
 @Embeddable
 public class EmpAuthPK implements Serializable{
 
-	@ManyToOne
-	@JoinColumn(name="AUTH_CODE") 
-	private Authority auth;
+	@Column(name="EMP_CODE")
+	private Long empCode;
 	
-	@ManyToOne
-	@JoinColumn(name="EMP_CODE")
-	private Employee emp;
-	
+	@Column(name="AUTH_CODE")
+	private Long authCode;
+		
 	public EmpAuthPK() {}
-	
-	public EmpAuthPK(Authority auth, Employee emp) {
+
+	public EmpAuthPK(Long empCode, Long authCode) {
 		super();
-		this.auth = auth;
-		this.emp = emp;
+		this.empCode = empCode;
+		this.authCode = authCode;
 	}
 
-	public Authority getAuth() {
-		return auth;
+
+	public Long getEmpCode() {
+		return empCode;
 	}
 
-	public void setAuth(Authority auth) {
-		this.auth = auth;
+
+	public void setEmpCode(Long empCode) {
+		this.empCode = empCode;
 	}
 
-	public Employee getEmp() {
-		return emp;
+
+	public Long getAuthCode() {
+		return authCode;
 	}
 
-	public void setEmp(Employee emp) {
-		this.emp = emp;
+
+	public void setAuthCode(Long authCode) {
+		this.authCode = authCode;
 	}
+
+
+	@Override
+	public String toString() {
+		return "EmpAuthPK [empCode=" + empCode + ", authCode=" + authCode + "]";
+	}
+
+
 	
 	
 	

@@ -1,5 +1,7 @@
 package com.groovy.ware.employee.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
@@ -15,14 +17,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.groovy.ware.common.dto.FileDto;
 import com.groovy.ware.common.entity.File;
 import com.groovy.ware.common.exception.DuplicatedEmpIdException;
+import com.groovy.ware.common.exception.UserNotFoundException;
 import com.groovy.ware.common.repository.FileRepository;
+import com.groovy.ware.employee.dto.EmpAuthDto;
 import com.groovy.ware.employee.dto.EmployeeDto;
 import com.groovy.ware.employee.entity.Department;
+import com.groovy.ware.employee.entity.EmpAuthPK;
 import com.groovy.ware.employee.entity.Employee;
 import com.groovy.ware.employee.entity.Position;
 import com.groovy.ware.employee.repository.EmployeeRepository;
 import com.groovy.ware.util.FileUploadUtils;
-
 
 import io.jsonwebtoken.io.IOException;
 import lombok.extern.slf4j.Slf4j;
@@ -87,9 +91,9 @@ public class EmployeeService {
 		
 		log.info("[EmployeeService] registEmployee start ============================================");
 		log.info("[EmployeeService] registEmployee employeeDto : {}", employeeDto);
-		
+	
 		/* 아이디 중복 확인 */
-		if(employeeRepository.findByEmpId(employeeDto.getEmpId()) != null) {
+		if(employeeRepository.idCheck(employeeDto.getEmpId()) != null) {
 			log.info("[EmployeeService] 이미 해당 아이디가 있습니다.");
 			throw new DuplicatedEmpIdException("아이디가 이미 존재합니다.");
 		}
@@ -101,7 +105,23 @@ public class EmployeeService {
 		String imageName = UUID.randomUUID().toString().replace("-", ""); 
 		
 		try {
-	
+			
+			/* 권한 임의 값 전처리 */
+			Long initEmpCode = (long) 0;
+			Long initAuthCode = (long) 2;
+			EmpAuthDto empAuthDto = new EmpAuthDto();
+			EmpAuthPK empAuthPK = new EmpAuthPK();
+			
+			empAuthPK.setEmpCode(initEmpCode);
+			empAuthPK.setAuthCode(initAuthCode);
+			empAuthDto.setEmpAuthPK(empAuthPK);
+			
+			List<EmpAuthDto> authList = new ArrayList<EmpAuthDto>();
+			authList.add(empAuthDto);
+			log.info("authList : {}", authList);
+			employeeDto.setAuths(authList);
+			
+			
 			String originalName = employeeDto.getImgUrl().getOriginalFilename();
 			String replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, employeeDto.getImgUrl());
 			
@@ -112,7 +132,9 @@ public class EmployeeService {
 
 			fileDto.setEmployee(employeeDto);
 			log.info("[EmployeeService] registEmployee fileDto : {}", fileDto);
+			
 
+			
 			fileRepository.save(modelMapper.map(fileDto, File.class));
 			
 		} catch (IOException | java.io.IOException e) {
@@ -165,7 +187,18 @@ public class EmployeeService {
 	
 }
 
-	public EmployeeDto getEmployeeByEmpCode(Long empCode) {
-		return null;
+	/* 내정보 조회*/
+	public EmployeeDto selectMyInfo(Long empCode) {
+		log.info("[EmployeeService] selectMyInfo empCode : {}", empCode);
+		Employee employee = employeeRepository.findById(empCode)
+				.orElseThrow(() -> new UserNotFoundException(empCode + "를 찾을 수 없습니다."));
+		
+		return modelMapper.map(employee, EmployeeDto.class);
 	}
+	
+
+
+	
+
+
 }

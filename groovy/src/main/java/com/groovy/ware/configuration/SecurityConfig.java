@@ -20,22 +20,28 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
- @EnableWebSecurity
- public class SecurityConfig {
+import com.groovy.ware.jwt.JwtAccessDeniedHandler;
+import com.groovy.ware.jwt.JwtAuthenticationEntryPoint;
+import com.groovy.ware.jwt.JwtFilter;
+import com.groovy.ware.jwt.TokenProvider;
+
+@EnableWebSecurity
+public class SecurityConfig {
 	
-	// 인증 실패 핸들러
-//	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-	// 인가 실패 핸들러
-//	private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-	// 커스텀 인증 필터
-//	private final JwtFilter jwtFilter;
- //	
- //	public SecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, 
- //			JwtAccessDeniedHandler jwtAccessDeniedHandler, JwtFilter jwtFilter) {
- //		this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
- //		this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
- //		this.jwtFilter = jwtFilter;
- //	}
+	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+	private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+	private final JwtFilter jwtFilter;
+	private final TokenProvider tokenProvider;
+	
+	public SecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, 
+			JwtAccessDeniedHandler jwtAccessDeniedHandler, JwtFilter jwtFilter,
+			TokenProvider tokenProvider) {
+		this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+		this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
+		this.jwtFilter = jwtFilter;
+		this.tokenProvider = tokenProvider;
+	}
+
 
  	// 외부에서 이미지 파일에 접근 가능 하도록 설정
  	@Bean
@@ -52,39 +58,34 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
  	@Bean
  	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		
- 		 return http
- 		         // CSRF 설정 Disable
- 		         .csrf()
- 		         	.disable()
- 		         // exception handling 설정 추가
- //		         .exceptionHandling()
- //		         	.authenticationEntryPoint(jwtAuthenticationEntryPoint)
- //		         	.accessDeniedHandler(jwtAccessDeniedHandler)
- //		         .and()	
- 		         // 시큐리티는 기본적으로 세션을 사용하지만 API 서버에선 세션을 사용하지 않기 때문에 세션 설정을 Stateless 로 설정
- 		         .sessionManagement()
- 		             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
- 		         .and()
- 		         	 // 요청에 대한 권한 체크
- 		             .authorizeRequests()
- 		             /* 클라이언트가 외부 도메인을 요청하는 경우 웹 브라우저에서 자체적으로 사전 요청(preflight)이 일어남 
- 		              * 이 때 OPTIONS 메서드로 서버에 사전 요청을 보내 요청 권한이 있는지 확인 */
- 		             .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
- 		             .antMatchers("/auth/**").permitAll()
 
- 		             .antMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
- 		             .antMatchers("/api/v1/products/**").hasRole("ADMIN")
- 		             .antMatchers("/api/v1/products-management/**").hasRole("ADMIN")
- 		             .antMatchers(HttpMethod.GET, "/api/v1/reviews/**").permitAll()
- 		             .antMatchers("/api/**").hasAnyRole("USER", "ADMIN")  // 나머지 API 는 전부 인증 필요
+		 return http
+		         .csrf()
+		         	.disable()
+		         .exceptionHandling()
+		         	.authenticationEntryPoint(jwtAuthenticationEntryPoint)
+		         	.accessDeniedHandler(jwtAccessDeniedHandler)
+		         .and()	
+		         .sessionManagement()
+		             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		         .and()
+		         	 // 요청에 대한 권한 체크
+		             .authorizeRequests()
+		             /* 클라이언트가 외부 도메인을 요청하는 경우 웹 브라우저에서 자체적으로 사전 요청(preflight)이 일어남 
+		              * 이 때 OPTIONS 메서드로 서버에 사전 요청을 보내 요청 권한이 있는지 확인 */
+		             .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+		             .antMatchers("/auth/**").permitAll()
+		             .antMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
+		             .antMatchers("/api/v1/products/**").hasRole("ADMIN")
+		             .antMatchers("/api/v1/products-management/**").hasRole("ADMIN")
+		             .antMatchers(HttpMethod.GET, "/api/v1/reviews/**").permitAll()
+		             .antMatchers("/api/**").hasAnyRole("USER", "ADMIN")  // 나머지 API 는 전부 인증 필요
+		         .and()
+		         	.cors()
+		         .and()
+		         	.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+		         .build();
 
- 		         .and()
- 		         	.cors()
- 		         // 실제 요청에 대해서 적용할 JwtFilter 설정
- 		         // 인증을 처리하는 기본 필터 UsernamePasswordAuthenticationFilter 대신 별도의 인증 로직을 가진 커스텀 필터 사용
- 		         .and()
- //		         	.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
- 		         .build();
 		 
  	}
 	

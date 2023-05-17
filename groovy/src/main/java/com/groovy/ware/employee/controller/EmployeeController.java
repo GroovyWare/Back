@@ -3,7 +3,8 @@ package com.groovy.ware.employee.controller;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
+
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +23,6 @@ import com.groovy.ware.employee.service.EmployeeService;
 
 import lombok.extern.slf4j.Slf4j;
 
-@CrossOrigin(origins="*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/auth")
 @Slf4j
@@ -84,6 +84,17 @@ public class EmployeeController {
 		return ResponseEntity
 				.ok()
 				.body(new ResponseDto(HttpStatus.OK, "해당 직원 정보가 수정되었습니다."));
+	}
+	
+	/* 내 정보 조회 */
+	@GetMapping("/emps")
+	public ResponseEntity<ResponseDto> selectMyInfo(@AuthenticationPrincipal EmployeeDto employee) {
+		
+		log.info("employeeAuthentication : {}", employee);
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDto(HttpStatus.OK, "조회 완료", employeeService.selectMyInfo(employee.getEmpCode())));
+		
 	}
 	
 	

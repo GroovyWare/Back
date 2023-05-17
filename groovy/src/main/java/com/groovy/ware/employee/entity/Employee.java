@@ -3,6 +3,7 @@ package com.groovy.ware.employee.entity;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -64,11 +65,11 @@ public class Employee {
 	@ManyToOne
 	@JoinColumn(name="POSITION_CODE")
 	private Position position;
-	
+
 	@OneToOne(mappedBy="employee")
 	private File file;
 	
-	@OneToMany
+	@OneToMany(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="EMP_CODE")
 	private List<EmpAuth> auths;
 	
@@ -82,4 +83,5 @@ public class Employee {
 		this.position = position;
 		this.file = file;
 	}
+
 }
