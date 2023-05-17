@@ -1,6 +1,5 @@
 package com.groovy.ware.announce.service;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -57,7 +56,7 @@ public class AnnounceService {
     }
 
     @Transactional
-    public void createAnnounce(AnnounceDto announceDto, MultipartFile multipartFile) {
+    public void createAnnounce(AnnounceDto announceDto, MultipartFile multipartFile, Long empCode) {
         try {
             if (multipartFile != null && !multipartFile.isEmpty()) {
                 String replaceFileName = fileService.saveFile(multipartFile);
@@ -69,15 +68,23 @@ public class AnnounceService {
                 files.add(fileSavedName);
                 announceDto.setFiles(files);
             }
-            
-            announceDto.setAnnDate(new Timestamp(System.currentTimeMillis()));
 
-            announceRepository.save(modelMapper.map(announceDto, Announce.class));
+            // Retrieve the employee by their code
+            Employee employee = employeeRepository.findById(empCode)
+                    .orElseThrow(() -> new RuntimeException("Employee not found"));
+
+            // Convert DTO to Entity
+            Announce announce = modelMapper.map(announceDto, Announce.class);
+            announce.setEmployee(employee);  // Set the employee
+
+            announceRepository.save(announce);
         } catch (FileUploadException e) {
             LOGGER.error("Failed to create announce", e);
             throw e;
         }
     }
+
+
 
 
     @Transactional

@@ -10,15 +10,16 @@ import com.groovy.ware.employee.entity.Employee;
 
 public interface AnnounceRepository extends JpaRepository<Announce, Long> {
 
-    @EntityGraph(attributePaths = {"empCode"})
-    Page<Announce> findByAnnTitleContaining(String keyword, Pageable pageable);
+	@EntityGraph(attributePaths = {"employee"})
+	Page<Announce> findByAnnTitleContaining(String keyword, Pageable pageable);
 
-    @EntityGraph(attributePaths = {"empCode"})
-    Page<Announce> findByEmployee(Employee employee, Pageable pageable);
+	@EntityGraph(attributePaths = {"employee"})
+	Page<Announce> findByEmployee(Employee employee, Pageable pageable);
 
-    @EntityGraph(attributePaths = {"empCode"})
-    Page<Announce> findByAnnContentContaining(String keyword, Pageable pageable);
+	@EntityGraph(attributePaths = {"employee"})
+	Page<Announce> findByAnnContentContaining(String keyword, Pageable pageable);
 
-    @EntityGraph(attributePaths = {"empCode"})
-    Page<Announce> findByAnnTitleContainingOrAnnContentContaining(String titleKeyword, String contentKeyword, Pageable pageable);
+	@EntityGraph(attributePaths = {"employee"})
+	Page<Announce> findByAnnTitleContainingOrAnnContentContaining(String titleKeyword, String contentKeyword, Pageable pageable);
+
 }
