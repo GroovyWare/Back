@@ -52,6 +52,20 @@ public class CalendarService {
       return calendarDTOList;
   }
   
+
+//   /* 1-1. 캘린더 메인에서 부서값만 갖고와서 출력하기 */
+//   public List<CalendarDTO> viewDeptSchedule(EmployeeDto writer) {
+
+//    List<Calendar> deptSchedules = calendarRepository.findByAllScheduleswithDept(writer.getEmpCode(), writer.getDept().getDeptCode());
+//    List<CalendarDTO> calendarDTOList = deptSchedules.stream()
+//               .map(calendar -> modelMapper.map(calendar, CalendarDTO.class))
+//               .collect(Collectors.toList());
+  
+//       return calendarDTOList;
+
+
+
+//   }
    
    /* 2. 일정 생성하기 */
    @Transactional
