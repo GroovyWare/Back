@@ -37,24 +37,16 @@ public class PlayService {
 		this.historyRepository = historyRepository;
 	}
 	
-	public Page<MemberDto> selectMemberList(int page, Long empCode) {
-		
-		log.info("service start==========================");
+	public Page<MemberDto> selectMemberList(int page, String empId) {
 		
 		Pageable pageable = PageRequest.of(page -1,  10, Sort.by("memCode").descending());
 		
-		Employee findTrainer = employeeRepository.findById(empCode).orElseThrow(() -> new IllegalArgumentException("일치하는 직원 목록이 없습니다."));
-		log.info("empCode {}", findTrainer.getEmpCode().toString());
+		Employee findTrainer = employeeRepository.findByEmpId(empId).orElseThrow(() -> new IllegalArgumentException("일치하는 직원 목록이 없습니다."));
 		
 		History findPlayMember = historyRepository.findByEmployeeEmpCode(findTrainer.getEmpCode());
-		log.info("findPlayMember {}", findPlayMember);
 		
 		Page<Member> playMemberList = memberRepository.findByMemCode(pageable, findPlayMember.getMemCode());
 		Page<MemberDto> playDtoMemberList = playMemberList.map(row -> modelMapper.map(row, MemberDto.class));
-		
-		log.info("playMemberList {}", playMemberList);
-		
-		log.info("service start==========================");
 		
 		return playDtoMemberList;
 	}

@@ -1,5 +1,7 @@
 package com.groovy.ware.document.Service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
@@ -26,6 +28,15 @@ public class DocumentService {
 		
 		documentRepository.save(modelMapper.map(documentDto, Document.class));
 		
+	}
+
+
+	public DocumentDto setDocument() {
+		
+		Document document = documentRepository.findByDocCode(Long.parseLong("1"));
+		DocumentDto documentDto = modelMapper.map(document, DocumentDto.class);
+		
+		return documentDto;
 	}
 
 }
