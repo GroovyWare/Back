@@ -13,14 +13,12 @@ public class CalendarDTO {
     
     private Long schCode;
     private String Title;
-    private String context;
+    private String Context;
     private String schDiv;
     private DepartmentDto dept;
     private EmployeeDto schWriter;
-    private Timestamp start;
-    private Timestamp end;
-    private String color;
-    private String textColor;
+    private Timestamp Start;
+    private Timestamp End;
 
 
 
