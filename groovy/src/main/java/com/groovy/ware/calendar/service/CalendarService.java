@@ -140,6 +140,8 @@ public void modifyCalendar(CalendarDTO calendarDTO) {
     originCalendar.setContext(calendarDTO.getContext());
     originCalendar.setStart(calendarDTO.getStart());
     originCalendar.setEnd(calendarDTO.getEnd());
+    originCalendar.setColor(calendarDTO.getColor());
+    originCalendar.setTextColor(calendarDTO.getTextColor());
 
     log.info("[CalendarService] modify end");
 }
