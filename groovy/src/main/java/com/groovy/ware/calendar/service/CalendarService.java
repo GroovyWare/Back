@@ -83,10 +83,10 @@ public class CalendarService {
 
    /* 3. 검색한 스케쥴 제목으로 리스트 보여주기 */
  
-   public Page<CalendarDTO> selectScheduleListbyTitle(int page, String schTitle) {
+   public Page<CalendarDTO> selectScheduleListbyTitle(int page, String schTitle , EmployeeDto writer) {
       Pageable pageable = PageRequest.of(page - 1, 5, Sort.by("schCode").descending());
 
-      Page<Calendar> scheduleList = calendarRepository.findBySchTitle(pageable, schTitle);
+      Page<Calendar> scheduleList = calendarRepository.findByTitle(pageable, schTitle , writer.getEmpCode(), writer.getDept().getDeptCode());
       Page<CalendarDTO> scheduleDtoList = scheduleList.map(calendar -> modelMapper.map(calendar, CalendarDTO.class));
       log.info("[CalenderService] scheduleList : {}", scheduleList);
       
