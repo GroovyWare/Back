@@ -44,7 +44,7 @@ public class Calendar {
     private Long schCode;
 
     @Column(name = "SCH_TITLE")
-    private String Title;
+    private String title;
 
     @Column(name = "SCH_CONTEXT")
     private String context;
@@ -76,20 +76,18 @@ public class Calendar {
 
     /* 수정용도 메소드는 별도 정의가 필요하다. */
 public void update(String schTitle, String schContext, Timestamp schStart, Timestamp schEnd) {
-    this.Title = schTitle;
+    this.title = schTitle;
     this.context = schContext;
     this.start = schStart;
     this.end = schEnd;
     
 
 
-
-
 }
 
 
 public Calendar(String schTitle, String schContext, String schDiv, Department dept, Employee schWriter, Timestamp schStart, Timestamp schEnd) {
-    this.Title = schTitle;
+    this.title = schTitle;
     this.context = schContext;
     this.schDiv = schDiv;
     this.dept = dept;
