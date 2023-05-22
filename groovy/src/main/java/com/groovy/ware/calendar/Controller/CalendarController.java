@@ -85,14 +85,14 @@ public ResponseEntity<ResponseDto> getAllSchedules(@AuthenticationPrincipal Empl
     /* 3. 일정 검색시 조회 */
     @GetMapping("/schedule/list")
     public ResponseEntity<ResponseDto> selectScheduleListbyTitle(
-            @RequestParam(name = "list") String schTitle,
+            @RequestParam(name = "title") String title,
             @RequestParam(name = "page", defaultValue = "1") int page,
-            EmployeeDto employee) {
+            @AuthenticationPrincipal  EmployeeDto writer) {
         log.info("[CalendarController] start ============================");
-        log.info("[CalendarController] schedule " + schTitle);
+        log.info("[CalendarController] schedule " + title);
         log.info("[CalendarController] page" + page);
 
-        Page<CalendarDTO> scheduleList = calendarService.selectScheduleListbyTitle(page, schTitle);
+        Page<CalendarDTO> scheduleList = calendarService.selectScheduleListbyTitle(page, title, writer);
 
         PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(scheduleList);
 
@@ -103,7 +103,7 @@ public ResponseEntity<ResponseDto> getAllSchedules(@AuthenticationPrincipal Empl
         responseDtoWithPaging.setData(scheduleList.getContent());
 
         log.info("[CalendarController] end ============================");
-        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "검색 조회 성공", responseDtoWithPaging));
     }
 
     /* 3-1 . 일정 상세를 보여주기 */

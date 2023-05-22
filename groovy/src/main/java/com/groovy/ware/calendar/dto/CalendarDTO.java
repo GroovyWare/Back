@@ -12,8 +12,8 @@ import lombok.Data;
 public class CalendarDTO {
     
     private Long schCode;
-    private String Title;
-    private String Context;
+    private String title;
+    private String context;
     private String schDiv;
     private DepartmentDto dept;
     private EmployeeDto schWriter;
