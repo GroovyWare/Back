@@ -25,18 +25,10 @@ public class Document {
 	@Column(name="DOC_CODE")
 	public Long docCode;
 	
-	@Column(name="DOC_CUSTOM")
-	private String docCustom;
-	
 	@Column(name="DOC_TITLE")
-	private String docTitle;
+	public String docTitle;
 	
 	@Column(name="DOC_CONTEXT")
-	private String docContext;
-	
-	@Column(name="DOC_START_DATE")
-	private Date docStartDate;
-	
-	@Column(name="DOC_END_DATE")
-	private Date docEndDate;
+	public String docContext;
+
 }

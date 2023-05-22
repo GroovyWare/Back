@@ -1,8 +1,6 @@
 package com.groovy.ware.test;
 
-import java.io.File;
-import java.io.FileOutputStream;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,29 +8,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import lombok.extern.slf4j.Slf4j;
-
 @RestController
-@Slf4j
 public class FileUploadController {
+	
+    @Autowired
+    private FilesRepository filesRepository;
 
-    @PostMapping("/upload")
-    public ResponseEntity<String> handleFileUpload(@RequestParam("docxFile") MultipartFile file) {
+    @PostMapping(value = "/upload")
+    public ResponseEntity uploadFile(@RequestParam("file") MultipartFile file) {
         try {
-        	log.info("controller start ==========================");
-        	log.info("file", file.toString());
-        	
-            // 파일을 임시 디렉터리에 저장
-            File tempFile = File.createTempFile("upload-", ".docx");
-            try (FileOutputStream fos = new FileOutputStream(tempFile)) {
-            	log.info("success");
-                fos.write(file.getBytes());
-            }
-
-            // 파일 경로 반환
-            return ResponseEntity.ok(tempFile.getAbsolutePath());
+            // 파일을 데이터베이스에 저장
+            Files fileEntity = new Files();
+            fileEntity.setName(file.getOriginalFilename());
+            fileEntity.setData(file.getBytes());
+            filesRepository.save(fileEntity);
+            return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("File upload failed: " + e.getMessage());
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -8,6 +8,7 @@ import com.groovy.ware.document.Entity.Document;
 
 public interface DocumentRepository extends JpaRepository<Document, Long> {
 
-	Document findByDocCode(long l);
+	/* 이름에 따른 기안서 양식 찾기 */
+	Document findByDocTitle(String docTitle);
 
 }
