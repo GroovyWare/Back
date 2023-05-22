@@ -119,10 +119,12 @@ public ResponseEntity<ResponseDto> getAllSchedules(@AuthenticationPrincipal Empl
     /* 4. 일정 수정하기 */
     @PutMapping("/schedule/{schCode}")
     public ResponseEntity<ResponseDto> modifyCalendar(
-            @RequestBody CalendarDTO calendarDTO) {
+            @RequestBody CalendarDTO calendarDTO, @AuthenticationPrincipal EmployeeDto writer,
+            @PathVariable Long schCode) {
 
+            calendarDTO.setSchCode(schCode);
         /* schCode로 값을 받아서 수정 */
-        calendarService.modifyCalendar(calendarDTO);
+        calendarService.modifyCalendar(calendarDTO, writer);
 
         return ResponseEntity.ok()
                 .body(new ResponseDto(HttpStatus.OK, "수정 완료"));
