@@ -49,7 +49,7 @@ public class PassService {
 		
 		log.info("[PassService] findPassList start =====================================");
 		
-		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("passCode").descending());
+		Pageable pageable = PageRequest.of(page - 1, 6, Sort.by("passCode").descending());
 		
 		Page<Pass> passList = passRepository.findAll(pageable);
 		Page<PassDto> passDtoList = passList.map(pass -> modelMapper.map(pass, PassDto.class));

@@ -4,7 +4,6 @@ package com.groovy.ware.history.entity;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,7 +16,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 
-import com.groovy.ware.employee.entity.Employee;
+import com.groovy.ware.member.entity.MemberEmployee;
 import com.groovy.ware.pass.entity.Pass;
 
 import lombok.Getter;
@@ -54,7 +53,7 @@ public class History {
 	
 	@ManyToOne
 	@JoinColumn(name="EMP_CODE")
-	private Employee employee;
+	private MemberEmployee employee;
 
 }
 
