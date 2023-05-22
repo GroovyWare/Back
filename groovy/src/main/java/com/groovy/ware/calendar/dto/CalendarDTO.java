@@ -19,6 +19,8 @@ public class CalendarDTO {
     private EmployeeDto schWriter;
     private Timestamp Start;
     private Timestamp End;
+    private String textColor;
+    private String color;
 
 
 }
