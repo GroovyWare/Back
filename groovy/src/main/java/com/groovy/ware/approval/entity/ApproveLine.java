@@ -1,17 +1,12 @@
-package com.groovy.ware.approveLine.entity;
+package com.groovy.ware.approval.entity;
 
 import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.groovy.ware.approval.entity.Approval;
-import com.groovy.ware.employee.entity.Employee;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,14 +17,8 @@ import lombok.Setter;
 @Table(name="GRV_APPROVELINE")
 public class ApproveLine implements Serializable{
 	
-	@Id
-	@ManyToOne
-	@JoinColumn(name="APV_CODE")
-	private Approval approval;
-	
-	@ManyToOne
-	@JoinColumn(name="EMP_CODE")
-	private Employee employee;
+	@EmbeddedId
+	private ApproveLineId approveLineId;
 	
 	@Column(name="APL_NUM")
 	private String aplNum;
