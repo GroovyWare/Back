@@ -47,6 +47,7 @@ public class MemberService {
 		log.info("[MemberService] findMemberListAll start ==================");
 		
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("memCode").descending());
+		
 
 		Page<Member> memberList = memberRepository.findAll(pageable);
 		//log.info("[MemberService] findMemberListAll.getContent(): {}", memberList.getContent());

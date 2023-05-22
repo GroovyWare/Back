@@ -47,7 +47,7 @@ public class Calendar {
     private String title;
 
     @Column(name = "SCH_CONTEXT")
-    private String context;
+    private String Context;
 
     @Column(name = "SCH_DIV")
     private String schDiv;
@@ -62,17 +62,11 @@ public class Calendar {
 
     @Column(name = "SCH_START")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-    private Timestamp start;
+    private Timestamp Start;
 
     @Column(name = "SCH_END")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-    private Timestamp end;
-
-    @Column(name = "SCH_EVENT_BACK")
-    private String color;
-
-    @Column(name = "SCH_EVENT_TEXT")
-    private String textColor;
+    private Timestamp End;
 
     /* 수정용도 메소드는 별도 정의가 필요하다. */
 public void update(String schTitle, String schContext, Timestamp schStart, Timestamp schEnd) {
@@ -92,8 +86,8 @@ public Calendar(String schTitle, String schContext, String schDiv, Department de
     this.schDiv = schDiv;
     this.dept = dept;
     this.schWriter = schWriter;
-    this.start = schStart;
-    this.end = schEnd;
+    this.Start = schStart;
+    this.End = schEnd;
 }
 
 
