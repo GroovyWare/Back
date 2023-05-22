@@ -23,5 +23,4 @@ public class CalendarDTO {
     private String textColor;
 
 
-
 }

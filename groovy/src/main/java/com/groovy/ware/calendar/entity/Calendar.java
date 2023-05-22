@@ -73,7 +73,6 @@ public class Calendar {
 
     @Column(name = "SCH_EVENT_TEXT")
     private String textColor;
-
     /* 수정용도 메소드는 별도 정의가 필요하다. */
 public void update(String schTitle, String schContext, Timestamp schStart, Timestamp schEnd) {
     this.title = schTitle;
