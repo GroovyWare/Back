@@ -17,10 +17,8 @@ public class CalendarDTO {
     private String schDiv;
     private DepartmentDto dept;
     private EmployeeDto schWriter;
-    private Timestamp start;
-    private Timestamp end;
-    private String color;
-    private String textColor;
+    private Timestamp Start;
+    private Timestamp End;
 
 
 
