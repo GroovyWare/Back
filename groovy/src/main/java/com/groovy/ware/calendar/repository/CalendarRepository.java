@@ -1,6 +1,7 @@
 package com.groovy.ware.calendar.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,7 +38,13 @@ public interface CalendarRepository extends JpaRepository<Calendar, Long> {
    List<Calendar> findByAllSchedulesWithEmpCode(@Param("empCode") Long empCode, @Param("deptCode") Long deptCode);
 
    @Query("SELECT s FROM Calendar s WHERE (s.schDiv = :schDiv AND s.schWriter.empCode = :empCode) OR (s.schDiv = '부서' AND s.dept.deptCode = :deptCode) OR s.schDiv = '전체'")
-   List<Calendar> findByAllSchedulesWithEmpCodeAndSchDiv(@Param("empCode") Long empCode,
+   List<Calendar> findByAllSchedulesWithEmpCodeAndSchDiv(@Param("empCode") Long
+    empCode,
          @Param("schDiv") String schDiv);
 
+
+      // @EntityGraph(attributePaths = {"schWriter"})
+      // Calendar findBySchWriter();
+
+      
 }
