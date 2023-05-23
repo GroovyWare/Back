@@ -44,10 +44,10 @@ public class Calendar {
     private Long schCode;
 
     @Column(name = "SCH_TITLE")
-    private String Title;
+    private String title;
 
     @Column(name = "SCH_CONTEXT")
-    private String Context;
+    private String context;
 
     @Column(name = "SCH_DIV")
     private String schDiv;
@@ -62,34 +62,39 @@ public class Calendar {
 
     @Column(name = "SCH_START")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-    private Timestamp Start;
+    private Timestamp start;
 
     @Column(name = "SCH_END")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-    private Timestamp End;
+    private Timestamp end;
 
+    @Column(name = "SCH_EVENT_BACK")
+    private String color;
+
+    @Column(name = "SCH_EVENT_TEXT")
+    private String textColor;
     /* 수정용도 메소드는 별도 정의가 필요하다. */
-public void update(String schTitle, String schContext, Timestamp schStart, Timestamp schEnd) {
-    this.Title = schTitle;
-    this.Context = schContext;
-    this.Start = schStart;
-    this.End = schEnd;
-    
-
-
-
+public void update(String title, String context, Timestamp start, Timestamp end, String color, String textColor) {
+    this.title = title;
+    this.context = context;
+    this.start = start;
+    this.end = end;
+    this.color = color;
+    this.textColor = textColor;
 
 }
 
 
-public Calendar(String schTitle, String schContext, String schDiv, Department dept, Employee schWriter, Timestamp schStart, Timestamp schEnd) {
-    this.Title = schTitle;
-    this.Context = schContext;
+public Calendar(String title, String context, String schDiv, Department dept, Employee schWriter, Timestamp start, Timestamp end, String color, String textColor) {
+    this.title = title;
+    this.context = context;
     this.schDiv = schDiv;
     this.dept = dept;
     this.schWriter = schWriter;
-    this.Start = schStart;
-    this.End = schEnd;
+    this.start = start;
+    this.end = end;
+   this.color = color;
+    this.textColor = textColor;
 }
 
 

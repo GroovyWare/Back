@@ -1,9 +1,7 @@
 package com.groovy.ware.member.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -11,8 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.groovy.ware.employee.entity.Employee;
 import com.groovy.ware.history.entity.History;
 import com.groovy.ware.history.repository.HistoryRepository;
 import com.groovy.ware.member.dto.MemberDto;
@@ -52,13 +50,16 @@ public class MemberService {
 		
 
 		Page<Member> memberList = memberRepository.findAll(pageable);
+		//log.info("[MemberService] findMemberListAll.getContent(): {}", memberList.getContent());
 		Page<MemberDto> memberDtoList = memberList.map(member -> modelMapper.map(member, MemberDto.class));
+
 		
-		log.info("[MemberService] findMemberListAll.getContent(): {}", memberDtoList.getContent());
+		//log.info("[MemberService] findMemberListAll.getContent(): {}", memberDtoList.getContent());
 		log.info("[MemberService] findMemberListAll end ==================");
 		
 		return memberDtoList;
 	}
+	
 	
 
 	
@@ -96,12 +97,12 @@ public class MemberService {
 	
 	/* 회원 정보 수정 */
 	@Transactional
-	public void modifyMember(MemberDto memberDto, Long memCode) {
+	public void modifyMember(MemberDto memberDto) {
 		
 		log.info("[MemberService] : modifyMember start ==================================== ");
 		log.info("[MemberService] : memberDto : {}", memberDto);
 		
-		Member findMember = memberRepository.findById(memCode).orElseThrow();
+		Member findMember = memberRepository.findById(memberDto.getMemCode()).orElseThrow();
 		
 		log.info("[MemberService] : originMember : {}", findMember);
 
@@ -115,8 +116,5 @@ public class MemberService {
 				);
 	
 		log.info("[MemberService] : modifyMember end ==================================== ");
-		
 	}
-	
-
 }

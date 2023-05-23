@@ -85,14 +85,14 @@ public ResponseEntity<ResponseDto> getAllSchedules(@AuthenticationPrincipal Empl
     /* 3. 일정 검색시 조회 */
     @GetMapping("/schedule/list")
     public ResponseEntity<ResponseDto> selectScheduleListbyTitle(
-            @RequestParam(name = "list") String schTitle,
+            @RequestParam(name = "title") String title,
             @RequestParam(name = "page", defaultValue = "1") int page,
-            EmployeeDto employee) {
+            @AuthenticationPrincipal  EmployeeDto writer) {
         log.info("[CalendarController] start ============================");
-        log.info("[CalendarController] schedule " + schTitle);
+        log.info("[CalendarController] schedule " + title);
         log.info("[CalendarController] page" + page);
 
-        Page<CalendarDTO> scheduleList = calendarService.selectScheduleListbyTitle(page, schTitle);
+        Page<CalendarDTO> scheduleList = calendarService.selectScheduleListbyTitle(page, title, writer);
 
         PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(scheduleList);
 
@@ -103,7 +103,7 @@ public ResponseEntity<ResponseDto> getAllSchedules(@AuthenticationPrincipal Empl
         responseDtoWithPaging.setData(scheduleList.getContent());
 
         log.info("[CalendarController] end ============================");
-        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "검색 조회 성공", responseDtoWithPaging));
     }
 
     /* 3-1 . 일정 상세를 보여주기 */
@@ -119,10 +119,12 @@ public ResponseEntity<ResponseDto> getAllSchedules(@AuthenticationPrincipal Empl
     /* 4. 일정 수정하기 */
     @PutMapping("/schedule/{schCode}")
     public ResponseEntity<ResponseDto> modifyCalendar(
-            @RequestBody CalendarDTO calendarDTO) {
+            @RequestBody CalendarDTO calendarDTO, @AuthenticationPrincipal EmployeeDto writer,
+            @PathVariable Long schCode) {
 
+            calendarDTO.setSchCode(schCode);
         /* schCode로 값을 받아서 수정 */
-        calendarService.modifyCalendar(calendarDTO);
+        calendarService.modifyCalendar(calendarDTO, writer);
 
         return ResponseEntity.ok()
                 .body(new ResponseDto(HttpStatus.OK, "수정 완료"));
@@ -134,5 +136,13 @@ public ResponseEntity<ResponseDto> getAllSchedules(@AuthenticationPrincipal Empl
         calendarService.deleteSchedule(schCode);
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "삭제 완료"));
     }
+
+
+    /* 한개 특정 조회 */
+    // @GetMapping("/schedule/{schCode}")
+    // public ResponseEntity<ResponseDto> justoneSchedule(@PathVariable Long schCode, @AuthenticationPrincipal  EmployeeDto writer)
+    // {
+
+    // }
 
 }

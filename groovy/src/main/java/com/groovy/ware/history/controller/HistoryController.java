@@ -3,6 +3,7 @@ package com.groovy.ware.history.controller;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,10 +16,10 @@ import com.groovy.ware.common.paging.PagingButtonInfo;
 import com.groovy.ware.common.paging.ResponseDtoWithPaging;
 import com.groovy.ware.history.dto.HistoryDto;
 import com.groovy.ware.history.service.HistoryService;
-import com.groovy.ware.member.entity.Member;
 
 import lombok.extern.slf4j.Slf4j;
 
+@CrossOrigin(origins="*", allowedHeaders = "*")
 @Slf4j
 @RestController
 @RequestMapping("/history")

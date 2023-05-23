@@ -12,8 +12,9 @@ import com.groovy.ware.member.entity.Member;
 public interface MemberRepository extends JpaRepository<Member, Long>{
 
 	/* 전체 회원 리스트 */
-	@EntityGraph(attributePaths={"history"})
+	@EntityGraph(attributePaths={"history", "history.pass", "history.employee"})
 	Page<Member> findAll(Pageable pageable);
+
 
 	/* 민경 운동량 회원 목록 조회 */
 	@Query(
@@ -25,9 +26,6 @@ public interface MemberRepository extends JpaRepository<Member, Long>{
 			+ " AND h.resEnd < SYSDATE"
 			)
 	Page<Member> findByMemCode(Pageable pageable, @Param("memCode")Long memCode);
-
-
-
 
 	
 	/* 회원 상세 조회 */
