@@ -3,11 +3,9 @@ package com.groovy.ware.member.dto;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.groovy.ware.history.dto.HistoryDto;
 
 import lombok.Data;
@@ -22,16 +20,17 @@ public class MemberDto {
 	
 	private String memPhone;
 
-	@Temporal(TemporalType.TIMESTAMP)
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date memDeleteDate;
 	
-	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date memStartDate;
 	
-	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private Date memEndDate;
 	
 	private List<HistoryDto> history;
