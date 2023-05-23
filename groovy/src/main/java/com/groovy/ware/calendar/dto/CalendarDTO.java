@@ -12,14 +12,26 @@ import lombok.Data;
 public class CalendarDTO {
     
     private Long schCode;
-    private String schTitle;
-    private String schContext;
+
+    private Long id;
+    private String title;
+    private String context;
     private String schDiv;
     private DepartmentDto dept;
     private EmployeeDto schWriter;
-    private Timestamp schStart;
-    private Timestamp schEnd;
+    private Timestamp Start;
+    private Timestamp End;
+    private String textColor;
+    private String color;
 
 
+    public void setId() {
+
+        this.id = schCode;
+    }
+
+    public Long getId() {
+        return schCode;
+    };
 
 }

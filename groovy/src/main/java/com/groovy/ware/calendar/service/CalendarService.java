@@ -3,6 +3,7 @@ package com.groovy.ware.calendar.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.naming.AuthenticationException;
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
@@ -10,12 +11,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 import com.groovy.ware.calendar.dto.CalendarDTO;
 import com.groovy.ware.calendar.entity.Calendar;
 import com.groovy.ware.calendar.repository.CalendarRepository;
 import com.groovy.ware.employee.dto.EmployeeDto;
+import com.groovy.ware.employee.entity.Employee;
 import com.groovy.ware.employee.repository.EmployeeRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +31,7 @@ public class CalendarService {
    private final ModelMapper modelMapper;
    private final EmployeeRepository employeeRepository;
    // private final DepartmentRepository deptrepository;
+
 
    public CalendarService(CalendarRepository calendarRepository, EmployeeRepository employeeRepository, ModelMapper modelMapper)
    {
@@ -53,12 +57,7 @@ public class CalendarService {
   }
   
    
-
-      
-
-
-
-   /* 2. 개인일정 생성하기 */
+   /* 2. 일정 생성하기 */
    @Transactional
    public void addSchedule(CalendarDTO calendarDTO) {
       log.info("[CalendarService] inserting event start");
@@ -74,10 +73,10 @@ public class CalendarService {
 
    /* 3. 검색한 스케쥴 제목으로 리스트 보여주기 */
  
-   public Page<CalendarDTO> selectScheduleListbyTitle(int page, String schTitle) {
+   public Page<CalendarDTO> selectScheduleListbyTitle(int page, String schTitle , EmployeeDto writer) {
       Pageable pageable = PageRequest.of(page - 1, 5, Sort.by("schCode").descending());
 
-      Page<Calendar> scheduleList = calendarRepository.findBySchTitle(pageable, schTitle);
+      Page<Calendar> scheduleList = calendarRepository.findByTitle(pageable, schTitle , writer.getEmpCode(), writer.getDept().getDeptCode());
       Page<CalendarDTO> scheduleDtoList = scheduleList.map(calendar -> modelMapper.map(calendar, CalendarDTO.class));
       log.info("[CalenderService] scheduleList : {}", scheduleList);
       
@@ -119,18 +118,24 @@ public class CalendarService {
 
 /* 4. 개인일정 수정하기 */
 @Transactional
-public void modifyCalendar(CalendarDTO calendarDTO) {
+public void modifyCalendar(CalendarDTO calendarDTO, EmployeeDto writer) {
     log.info("[CalendarService] modify start");
     log.info("[CalendarService] calendarDto : {}", calendarDTO);
 
     Calendar originCalendar = calendarRepository.findById(calendarDTO.getSchCode())
             .orElseThrow(() -> new IllegalArgumentException("그런 스케줄은 없습니다" + calendarDTO.getSchCode()));
-
-    originCalendar.setSchCode(calendarDTO.getSchCode());
-    originCalendar.setSchTitle(calendarDTO.getSchTitle());
-    originCalendar.setSchContext(calendarDTO.getSchContext());
-    originCalendar.setSchStart(calendarDTO.getSchStart());
-    originCalendar.setSchEnd(calendarDTO.getSchEnd());
+   
+   if( originCalendar.getSchWriter().getEmpCode() == writer.getEmpCode()){        
+   
+    originCalendar.setTitle(calendarDTO.getTitle());
+    originCalendar.setContext(calendarDTO.getContext());
+    originCalendar.setStart(calendarDTO.getStart());
+    originCalendar.setEnd(calendarDTO.getEnd());
+    originCalendar.setColor(calendarDTO.getColor());
+    originCalendar.setTextColor(calendarDTO.getTextColor());
+    originCalendar.setSchDiv(calendarDTO.getSchDiv());
+    
+  } else { throw new RuntimeException("수정할 권한이 없습니다.");}
 
     log.info("[CalendarService] modify end");
 }

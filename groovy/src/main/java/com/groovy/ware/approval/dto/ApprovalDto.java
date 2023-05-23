@@ -1,8 +1,7 @@
 package com.groovy.ware.approval.dto;
 
 import java.util.Date;
-
-import javax.persistence.Column;
+import java.util.List;
 
 import com.groovy.ware.document.dto.DocumentDto;
 import com.groovy.ware.employee.dto.EmployeeDto;
@@ -19,5 +18,6 @@ public class ApprovalDto {
 	private EmployeeDto employee;
 	private DocumentDto document;
 	private String apvContext;
+	private List<ApproveLineDto> approveLine;
 
 }

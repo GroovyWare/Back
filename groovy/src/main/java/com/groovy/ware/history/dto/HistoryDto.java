@@ -2,7 +2,6 @@ package com.groovy.ware.history.dto;
 
 
 
-
 import java.util.Date;
 
 import javax.persistence.Temporal;
@@ -10,7 +9,8 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.groovy.ware.employee.dto.EmployeeDto;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.groovy.ware.member.dto.MemberEmployeeDto;
 import com.groovy.ware.pass.dto.PassDto;
 
 import lombok.Data;
@@ -25,14 +25,16 @@ public class HistoryDto {
 	
 	private PassDto pass;
 	
-	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "yyMMdd")
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private Date resStart;
 	
-	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "yyMMdd")
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private Date resEnd;
 	
-	private EmployeeDto employee;
+	private MemberEmployeeDto employee;
 
 }

@@ -21,18 +21,13 @@ import lombok.extern.slf4j.Slf4j;
 public class HistoryService {
 	
 	/* 의존성 주입 */
-	private final MemberRepository memberRepository;
 	private final ModelMapper modelMapper;
-	private final PassRepository passRepository;
 	private final HistoryRepository historyRepository;
 
 
-	public HistoryService(MemberRepository memberRepository, PassRepository passRepository, 
-			HistoryRepository historyRepository, ModelMapper modelMapper) {
+	public HistoryService(HistoryRepository historyRepository, ModelMapper modelMapper) {
 		
-		this.memberRepository = memberRepository;
 		this.modelMapper = modelMapper;
-		this.passRepository = passRepository;
 		this.historyRepository = historyRepository;
 	}
 	

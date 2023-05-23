@@ -34,20 +34,13 @@ public class PlayController {
 	@GetMapping("/memberList")
 	public ResponseEntity<ResponseDto> selectMemberList(@RequestParam(name="page", defaultValue="1") int page, @AuthenticationPrincipal EmployeeDto employeeDto){
 		
-		log.info("controller start==========================");
-		log.info("employeeDto {}", employeeDto.toString());
-		
 		Page<MemberDto> memberList = playService.selectMemberList(page, employeeDto.getEmpId());
-		
-		log.info("memberList {}", memberList);
 		
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(memberList);
 		
 		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
 		responseDtoWithPaging.setPageInfo(pageInfo);
 		responseDtoWithPaging.setData(memberList.getContent());
-		
-		log.info("controller end==========================");
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 	}

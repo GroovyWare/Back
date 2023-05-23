@@ -7,6 +7,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,10 +24,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.groovy.ware.announce.dto.AnnounceDto;
 import com.groovy.ware.announce.entity.Announce;
 import com.groovy.ware.announce.service.AnnounceService;
+import com.groovy.ware.announce.service.FileService;
 import com.groovy.ware.common.ResponseDto;
 import com.groovy.ware.common.paging.Pagenation;
 import com.groovy.ware.common.paging.PagingButtonInfo;
 import com.groovy.ware.common.paging.ResponseDtoWithPaging;
+import com.groovy.ware.employee.dto.EmployeeDto;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,9 +39,11 @@ import lombok.extern.slf4j.Slf4j;
 public class AnnounceController {
 
     private final AnnounceService announceService;
+    private final FileService fileService;
     
-    public AnnounceController(AnnounceService announceService) {
+    public AnnounceController(AnnounceService announceService, FileService fileService) {
         this.announceService = announceService;
+        this.fileService = fileService;
     }
 
     /* 공지사항 목록 */
@@ -85,17 +91,25 @@ public class AnnounceController {
         }
     }
     
+    /* 공지사항 등록 */
     @PostMapping
     public ResponseEntity<ResponseDto> createAnnounce(@ModelAttribute AnnounceDto announceDto, @RequestParam(required = false) MultipartFile multipartFile) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        EmployeeDto employeeDto = (EmployeeDto) authentication.getPrincipal();
+
         if (multipartFile != null && !multipartFile.isEmpty()) {
             // 파일이 존재하는 경우에 대한 처리 로직
             String filename = multipartFile.getOriginalFilename();
             // 파일 업로드 및 저장 로직 등을 수행합니다.
         }
 
-        announceService.createAnnounce(announceDto, multipartFile);
+        // Get employee code from logged-in user
+        Long empCode = employeeDto.getEmpCode();
+
+        announceService.createAnnounce(announceDto, multipartFile, empCode);
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "공지사항이 등록되었습니다."));
     }
+
 
     /* 공지사항 수정 */
     @PutMapping("/{annCode}")
@@ -106,6 +120,8 @@ public class AnnounceController {
             // 파일이 존재하는 경우에 대한 처리 로직
             String filename = multipartFile.getOriginalFilename();
             // 파일 업로드 및 저장 로직 등을 수행합니다.
+            String savedFileName = fileService.saveFile(multipartFile);
+            // savedFileName을 announceDto에 추가하는 로직
         }
 
         announceService.updateAnnounce(announceDto);

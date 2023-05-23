@@ -5,6 +5,7 @@ package com.groovy.ware.member.controller;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import com.groovy.ware.member.service.MemberService;
 
 import lombok.extern.slf4j.Slf4j;
 
+@CrossOrigin(origins="*", allowedHeaders = "*")
 @Slf4j
 @RestController
 @RequestMapping("/member")
@@ -62,7 +64,7 @@ public class MemberController {
 	
 	
 	/* 회원 상세 조회 */
-	@GetMapping("detail/{memCode}")
+	@GetMapping("/detail/{memCode}")
 	public ResponseEntity<ResponseDto> findMemberDetail(@PathVariable Long memCode){
 		
 			
@@ -84,10 +86,10 @@ public class MemberController {
 
 	
 	/* 회원 수정 */
-	@PutMapping("/modify/{memCode}")
-	public ResponseEntity<ResponseDto> modifyMember(@ModelAttribute MemberDto memberDto, @PathVariable Long memCode) {
+	@PutMapping("/modify")
+	public ResponseEntity<ResponseDto> modifyMember(@ModelAttribute MemberDto memberDto) {
 		
-		memberService.modifyMember(memberDto, memCode);
+		memberService.modifyMember(memberDto);
 		
 		return ResponseEntity.ok()
 				.body(new ResponseDto(HttpStatus.OK, "회원 수정 성공"));
@@ -95,10 +97,5 @@ public class MemberController {
 	}
 	
  
-		
-		
-	
-	
-	
 
 }
