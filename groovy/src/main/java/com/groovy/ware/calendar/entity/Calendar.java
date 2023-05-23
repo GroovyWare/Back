@@ -73,30 +73,27 @@ public class Calendar {
 
     @Column(name = "SCH_EVENT_TEXT")
     private String textColor;
-
-
     /* 수정용도 메소드는 별도 정의가 필요하다. */
-public void update(String schTitle, String schContext, Timestamp schStart, Timestamp schEnd, String color, String textColor) {
-    this.title = schTitle;
-    this.context = schContext;
-    this.start = schStart;
-    this.end = schEnd;
+public void update(String title, String context, Timestamp start, Timestamp end, String color, String textColor) {
+    this.title = title;
+    this.context = context;
+    this.start = start;
+    this.end = end;
     this.color = color;
     this.textColor = textColor;
-
 
 }
 
 
-public Calendar(String schTitle, String schContext, String schDiv, Department dept, Employee schWriter, Timestamp schStart, Timestamp schEnd, String color, String textColor) {
-    this.title = schTitle;
-    this.context = schContext;
+public Calendar(String title, String context, String schDiv, Department dept, Employee schWriter, Timestamp start, Timestamp end, String color, String textColor) {
+    this.title = title;
+    this.context = context;
     this.schDiv = schDiv;
     this.dept = dept;
     this.schWriter = schWriter;
-    this.start = schStart;
-    this.end = schEnd;
-    this.color = color;
+    this.start = start;
+    this.end = end;
+   this.color = color;
     this.textColor = textColor;
 }
 

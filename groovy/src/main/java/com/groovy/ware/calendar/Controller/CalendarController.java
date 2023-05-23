@@ -137,4 +137,12 @@ public ResponseEntity<ResponseDto> getAllSchedules(@AuthenticationPrincipal Empl
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "삭제 완료"));
     }
 
+
+    /* 한개 특정 조회 */
+    // @GetMapping("/schedule/{schCode}")
+    // public ResponseEntity<ResponseDto> justoneSchedule(@PathVariable Long schCode, @AuthenticationPrincipal  EmployeeDto writer)
+    // {
+
+    // }
+
 }
