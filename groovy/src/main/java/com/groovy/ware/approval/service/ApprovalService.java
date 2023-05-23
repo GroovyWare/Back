@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.groovy.ware.approval.dto.ApprovalDto;
 import com.groovy.ware.approval.dto.ApproveLineDto;
 import com.groovy.ware.approval.entity.Approval;
+import com.groovy.ware.approval.entity.ApproveLine;
 import com.groovy.ware.approval.repository.ApprovalRepository;
 import com.groovy.ware.document.dto.DocumentDto;
 import com.groovy.ware.document.repository.DocumentRepository;
@@ -70,7 +71,7 @@ public class ApprovalService {
 	/* 결재 */
 	@Transactional
 	public void saveVacationHtml(ApprovalDto approvalDto) {
-
+		
 		approvalRepository.save(modelMapper.map(approvalDto, Approval.class));
 
 	}
