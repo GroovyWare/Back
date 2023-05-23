@@ -11,12 +11,20 @@ public class FileDto {
 
 	private Long fileCode;
 	private String fileDiv;
+  private String fileOriginalName;
+	private String fileSavedName;
+  
 	@JsonIgnore
 	private EmployeeDto employee;
 	@JsonIgnore
 	private AnnounceDto announce;
-	private String fileOriginalName;
-	private String fileSavedName;
-	
+
+	@Override
+	public String toString() {
+		return "FileDto [fileCode=" + fileCode + ", fileDiv=" + fileDiv + ", empCode=" + empCode + ", annCode="
+				+ annCode + ", fileOriginalName=" + fileOriginalName + ", fileSavedName=" + fileSavedName
+				+ ", announce=" + announce + "]";
+	}
+		
 }
 
