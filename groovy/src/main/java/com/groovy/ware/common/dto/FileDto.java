@@ -21,5 +21,14 @@ public class FileDto {
 	
 	@JsonIgnore
 	private AnnounceDto announce;
+
+	@Override
+	public String toString() {
+		return "FileDto [fileCode=" + fileCode + ", fileDiv=" + fileDiv + ", empCode=" + empCode + ", annCode="
+				+ annCode + ", fileOriginalName=" + fileOriginalName + ", fileSavedName=" + fileSavedName
+				+ ", announce=" + announce + "]";
+	}
+	
+	
 }
 
