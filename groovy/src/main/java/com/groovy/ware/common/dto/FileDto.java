@@ -11,7 +11,9 @@ public class FileDto {
 
 	private Long fileCode;
 	private String fileDiv;
-  private String fileOriginalName;
+	private Long empCode;
+	private Long annCode;
+    private String fileOriginalName;
 	private String fileSavedName;
   
 	@JsonIgnore
