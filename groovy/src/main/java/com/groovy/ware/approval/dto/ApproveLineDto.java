@@ -9,7 +9,8 @@ import lombok.Data;
 @Data
 public class ApproveLineDto {
 	
-	private ApproveLineId approveLineId;
+	private Integer empCode;
+	private Integer apvCode;
 	private String aplNum;
 	private String aplStatus;
 	private Date aplDate;

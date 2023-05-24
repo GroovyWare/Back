@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class ApprovalDto {
 	
-	private Long apvCode;
+	private Integer apvCode;
 	private Date apvCreatedDate;
 	private String apvStatus;
 	private Date apvEndDate;
@@ -19,5 +19,5 @@ public class ApprovalDto {
 	private DocumentDto document;
 	private String apvContext;
 	private List<ApproveLineDto> approveLine;
-
+	private List<ReaderDto> readerLine;
 }

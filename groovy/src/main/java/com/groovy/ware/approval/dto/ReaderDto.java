@@ -1,4 +1,4 @@
-package com.groovy.ware.reader.dto;
+package com.groovy.ware.approval.dto;
 
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class ReaderDto {
 	
-	private Approval approval;
-	private Employee employee;
+	private Integer apvCode;
+	private Integer empCode;
 
 }
