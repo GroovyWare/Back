@@ -23,8 +23,8 @@ public interface CalendarRepository extends JpaRepository<Calendar, Long> {
    Page<Calendar> findByTitle(Pageable pageable, @Param("title") String title, @Param("empCode") Long empCode, @Param("deptCode") Long deptCode);
 
    /* 일정코드로 찾기? */
-   @Query("SELECT s FROM Calendar s WHERE s.schCode = :schCode")
-   Calendar findBySchCode(@Param("schCode") Long schCode);
+   // @Query("SELECT s FROM Calendar s WHERE s.id = :id")
+   // Calendar findById(@Param("Id") Long id);
 
    /* 캘린더 메인 */
    // @EntityGraph(attributePaths = {"schWriter"})
@@ -35,9 +35,6 @@ public interface CalendarRepository extends JpaRepository<Calendar, Long> {
    @Query("SELECT s FROM Calendar s WHERE s.schDiv ='전체' OR (s.schDiv = '부서' AND s.dept.deptCode = :deptCode) OR s.schWriter.empCode = :empCode")
    List<Calendar> findByAllSchedulesWithEmpCode(@Param("empCode") Long empCode, @Param("deptCode") Long deptCode);
    
-
-
-
    @Query("SELECT s FROM Calendar s WHERE (s.schDiv = :schDiv AND s.schWriter.empCode = :empCode) OR (s.schDiv = '부서' AND s.dept.deptCode = :deptCode) OR s.schDiv = '전체'")
    List<Calendar> findByAllSchedulesWithEmpCodeAndSchDiv(@Param("empCode") Long
     empCode,
