@@ -23,6 +23,14 @@ public class CalendarDTO {
     private String textColor;
     private String color;
 
+    private boolean dragEvent;
 
    
+    public boolean getDragEvent() {
+        return dragEvent;
+    }
+
+    public void setDragEvent(boolean dragEvent) {
+        this.dragEvent = dragEvent;
+    }
 }

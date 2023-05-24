@@ -125,12 +125,17 @@ public void modifyCalendar(CalendarDTO calendarDTO, EmployeeDto writer) {
     Calendar originCalendar = calendarRepository.findById(calendarDTO.getId())
             .orElseThrow(() -> new IllegalArgumentException("그런 스케줄은 없습니다" + calendarDTO.getId()));
    
-   if( originCalendar.getSchWriter().getEmpCode() == writer.getEmpCode()){        
+   if( originCalendar.getSchWriter().getEmpCode() == writer.getEmpCode()){   
+      
+      if(calendarDTO.getDragEvent()) {
+         originCalendar.setStart(calendarDTO.getStart());
+         originCalendar.setEnd(calendarDTO.getEnd());
+
+      }
    
     originCalendar.setTitle(calendarDTO.getTitle());
     originCalendar.setContext(calendarDTO.getContext());
-    originCalendar.setStart(calendarDTO.getStart());
-    originCalendar.setEnd(calendarDTO.getEnd());
+    
     originCalendar.setColor(calendarDTO.getColor());
     originCalendar.setTextColor(calendarDTO.getTextColor());
     originCalendar.setSchDiv(calendarDTO.getSchDiv());
@@ -140,7 +145,20 @@ public void modifyCalendar(CalendarDTO calendarDTO, EmployeeDto writer) {
     log.info("[CalendarService] modify end");
 }
 
+/* 4-1. 드래그로 수정하기 */
+// @Transactional
+// public void dragCalendar(CalendarDTO calendarDTO, EmployeeDto writer){
+//    log.info("[CalendarService] drag start");
+//    log.info("[CalendarService] calendarDto : {}", calendarDTO);
+//    Calendar originCalendar = calendarRepository.findById(calendarDTO.getId())
+//    .orElseThrow(() -> new IllegalArgumentException("그런 스케줄은 없습니다" + calendarDTO.getId()));
 
+//    originCalendar.update(calendarDTO.getTitle(), calendarDTO.getContext(), null, null, calendarDTO.getColor(), calendarDTO.getTextColor());
+
+
+
+
+// }
    
 
    /* 5. 일정 삭제하기 */
