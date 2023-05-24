@@ -11,8 +11,7 @@ import lombok.Data;
 @Data
 public class CalendarDTO {
     
-    private Long schCode;
-
+    
     private Long id;
     private String title;
     private String context;
@@ -25,13 +24,5 @@ public class CalendarDTO {
     private String color;
 
 
-    public void setId() {
-
-        this.id = schCode;
-    }
-
-    public Long getId() {
-        return schCode;
-    };
-
+   
 }

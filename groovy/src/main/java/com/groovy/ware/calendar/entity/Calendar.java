@@ -38,10 +38,8 @@ public class Calendar {
 
     @Id
     @Column(name = "SCH_CODE")
-
-
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SCHEDULE_CODE_GENERATOR")
-    private Long schCode;
+    private Long id;
 
     @Column(name = "SCH_TITLE")
     private String title;
