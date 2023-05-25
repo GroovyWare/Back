@@ -49,13 +49,13 @@ public class Attendance {
     private LocalTime attEnd;
 
     @Column(name = "ATT_DIV")
-    private String AttDiv;
+    private String attDiv;
 
     @Column(name = "ATT_DATE")
-    private Date AttDate;
+    private Date attDate;
 
     @Column(name = "ATT_LATE")
-    private String AttLate;
+    private String attLate;
 
 
 
