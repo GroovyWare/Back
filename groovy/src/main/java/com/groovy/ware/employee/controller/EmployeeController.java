@@ -1,9 +1,10 @@
 package com.groovy.ware.employee.controller;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -95,6 +96,15 @@ public class EmployeeController {
 				.ok()
 				.body(new ResponseDto(HttpStatus.OK, "조회 완료", employeeService.selectMyInfo(employee.getEmpCode())));
 		
+	}
+	
+	/* 중복검사 */
+	@GetMapping("/empidlist")
+	public ResponseEntity<ResponseDto> selectEmpIdList() {
+				
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDto(HttpStatus.OK, "조회 완료", employeeService.selectEmpIdList()));
 	}
 	
 	

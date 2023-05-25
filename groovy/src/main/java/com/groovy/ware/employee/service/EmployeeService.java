@@ -2,7 +2,9 @@ package com.groovy.ware.employee.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -112,21 +114,8 @@ public class EmployeeService {
 		
 		try {
 			
-			/* 권한 부여전 임의 값 전처리 */
-			Long initEmpCode = (long) 0;
-			Long initAuthCode = (long) 2;
-			EmpAuthDto empAuthDto = new EmpAuthDto();
-			EmpAuthPK empAuthPK = new EmpAuthPK();
-			
-			empAuthPK.setEmpCode(initEmpCode);
-			empAuthPK.setAuthCode(initAuthCode);
-			empAuthDto.setEmpAuthPK(empAuthPK);
-			
-			List<EmpAuthDto> authList = new ArrayList<EmpAuthDto>();
-			authList.add(empAuthDto);
-			log.info("authList : {}", authList);
-			employeeDto.setAuths(authList);
-			
+			/* empCode insert 전처리*/
+			employeeDto.getAuths().forEach(auth -> auth.getEmpAuthPK().setEmpCode(0L));
 			
 			String originalName = employeeDto.getImgUrl().getOriginalFilename();
 			String replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, employeeDto.getImgUrl());
@@ -140,7 +129,6 @@ public class EmployeeService {
 			log.info("[EmployeeService] registEmployee fileDto : {}", fileDto);
 			
 
-			
 			fileRepository.save(modelMapper.map(fileDto, File.class));
 			
 		} catch (IOException | java.io.IOException e) {
@@ -148,7 +136,6 @@ public class EmployeeService {
 		}
 		
 	}
-		
 	
 	/* 직원 정보 수정 */
 	@Transactional
@@ -207,10 +194,18 @@ public class EmployeeService {
 		
 		return employeeDto;
 	}
-	
 
+	/* 직원 아이디 리스트 조회 */
+	public List<EmployeeDto> selectEmpIdList() {
+		
+		List<Employee> employeeList = employeeRepository.findEmpIdList();
+		
+		List<EmployeeDto> empIdList = employeeList
+												.stream()
+												.map(employee -> modelMapper.map(employee, EmployeeDto.class)).collect(Collectors.toList());
+		return empIdList;
+	}
 
-	
 
 
 }
