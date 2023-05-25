@@ -49,7 +49,7 @@ public class PassService {
 		
 		log.info("[PassService] findPassList start =====================================");
 		
-		Pageable pageable = PageRequest.of(page - 1, 6, Sort.by("passCode").descending());
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("passCode").descending());
 		
 		Page<Pass> passList = passRepository.findAll(pageable);
 		Page<PassDto> passDtoList = passList.map(pass -> modelMapper.map(pass, PassDto.class));
@@ -60,6 +60,25 @@ public class PassService {
 		
 		return passDtoList;
 	}
+	
+	/* 회원권 상세 조회 */
+	public PassDto findPassDetail(Long passCode) {
+		
+		log.info("[PassService] : findPassDetail start ==================================== ");
+		log.info("[PassService] : passCode : {}", passCode);
+		
+		Pass pass = passRepository.findById(passCode).orElseThrow();
+		
+		PassDto passDto = modelMapper.map(pass, PassDto.class);
+		
+		
+		log.info("[PassService] : passDto : {}", passDto);
+		log.info("[PassService] : findPassDetail end ==================================== ");
+		
+		return passDto;
+	}
+	
+	
 	
 	/* 회원권 수정 */
 	@Transactional

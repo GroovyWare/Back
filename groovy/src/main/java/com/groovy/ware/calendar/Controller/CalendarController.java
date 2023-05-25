@@ -3,6 +3,7 @@ package com.groovy.ware.calendar.Controller;
 import java.util.List;
 
 import org.apache.coyote.Response;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -107,40 +108,58 @@ public ResponseEntity<ResponseDto> getAllSchedules(@AuthenticationPrincipal Empl
     }
 
     /* 3-1 . 일정 상세를 보여주기 */
-    @GetMapping("/schedule/{schCode}")
-    public ResponseEntity<ResponseDto> selectScheduleDetail(@PathVariable Long schCode) {
+    @GetMapping("/schedule/{id}")
+    public ResponseEntity<ResponseDto> selectScheduleDetail(@PathVariable Long id) {
         return ResponseEntity
-                .ok().body(new ResponseDto(HttpStatus.OK, "상세 조회 성공", calendarService.selectScheduleDetail(schCode)));
+                .ok().body(new ResponseDto(HttpStatus.OK, "상세 조회 성공", calendarService.selectScheduleDetail(id)));
     }
 
 
 
     /* 리퀘스트 바디를 사용하여 json형식으로 보낸다. */
     /* 4. 일정 수정하기 */
-    @PutMapping("/schedule/{schCode}")
+    @PutMapping("/schedule/{id}")
     public ResponseEntity<ResponseDto> modifyCalendar(
             @RequestBody CalendarDTO calendarDTO, @AuthenticationPrincipal EmployeeDto writer,
-            @PathVariable Long schCode) {
+            @PathVariable Long id) {
 
-            calendarDTO.setSchCode(schCode);
-        /* schCode로 값을 받아서 수정 */
+            calendarDTO.setId(id);
+     
+        /* id로 값을 받아서 수정 */
         calendarService.modifyCalendar(calendarDTO, writer);
 
         return ResponseEntity.ok()
                 .body(new ResponseDto(HttpStatus.OK, "수정 완료"));
     }
 
+    /* 4-1. 일정을 드래그로 수정하기 */
+    // @PutMapping("/schedule/{id}")
+    // public ResponseEntity<ResponseDto> dragCalendar(
+    //     @RequestBody CalendarDTO calendarDTO, @AuthenticationPrincipal EmployeeDto writer,
+    //     @PathVariable Long id
+    // ) {
+
+
+        
+    //     return ResponseEntity.ok()
+    //             .body(new ResponseDto(HttpStatus.OK, "수정 완료"));
+    // }
+
+
+
+
     /* 5. 일정 삭제하기 */
-    @DeleteMapping("/schedule/delete/{schCode}")
-    public ResponseEntity<ResponseDto> deleteSchedule(@PathVariable Long schCode) {
-        calendarService.deleteSchedule(schCode);
+    @DeleteMapping("/schedule/delete/{id}")
+    public ResponseEntity<ResponseDto> deleteSchedule(@AuthenticationPrincipal EmployeeDto writer,
+            @PathVariable Long id) {
+        calendarService.deleteSchedule(writer, id);
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "삭제 완료"));
     }
 
 
     /* 한개 특정 조회 */
-    // @GetMapping("/schedule/{schCode}")
-    // public ResponseEntity<ResponseDto> justoneSchedule(@PathVariable Long schCode, @AuthenticationPrincipal  EmployeeDto writer)
+    // @GetMapping("/schedule/{id}")
+    // public ResponseEntity<ResponseDto> justoneSchedule(@PathVariable Long id, @AuthenticationPrincipal  EmployeeDto writer)
     // {
 
     // }

@@ -74,7 +74,7 @@ public class CalendarService {
    /* 3. 검색한 스케쥴 제목으로 리스트 보여주기 */
  
    public Page<CalendarDTO> selectScheduleListbyTitle(int page, String schTitle , EmployeeDto writer) {
-      Pageable pageable = PageRequest.of(page - 1, 5, Sort.by("schCode").descending());
+      Pageable pageable = PageRequest.of(page - 1, 5, Sort.by("id").descending());
 
       Page<Calendar> scheduleList = calendarRepository.findByTitle(pageable, schTitle , writer.getEmpCode(), writer.getDept().getDeptCode());
       Page<CalendarDTO> scheduleDtoList = scheduleList.map(calendar -> modelMapper.map(calendar, CalendarDTO.class));
@@ -89,10 +89,10 @@ public class CalendarService {
 
    /* 3-1. 상세 일정 보여주기 */
 
-   public CalendarDTO selectScheduleDetail(Long schCode) {
+   public CalendarDTO selectScheduleDetail(Long id) {
 
 
-      CalendarDTO calendarDTO = modelMapper.map(calendarRepository.findById(schCode)
+      CalendarDTO calendarDTO = modelMapper.map(calendarRepository.findById(id)
       .orElseThrow(() -> new RuntimeException("존재하지 않는 스케줄.")), CalendarDTO.class);
       
 
@@ -101,12 +101,12 @@ public class CalendarService {
 
 //    /* 4. 개인일정 수정하기 */
 //    @Transactional
-//    public void modifyCalendar(Long schCode, CalendarDTO calendarDTO) {
+//    public void modifyCalendar(Long id, CalendarDTO calendarDTO) {
 //        log.info("[CalendarService] modify start");
 //        log.info("[CalendarService] calendarDto : {}" , calendarDTO);
 
-//        Calendar originCalendar = calendarRepository.findById(calendarDTO.getSchCode())
-//        .orElseThrow(()-> new IllegalArgumentException("그런 스케줄은 없습니다. schCode=" + calendarDTO.getSchCode()));
+//        Calendar originCalendar = calendarRepository.findById(calendarDTO.getid())
+//        .orElseThrow(()-> new IllegalArgumentException("그런 스케줄은 없습니다. id=" + calendarDTO.getid()));
 
 //        originCalendar.setSchTitle(calendarDTO.getSchTitle());
 //        originCalendar.setSchContext(calendarDTO.getSchContext());
@@ -122,15 +122,20 @@ public void modifyCalendar(CalendarDTO calendarDTO, EmployeeDto writer) {
     log.info("[CalendarService] modify start");
     log.info("[CalendarService] calendarDto : {}", calendarDTO);
 
-    Calendar originCalendar = calendarRepository.findById(calendarDTO.getSchCode())
-            .orElseThrow(() -> new IllegalArgumentException("그런 스케줄은 없습니다" + calendarDTO.getSchCode()));
+    Calendar originCalendar = calendarRepository.findById(calendarDTO.getId())
+            .orElseThrow(() -> new IllegalArgumentException("그런 스케줄은 없습니다" + calendarDTO.getId()));
    
-   if( originCalendar.getSchWriter().getEmpCode() == writer.getEmpCode()){        
+   if( originCalendar.getSchWriter().getEmpCode() == writer.getEmpCode()){   
+      
+      if(calendarDTO.getDragEvent()) {
+         originCalendar.setStart(calendarDTO.getStart());
+         originCalendar.setEnd(calendarDTO.getEnd());
+
+      }
    
     originCalendar.setTitle(calendarDTO.getTitle());
     originCalendar.setContext(calendarDTO.getContext());
-    originCalendar.setStart(calendarDTO.getStart());
-    originCalendar.setEnd(calendarDTO.getEnd());
+    
     originCalendar.setColor(calendarDTO.getColor());
     originCalendar.setTextColor(calendarDTO.getTextColor());
     originCalendar.setSchDiv(calendarDTO.getSchDiv());
@@ -140,17 +145,29 @@ public void modifyCalendar(CalendarDTO calendarDTO, EmployeeDto writer) {
     log.info("[CalendarService] modify end");
 }
 
+/* 4-1. 드래그로 수정하기 */
+// @Transactional
+// public void dragCalendar(CalendarDTO calendarDTO, EmployeeDto writer){
+//    log.info("[CalendarService] drag start");
+//    log.info("[CalendarService] calendarDto : {}", calendarDTO);
+//    Calendar originCalendar = calendarRepository.findById(calendarDTO.getId())
+//    .orElseThrow(() -> new IllegalArgumentException("그런 스케줄은 없습니다" + calendarDTO.getId()));
 
+//    originCalendar.update(calendarDTO.getTitle(), calendarDTO.getContext(), null, null, calendarDTO.getColor(), calendarDTO.getTextColor());
+
+
+
+
+// }
    
 
    /* 5. 일정 삭제하기 */
    @Transactional
-   public void deleteSchedule(Long schCode) {
+   public void deleteSchedule(EmployeeDto writer, Long id) {
        log.info("[CalendarService] deletestart");
-       log.info("[CalendarService] schCode : {}", schCode);
-      
-         calendarRepository.deleteById(schCode);
-   
+     
+       calendarRepository.deleteById(id);
+       
        log.info("[CalendarService] delete end");
    }
    

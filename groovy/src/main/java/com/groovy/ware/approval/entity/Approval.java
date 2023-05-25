@@ -34,7 +34,7 @@ public class Approval {
 	@Id
 	@Column(name="APV_CODE")
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="APPROVAL_SEQ_GENERATOR")
-	private Long apvCode;
+	private Integer apvCode;
 	
 	@Column(name="APV_CREATED_DATE")
 	private Date apvCreatedDate;
@@ -56,8 +56,15 @@ public class Approval {
 	@Column(name="APV_CONTEXT")
 	private String apvContext;
 	
-	@OneToMany
+	@Column(name="APV_COUNT")
+	private Integer apvCount;
+	
+	@OneToMany(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="APV_CODE")
 	private List<ApproveLine> approveLine;
+	
+	@OneToMany(cascade=CascadeType.PERSIST)
+	@JoinColumn(name="APV_CODE")
+	private List<Reader> readerLine;
 
 }

@@ -54,7 +54,7 @@ public class AnnounceController {
         log.info("[AnnounceController] : page : {}", page);
 
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Announce> announces = announceService.getAnnounces(pageable);
+        Page<AnnounceDto> announces = announceService.getAnnounces(pageable);
 
         PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(announces);
 
@@ -86,29 +86,54 @@ public class AnnounceController {
             return ResponseEntity.ok()
                     .body(new ResponseDto(HttpStatus.OK, "공지사항 조회가 완료되었습니다.", announce.get()));
         } else {
-            return ResponseEntity.notFound()
-                    .build();
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseDto(HttpStatus.NOT_FOUND, "공지사항을 찾을 수 없습니다."));
         }
     }
+
     
     /* 공지사항 등록 */
-    @PostMapping
-    public ResponseEntity<ResponseDto> createAnnounce(@ModelAttribute AnnounceDto announceDto, @RequestParam(required = false) MultipartFile multipartFile) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        EmployeeDto employeeDto = (EmployeeDto) authentication.getPrincipal();
+    // 공지사항 등록을 위한 POST 메소드를 정의하는 부분입니다. "/announce-registration" 엔드포인트에 POST 요청이 오면 이 메소드가 호출됩니다.
+    @PostMapping("/announce-registration") 
 
-        if (multipartFile != null && !multipartFile.isEmpty()) {
-            // 파일이 존재하는 경우에 대한 처리 로직
-            String filename = multipartFile.getOriginalFilename();
-            // 파일 업로드 및 저장 로직 등을 수행합니다.
+    // 메소드의 선언입니다. 
+    // - @ModelAttribute로 받은 AnnounceDto 객체는 클라이언트에서 보낸 데이터를 담고 있습니다.
+    // - @RequestParam으로 받은 MultipartFile 객체는 클라이언트가 업로드한 파일을 담고 있습니다. 파일 업로드는 선택적이므로 required = false로 설정되어 있습니다.
+    public ResponseEntity<ResponseDto> createAnnounce(@ModelAttribute AnnounceDto announceDto, @RequestParam(required = false) MultipartFile multipartFile) {
+
+        // 현재 인증된 사용자의 정보를 가져오는 부분입니다. 이는 Spring Security의 기능을 활용합니다.
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        // 인증된 사용자의 정보를 EmployeeDto 타입으로 변환합니다. 
+        EmployeeDto employeeDto = (EmployeeDto) authentication.getPrincipal();
+        
+        // 클라이언트로부터 받은 공지사항 제목이 없을 경우 디폴트 값으로 설정합니다.
+        if (announceDto.getAnnTitle() == null) {
+        	announceDto.setAnnTitle("Default Title");
+        }
+        // 클라이언트로부터 받은 공지사항 내용이 없을 경우 디폴트 값으로 설정합니다.
+        if (announceDto.getAnnContent() == null) {
+        	announceDto.setAnnContent("Default Content");
         }
 
-        // Get employee code from logged-in user
+        // 클라이언트로부터 받은 파일이 있는지 확인하고, 파일이 있는 경우 파일 처리 로직을 실행합니다.
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            // 파일 이름을 가져오는 부분입니다.
+            String filename = multipartFile.getOriginalFilename();
+            // 여기에 파일을 업로드하고 저장하는 로직을 추가할 수 있습니다.
+            
+        }
+
+        // 로그인된 사용자의 사원 코드를 가져옵니다.
         Long empCode = employeeDto.getEmpCode();
 
+        // 서비스 로직을 호출하여 공지사항을 등록합니다. 이 부분에서는 공지사항 데이터, 업로드한 파일, 사원 코드를 넘겨줍니다.
         announceService.createAnnounce(announceDto, multipartFile, empCode);
+        
+        // 공지사항 등록이 성공적으로 이루어진 후에는 클라이언트에게 200 OK 응답과 함께 메시지를 전달합니다.
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "공지사항이 등록되었습니다."));
     }
+
 
 
     /* 공지사항 수정 */
