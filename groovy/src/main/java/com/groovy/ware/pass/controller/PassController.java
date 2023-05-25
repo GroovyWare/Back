@@ -73,6 +73,14 @@ public class PassController {
 				.body(new ResponseDto(HttpStatus.OK, "리스트 조회 성공", responseDtoWithPaging));
 	}
 	
+	/* 회원권 상세 조회 */
+	@GetMapping("detail/{passCode}")
+	public ResponseEntity<ResponseDto> findPassDetail(@PathVariable Long passCode) {
+		
+		return ResponseEntity.ok()
+				.body(new ResponseDto(HttpStatus.OK, "회원권 상세 조회 완료", passService.findPassDetail(passCode)));
+	}
+	
 	/* 회원권 수정 */
 	@PutMapping("/modify/{passCode}")
 	public ResponseEntity<ResponseDto> modifyPass(@ModelAttribute PassDto passDto, @PathVariable Long passCode) {
