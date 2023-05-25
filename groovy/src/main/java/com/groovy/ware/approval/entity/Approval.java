@@ -56,12 +56,15 @@ public class Approval {
 	@Column(name="APV_CONTEXT")
 	private String apvContext;
 	
+	@Column(name="APV_COUNT")
+	private Integer apvCount;
+	
 	@OneToMany(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="APV_CODE")
 	private List<ApproveLine> approveLine;
 	
 	@OneToMany(cascade=CascadeType.PERSIST)
 	@JoinColumn(name="APV_CODE")
-	private List<Reader> reader;
+	private List<Reader> readerLine;
 
 }
