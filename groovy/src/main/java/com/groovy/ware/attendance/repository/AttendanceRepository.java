@@ -1,5 +1,6 @@
 package com.groovy.ware.attendance.repository;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -14,7 +15,6 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 
     @Query("SELECT a FROM Attendance a WHERE a.employee.empCode = :empCode AND a.attDate = CURRENT_DATE")
     Attendance findOneAttendance(@Param("empCode") Long empCode);
-    
 
     
 }
