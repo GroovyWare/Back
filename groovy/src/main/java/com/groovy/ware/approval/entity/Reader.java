@@ -2,14 +2,11 @@ package com.groovy.ware.approval.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.groovy.ware.employee.entity.Employee;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,9 +19,11 @@ import lombok.Setter;
 public class Reader implements Serializable{
 	
 	@Id
-	private Integer apvCode;
-	
+	@Column(name="EMP_CODE", nullable = true)
+	public Integer empCode;
+		
 	@Id
-	private Integer empCode;
+	@Column(name="APV_CODE", nullable = true)
+	public Integer apvCode;
 
 }

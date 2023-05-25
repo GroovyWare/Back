@@ -7,10 +7,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Version;
 
 import org.hibernate.annotations.DynamicInsert;
+
+import com.groovy.ware.employee.entity.Employee;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -25,11 +28,11 @@ public class ApproveLine implements Serializable{
 	
 	@Id
 	@Column(name="EMP_CODE", nullable = true)
-	public Integer empCode;
+	private Integer empCode;
 		
 	@Id
 	@Column(name="APV_CODE", nullable = true)
-	public Integer apvCode;
+	private Integer apvCode;
 	
 	@Column(name="APL_NUM")
 	private String aplNum;

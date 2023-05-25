@@ -29,8 +29,8 @@ import lombok.Setter;
 @SequenceGenerator(name="ANNOUNCE_SEQ_GENERATOR", sequenceName="SEQ_ANN_CODE", initialValue=1, allocationSize=1)
 public class Announce {
     @Id
-    @Column(name="ANN_CODE")
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="ANNOUNCE_SEQ_GENERATOR")
+    @Column(name="ANN_CODE")
     private Long annCode; 			// 공지사항 코드
 
     @Column(name="ANN_TITLE")
@@ -45,12 +45,6 @@ public class Announce {
 
     @Column(name="ANN_CONTENT")
     private String annContent;		// 내용
-
-    @Column(name="ANN_DELDATE")
-    private Date annDelDate; 		// 삭제 일자
-
-    @Column(name="ANN_DELETE")
-    private String annDelete; 		// 삭제 여부
 
     @OneToMany(mappedBy="announce")
     @JsonManagedReference
