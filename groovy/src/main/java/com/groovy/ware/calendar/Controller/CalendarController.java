@@ -150,8 +150,9 @@ public ResponseEntity<ResponseDto> getAllSchedules(@AuthenticationPrincipal Empl
 
     /* 5. 일정 삭제하기 */
     @DeleteMapping("/schedule/delete/{id}")
-    public ResponseEntity<ResponseDto> deleteSchedule(@PathVariable Long id) {
-        calendarService.deleteSchedule(id);
+    public ResponseEntity<ResponseDto> deleteSchedule(@AuthenticationPrincipal EmployeeDto writer,
+            @PathVariable Long id) {
+        calendarService.deleteSchedule(writer, id);
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "삭제 완료"));
     }
 

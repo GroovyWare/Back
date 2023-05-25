@@ -163,12 +163,11 @@ public void modifyCalendar(CalendarDTO calendarDTO, EmployeeDto writer) {
 
    /* 5. 일정 삭제하기 */
    @Transactional
-   public void deleteSchedule(Long id) {
+   public void deleteSchedule(EmployeeDto writer, Long id) {
        log.info("[CalendarService] deletestart");
-       log.info("[CalendarService] id : {}", id);
-      
-         calendarRepository.deleteById(id);
-   
+     
+       calendarRepository.deleteById(id);
+       
        log.info("[CalendarService] delete end");
    }
    
