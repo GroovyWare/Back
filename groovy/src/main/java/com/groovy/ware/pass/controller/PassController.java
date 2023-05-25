@@ -3,6 +3,7 @@ package com.groovy.ware.pass.controller;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,6 +23,7 @@ import com.groovy.ware.pass.service.PassService;
 
 import lombok.extern.slf4j.Slf4j;
 
+@CrossOrigin(origins="*", allowedHeaders = "*")
 @Slf4j
 @RestController
 @RequestMapping("/pass")
@@ -69,6 +71,14 @@ public class PassController {
 		
 		return ResponseEntity.ok()
 				.body(new ResponseDto(HttpStatus.OK, "리스트 조회 성공", responseDtoWithPaging));
+	}
+	
+	/* 회원권 상세 조회 */
+	@GetMapping("detail/{passCode}")
+	public ResponseEntity<ResponseDto> findPassDetail(@PathVariable Long passCode) {
+		
+		return ResponseEntity.ok()
+				.body(new ResponseDto(HttpStatus.OK, "회원권 상세 조회 완료", passService.findPassDetail(passCode)));
 	}
 	
 	/* 회원권 수정 */

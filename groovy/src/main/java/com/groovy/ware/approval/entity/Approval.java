@@ -1,7 +1,9 @@
 package com.groovy.ware.approval.entity;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -30,8 +33,8 @@ public class Approval {
 	
 	@Id
 	@Column(name="APV_CODE")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="APPROVAL_SEQ_GENETRATOR")
-	private Long apvCode;
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="APPROVAL_SEQ_GENERATOR")
+	private Integer apvCode;
 	
 	@Column(name="APV_CREATED_DATE")
 	private Date apvCreatedDate;
@@ -53,6 +56,15 @@ public class Approval {
 	@Column(name="APV_CONTEXT")
 	private String apvContext;
 	
+	@Column(name="APV_COUNT")
+	private Integer apvCount;
 	
+	@OneToMany(cascade = CascadeType.PERSIST)
+	@JoinColumn(name="APV_CODE")
+	private List<ApproveLine> approveLine;
+	
+	@OneToMany(cascade=CascadeType.PERSIST)
+	@JoinColumn(name="APV_CODE")
+	private List<Reader> readerLine;
 
 }

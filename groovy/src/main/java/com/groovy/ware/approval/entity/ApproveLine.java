@@ -1,4 +1,4 @@
-package com.groovy.ware.approveLine.entity;
+package com.groovy.ware.approval.entity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -6,11 +6,13 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.groovy.ware.approval.entity.Approval;
+import org.hibernate.annotations.DynamicInsert;
+
 import com.groovy.ware.employee.entity.Employee;
 
 import lombok.Getter;
@@ -19,17 +21,18 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
+@IdClass(ApproveLineId.class)
 @Table(name="GRV_APPROVELINE")
+@DynamicInsert
 public class ApproveLine implements Serializable{
 	
 	@Id
-	@ManyToOne
-	@JoinColumn(name="APV_CODE")
-	private Approval approval;
-	
-	@ManyToOne
-	@JoinColumn(name="EMP_CODE")
-	private Employee employee;
+	@Column(name="EMP_CODE", nullable = true)
+	private Integer empCode;
+		
+	@Id
+	@Column(name="APV_CODE", nullable = true)
+	private Integer apvCode;
 	
 	@Column(name="APL_NUM")
 	private String aplNum;

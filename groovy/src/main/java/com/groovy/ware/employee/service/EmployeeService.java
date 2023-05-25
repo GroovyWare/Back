@@ -61,8 +61,13 @@ public class EmployeeService {
 		Pageable pageable = PageRequest.of(page -1, 10, Sort.by("empCode").descending());
 		
 		Page<Employee> employeeList = employeeRepository.findAll(pageable);
-		Page<EmployeeDto> employeeDtoList = employeeList.map(employee -> modelMapper.map(employee, EmployeeDto.class));		
+		Page<EmployeeDto> employeeDtoList = employeeList.map(employee -> modelMapper.map(employee, EmployeeDto.class));
 		
+		for(EmployeeDto employeeDto : employeeDtoList) {
+				if(employeeDto.getFile() != null)
+				employeeDto.getFile().setFileSavedName(IMAGE_URL + employeeDto.getFile().getFileSavedName());
+		}
+			
 		log.info("[EmployeeService] selectEmployeeList end ============================================");
 		
 		return employeeDtoList;
@@ -76,14 +81,15 @@ public class EmployeeService {
 		
 		Employee employee = employeeRepository.findById(empCode)
 												.orElseThrow(() -> new IllegalArgumentException("해당 코드의 직원이 없습니다."));
-		
+	
 		EmployeeDto employeeDto = modelMapper.map(employee, EmployeeDto.class);
+
 		employeeDto.getFile().setFileSavedName(IMAGE_URL + employeeDto.getFile().getFileSavedName());
 
 		log.info("[EmployeeService] selectEmployee end ==============================================");
 		
 		return employeeDto;
-	}
+	}	
 	
 	/* 직원 등록 */
 	@Transactional
@@ -106,7 +112,7 @@ public class EmployeeService {
 		
 		try {
 			
-			/* 권한 임의 값 전처리 */
+			/* 권한 부여전 임의 값 전처리 */
 			Long initEmpCode = (long) 0;
 			Long initAuthCode = (long) 2;
 			EmpAuthDto empAuthDto = new EmpAuthDto();
@@ -187,13 +193,19 @@ public class EmployeeService {
 	
 }
 
-	/* 내정보 조회*/
+	/* 내정보 조회 */
 	public EmployeeDto selectMyInfo(Long empCode) {
 		log.info("[EmployeeService] selectMyInfo empCode : {}", empCode);
 		Employee employee = employeeRepository.findById(empCode)
 				.orElseThrow(() -> new UserNotFoundException(empCode + "를 찾을 수 없습니다."));
 		
-		return modelMapper.map(employee, EmployeeDto.class);
+		EmployeeDto employeeDto = modelMapper.map(employee, EmployeeDto.class);
+		if(employeeDto.getFile() != null) {
+			employeeDto.getFile().setFileSavedName(IMAGE_URL + employeeDto.getFile().getFileSavedName());
+		}
+		log.info("[EmployeeService] employeeDto empCode : {}", empCode);
+		
+		return employeeDto;
 	}
 	
 

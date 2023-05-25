@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TokenProvider {
 
 	private static final String AUTHORITIES_KEY = "auth"; 
-	private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;
+	private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 600;
 	private static final String BEARER_TYPE = "bearer";
 	
 	private final Key key;

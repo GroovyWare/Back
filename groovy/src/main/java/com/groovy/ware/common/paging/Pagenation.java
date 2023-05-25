@@ -1,5 +1,7 @@
 package com.groovy.ware.common.paging;
 
+import java.util.Map;
+
 import org.springframework.data.domain.Page;
 
 public class Pagenation {
