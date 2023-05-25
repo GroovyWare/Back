@@ -27,10 +27,15 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@EntityGraph(attributePaths={"dept", "position", "file", "auths", "auths.auth"})
 	Optional<Employee> findByEmpId(String empId);
 	
+	/* 아이디 중복 검사 */
+	@Query("SELECT e.empId FROM Employee e")
+	List<Employee> findEmpIdList();
+	
 	/* 민경 조직도 조회 (검색) */
 	List<Employee> findByEmpName(String empName);
 	
 	/* 기욱 */
 	Employee findByEmpCode(String keyword);
+
 	
 }

@@ -15,6 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.DynamicInsert;
 
@@ -53,8 +55,10 @@ public class Employee {
 	private String empEmail;
 	@Column(name="EMP_ADDRESS")
 	private String empAddress;
+	@Temporal(TemporalType.DATE)
 	@Column(name="EMP_ENT_DATE")
 	private Date empEntDate;
+	@Temporal(TemporalType.DATE)
 	@Column(name="EMP_EX_DATE")
 	private Date empExDate;
 	@Column(name="EMP_STATUS")
