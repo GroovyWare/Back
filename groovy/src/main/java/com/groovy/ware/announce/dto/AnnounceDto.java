@@ -1,5 +1,6 @@
 package com.groovy.ware.announce.dto;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,14 +21,12 @@ public class AnnounceDto {
 	private Date annDate;				// 작성일
 	private EmployeeDto employee;		// 직원 코드
 	private String annContent;			// 내용
-	private Date annDelDate;			// 삭제 일자
-	private String annDelete;			// 삭제 여부
 	
 	@JsonIgnore
 	private MultipartFile announceImage;
 	
-	private List<FileDto> files;
-//	private List<FileDto> files = new ArrayList<>();
+//	private List<FileDto> files;
+	private List<FileDto> files = new ArrayList<>();
 	
 	public void setEmployee(EmployeeDto employeeDto) {
         ModelMapper modelMapper = new ModelMapper();

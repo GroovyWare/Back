@@ -10,7 +10,10 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,8 +50,19 @@ public class AnnounceService {
         this.employeeRepository = employeeRepository;
     }
 
-    public Page<Announce> getAnnounces(Pageable pageable) {
-        return announceRepository.findAll(pageable);
+    public Page<AnnounceDto> getAnnounces(Pageable pageable) {
+        // 게시물 작성 날짜를 기준으로 내림차순 정렬
+        PageRequest sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "annDate"));
+        Page<Announce> announces = announceRepository.findAll(sortedPageable);
+
+        // Convert Entity to DTO
+        List<AnnounceDto> announceDtoList = new ArrayList<>();
+        for (Announce announce : announces) {
+            AnnounceDto announceDto = modelMapper.map(announce, AnnounceDto.class);
+            announceDtoList.add(announceDto);
+        }
+
+        return new PageImpl<>(announceDtoList, sortedPageable, announces.getTotalElements());
     }
 
     public Optional<Announce> getAnnounce(Long annCode) {
@@ -93,7 +107,8 @@ public class AnnounceService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 코드의 공지사항이 없습니다. annCode=" + announceDto.getAnnCode()));
 
         try {
-            if (announceDto.getFiles().get(0).getFileSavedName() != null) {
+        	if (announceDto.getFiles() != null && !announceDto.getFiles().isEmpty() && 
+                announceDto.getFiles().get(0).getFileSavedName() != null) {
                 String replaceFileName = fileService.saveFile(announceDto.getAnnounceImage());
                 fileService.deleteFile(originAnnounce.getFiles().get(0).getFileSavedName());
 
