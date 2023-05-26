@@ -80,6 +80,7 @@ public class EmployeeController {
 	@PutMapping("/emp")
 	public ResponseEntity<ResponseDto> updateEmployee(@ModelAttribute EmployeeDto employeeDto) {
 		
+		log.info("수정 정보 employeeDto : {}", employeeDto);
 		employeeService.updateEmployee(employeeDto);
 		
 		return ResponseEntity
