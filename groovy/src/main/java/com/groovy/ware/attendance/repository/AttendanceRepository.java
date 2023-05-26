@@ -15,7 +15,7 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 
    
     
-    @Query(value = "SELECT * FROM GRV_ATTENDENCE a WHERE a.EMP_CODE = :empCode AND TRUNC(a.ATT_DATE) = TRUNC(SYSDATE)", nativeQuery = true)
+    @Query(value = "SELECT * FROM GRV_ATTENDENCE  WHERE EMP_CODE = :empCode AND TRUNC(ATT_DATE) = TRUNC(SYSDATE)", nativeQuery = true)
     Attendance findOneAttendance(@Param("empCode") Long empCode);
     
 
