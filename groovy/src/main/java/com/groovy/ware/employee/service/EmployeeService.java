@@ -1,8 +1,8 @@
 package com.groovy.ware.employee.service;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -21,16 +21,13 @@ import com.groovy.ware.common.entity.File;
 import com.groovy.ware.common.exception.DuplicatedEmpIdException;
 import com.groovy.ware.common.exception.UserNotFoundException;
 import com.groovy.ware.common.repository.FileRepository;
-import com.groovy.ware.employee.dto.EmpAuthDto;
 import com.groovy.ware.employee.dto.EmployeeDto;
 import com.groovy.ware.employee.entity.Department;
-import com.groovy.ware.employee.entity.EmpAuthPK;
 import com.groovy.ware.employee.entity.Employee;
 import com.groovy.ware.employee.entity.Position;
 import com.groovy.ware.employee.repository.EmployeeRepository;
 import com.groovy.ware.util.FileUploadUtils;
 
-import io.jsonwebtoken.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -116,6 +113,7 @@ public class EmployeeService {
 			
 			/* empCode insert 전처리*/
 			employeeDto.getAuths().forEach(auth -> auth.getEmpAuthPK().setEmpCode(0L));
+			employeeDto.setEmpEntDate(new Date());
 			
 			String originalName = employeeDto.getImgUrl().getOriginalFilename();
 			String replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, employeeDto.getImgUrl());
@@ -131,7 +129,7 @@ public class EmployeeService {
 
 			fileRepository.save(modelMapper.map(fileDto, File.class));
 			
-		} catch (IOException | java.io.IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
@@ -144,22 +142,25 @@ public class EmployeeService {
 		log.info("[EmployeeService] updateEmployee start ===============================================");
 		log.info("[EmployeeService] employeeDto : {}", employeeDto);
 		
-		Employee originEmployee = employeeRepository.findById(employeeDto.getEmpCode())
-		
+		Employee originEmployee = employeeRepository.findById(employeeDto.getEmpCode())	
 				.orElseThrow(() -> new IllegalArgumentException("해당 코드의 직원이 없습니다."));
 		try {
 		
 			if(employeeDto.getImgUrl() != null) {
 				
 				String imageName = UUID.randomUUID().toString().replace("-", "");
+				log.info("[변경할 원본파일명 변경] imageName : {}", imageName);
 				
-				String replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, employeeDto.getImgUrl());		
-					
+				String replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, employeeDto.getImgUrl());	
+				log.info("[변경할 저장파일명] FileSavedName : {}", replaceFileName);
+				
+				log.info("[삭제할 파일명] delete image : {}", originEmployee.getFile().getFileSavedName());
 				FileUploadUtils.deleteFile(IMAGE_DIR, originEmployee.getFile().getFileSavedName());
 				
+				log.info("[originalEmployee.getFile()] : {}", originEmployee.getFile());
 				originEmployee.getFile().setFileSavedName(replaceFileName);
 				originEmployee.getFile().setFileOriginalName(employeeDto.getImgUrl().getOriginalFilename());
-							
+
 			}
 		
 			originEmployee.update(
@@ -170,15 +171,15 @@ public class EmployeeService {
 					employeeDto.getEmpExDate(),
 					modelMapper.map(employeeDto.getDept(), Department.class),
 					modelMapper.map(employeeDto.getPosition(), Position.class),
-					modelMapper.map(employeeDto.getFile(), File.class)
+					originEmployee.getFile()
 					);
 			
-		} catch (IOException | java.io.IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-	
-}
+		log.info("변경 후 {}", employeeDto);
+	}
 
 	/* 내정보 조회 */
 	public EmployeeDto selectMyInfo(Long empCode) {
