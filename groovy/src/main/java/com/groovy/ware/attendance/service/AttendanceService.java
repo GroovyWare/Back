@@ -72,9 +72,6 @@ public class AttendanceService {
 
         // Attendance originAttendance = attendanceRepository.findOneAttendance(employee.getEmpCode());
 
-
-
-        
         attendanceDto.setAttEnd(new Time(System.currentTimeMillis()));
         
         attendanceRepository.save(modelMapper.map(attendanceDto, Attendance.class));
