@@ -82,10 +82,10 @@ public class PassController {
 	}
 	
 	/* 회원권 수정 */
-	@PutMapping("/modify/{passCode}")
-	public ResponseEntity<ResponseDto> modifyPass(@ModelAttribute PassDto passDto, @PathVariable Long passCode) {
+	@PutMapping("/modify")
+	public ResponseEntity<ResponseDto> modifyPass(@ModelAttribute PassDto passDto) {
 		
-		passService.modifyPass(passDto, passCode);
+		passService.modifyPass(passDto);
 		
 		return ResponseEntity.ok()
 				.body(new ResponseDto(HttpStatus.OK, "회원권 수정 성공"));
