@@ -1,6 +1,7 @@
 package com.groovy.ware.attendance.entity;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.time.LocalTime;
 
 import javax.persistence.Column;
@@ -42,11 +43,11 @@ public class Attendance {
 
    
     @Column(name = "ATT_START")
-    private LocalTime attStart;
+    private Time attStart;
 
   
     @Column(name = "ATT_END")
-    private LocalTime attEnd;
+    private Time attEnd;
 
     @Column(name = "ATT_DIV")
     private String attDiv;
