@@ -12,11 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.groovy.ware.history.entity.History;
-import com.groovy.ware.history.repository.HistoryRepository;
 import com.groovy.ware.member.dto.MemberDto;
 import com.groovy.ware.member.entity.Member;
 import com.groovy.ware.member.repository.MemberRepository;
-import com.groovy.ware.pass.repository.PassRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,17 +25,13 @@ public class MemberService {
 	/* 의존성 주입 */
 	private final MemberRepository memberRepository;
 	private final ModelMapper modelMapper;
-	private final PassRepository passRepository;
-	private final HistoryRepository historyRepository;
 
 
-	public MemberService(MemberRepository memberRepository, PassRepository passRepository, 
-			HistoryRepository historyRepository, ModelMapper modelMapper) {
+
+	public MemberService(MemberRepository memberRepository,  ModelMapper modelMapper) {
 		
 		this.memberRepository = memberRepository;
 		this.modelMapper = modelMapper;
-		this.passRepository = passRepository;
-		this.historyRepository = historyRepository;
 	}
 	
 	
@@ -50,16 +44,12 @@ public class MemberService {
 		
 
 		Page<Member> memberList = memberRepository.findAll(pageable);
-		//log.info("[MemberService] findMemberListAll.getContent(): {}", memberList.getContent());
 		Page<MemberDto> memberDtoList = memberList.map(member -> modelMapper.map(member, MemberDto.class));
 
-		
-		//log.info("[MemberService] findMemberListAll.getContent(): {}", memberDtoList.getContent());
 		log.info("[MemberService] findMemberListAll end ==================");
 		
 		return memberDtoList;
 	}
-	
 	
 
 	
@@ -117,4 +107,11 @@ public class MemberService {
 	
 		log.info("[MemberService] : modifyMember end ==================================== ");
 	}
+	
+	
+	
+	
+	
+	
+	
 }

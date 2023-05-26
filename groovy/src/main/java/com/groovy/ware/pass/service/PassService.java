@@ -49,7 +49,7 @@ public class PassService {
 		
 		log.info("[PassService] findPassList start =====================================");
 		
-		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("passCode").descending());
+		Pageable pageable = PageRequest.of(page - 1, 8, Sort.by("passCode").descending());
 		
 		Page<Pass> passList = passRepository.findAll(pageable);
 		Page<PassDto> passDtoList = passList.map(pass -> modelMapper.map(pass, PassDto.class));
@@ -82,12 +82,12 @@ public class PassService {
 	
 	/* 회원권 수정 */
 	@Transactional
-	public void modifyPass(PassDto passDto, Long passCode) {
+	public void modifyPass(PassDto passDto) {
 		log.info("[PassService] modifyPass start =====================================");
 		log.info("[PassService] passDto : {}", passDto);
 		
-		Pass originPass = passRepository.findById(passCode).orElseThrow();
-		
+		Pass originPass = passRepository.findById(passDto.getPassCode()).orElseThrow();
+				
 		originPass.modify(
 				
 				passDto.getPassType(), 
