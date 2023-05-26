@@ -43,21 +43,16 @@ public class EquipmentController {
     }
 
     // 새로운 기구를 등록하는 메서드
-//    @PostMapping("/equipment")
-//    public ResponseEntity<Equipment> createEquipment(@RequestBody EquipmentDto equipmentDto) {
-//        Equipment equipment = equipmentService.createEquipment(equipmentDto);
-//        return ResponseEntity.ok(equipment);
-//    }    
+    @PostMapping("/regist")
+    public ResponseEntity<Equipment> createEquipment(@RequestBody EquipmentDto equipmentDto) {
+        Equipment equipment = equipmentService.createEquipment(equipmentDto);
+        return ResponseEntity.ok(equipment);
+    }    
 
     // 기구 정보를 수정하는 메서드
     @PutMapping("/{eqpCode}")
     public Equipment updateEquipment(@PathVariable Long eqpCode, @RequestBody EquipmentDto equipmentDto) {
-        Equipment equipment = equipmentService.getEquipment(eqpCode);
-
-        // DTO의 필드를 Equipment 객체에 매핑합니다.
-        modelMapper.map(equipmentDto, equipment);
-
-        return equipmentService.saveEquipment(equipment);
+        return equipmentService.updateEquipment(eqpCode, equipmentDto);
     }
 
     // 기구를 삭제하는 메서드

@@ -4,9 +4,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.groovy.ware.employee.dto.EmployeeDto;
 import com.groovy.ware.employee.entity.Employee;
 import com.groovy.ware.employee.repository.EmployeeRepository;
 import com.groovy.ware.equipment.dto.EquipmentDto;
@@ -48,7 +51,14 @@ public class EquipmentService {
     }
 
     @Transactional
-    public Equipment createEquipment(EquipmentDto equipmentDto, Long empCode) {
+    public Equipment createEquipment(EquipmentDto equipmentDto) {
+        // 현재 로그인한 사용자를 가져옵니다. 
+        // Authentication 객체를 사용하거나 SecurityContext를 사용하여 가져올 수 있습니다.
+        // 아래는 Spring Security를 이용해서 현재 로그인한 사용자를 가져오는 예제 코드입니다.
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        EmployeeDto employeeDto = (EmployeeDto) authentication.getPrincipal();
+        Long empCode = employeeDto.getEmpCode();
+
         // 직원의 코드로 직원을 찾습니다.
         Employee employee = employeeRepository.findById(empCode)
             .orElseThrow(() -> new RuntimeException("Employee not found"));
@@ -67,6 +77,7 @@ public class EquipmentService {
 
         return saveEquipment(equipment);
     }
+
 
 
     // 주어진 eqpCode에 해당하는 기구의 정보를 수정하고 업데이트한 뒤 반환하는 메서드
