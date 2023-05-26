@@ -1,7 +1,10 @@
 package com.groovy.ware.attendance.service;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.util.List;
+
+import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -50,7 +53,36 @@ public class AttendanceService {
         return attendanceDto;
     }
 
+    /* 출근 버튼을 누를때 */
+    @Transactional
     public void addGoWork(AttendanceDto attendanceDto) {
+        log.info("[AttendanceService] start==============");
+        log.info("[AttendanceService] attendanceDto : {}", attendanceDto);
+        attendanceDto.setAttDate(new Date(System.currentTimeMillis()));
+        attendanceRepository.save(modelMapper.map(attendanceDto, Attendance.class));
+
+
     }
     
+
+    /* 퇴근 버튼을 누를때 (수정) */
+    @Transactional
+    public void leaveWork(AttendanceDto attendanceDto, EmployeeDto employee) {
+        log.info("[AttendanceService] update start ==============");
+
+        // Attendance originAttendance = attendanceRepository.findOneAttendance(employee.getEmpCode());
+
+
+
+        
+        attendanceDto.setAttEnd(new Time(System.currentTimeMillis()));
+        
+        attendanceRepository.save(modelMapper.map(attendanceDto, Attendance.class));
+
+
+        log.info("[AttendanceService] update end ==============");
+
+
+    }
+
 }
