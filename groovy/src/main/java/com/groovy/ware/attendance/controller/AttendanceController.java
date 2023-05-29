@@ -73,12 +73,12 @@ public class AttendanceController {
     
         attendanceDto.setAttDate(new Date(System.currentTimeMillis()));
     
-        attendanceDto.setEmployee(employee);
+        attendanceDto.setEmployee(employee); 
         
         /* 조회 메소드를 이용해서 출근 시간에 대한 변경을 없앤다. */
         AttendanceDto findStartTime = attendanceService.viewMain(employee);
         attendanceDto.setAttStart(findStartTime.getAttStart());
-
+       
     
         attendanceService.leaveWork(attendanceDto, employee); 
     
