@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -66,10 +67,11 @@ public class AttendanceController {
 
     /* 3. 퇴근*/
     @PutMapping("/main/leave")
-    public ResponseEntity<ResponseDto> leaveWork(@RequestBody AttendanceDto attendanceDto, @AuthenticationPrincipal EmployeeDto employee) 
+    public ResponseEntity<ResponseDto> leaveWork(@ModelAttribute AttendanceDto attendanceDto, @AuthenticationPrincipal EmployeeDto employee) 
     {
     
         log.info("[AttendanceController] start ====================-");
+       
     
         attendanceDto.setAttDate(new Date(System.currentTimeMillis()));
         attendanceDto.setAttCode(attendanceDto.getAttCode());
@@ -78,15 +80,29 @@ public class AttendanceController {
         /* 조회 메소드를 이용해서 출근 시간에 대한 변경을 없앤다. */
         AttendanceDto findStartTime = attendanceService.viewMain(employee);
         attendanceDto.setAttStart(findStartTime.getAttStart());
+        attendanceDto.setAttCode(findStartTime.getAttCode());
        
     
         attendanceService.leaveWork(attendanceDto, employee); 
-    
+        log.info("[AttendanceController] attendenceDto: {}", attendanceDto);
         log.info("[AttendanceController] end ====================-");
     
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "퇴근되었습니다."));
     }
-    /* */
+   
 
+
+    /* 4. 휴가 */
+    @PostMapping("/main/vacation")
+    public ResponseEntity<ResponseDto> goVacation(@RequestBody AttendanceDto attendanceDto, @AuthenticationPrincipal EmployeeDto employee)
+    {
+        log.info("[AttendanceController] goVacation start ==========");
+
+
+        
+
+
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "휴가처리되었습니다."));
+    }
 
 }
