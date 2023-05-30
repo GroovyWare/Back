@@ -95,11 +95,10 @@ public class AttendanceController {
     /* 4. 휴가 */
     @PostMapping("/main/vacation")
     public ResponseEntity<ResponseDto> goVacation(@RequestBody AttendanceDto attendanceDto, @AuthenticationPrincipal EmployeeDto employee)
-    {
+    {   
+
+
         log.info("[AttendanceController] goVacation start ==========");
-
-
-        
 
 
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "휴가처리되었습니다."));
