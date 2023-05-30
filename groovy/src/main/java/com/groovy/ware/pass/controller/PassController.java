@@ -3,6 +3,7 @@ package com.groovy.ware.pass.controller;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import com.groovy.ware.common.ResponseDto;
 import com.groovy.ware.common.paging.Pagenation;
 import com.groovy.ware.common.paging.PagingButtonInfo;
 import com.groovy.ware.common.paging.ResponseDtoWithPaging;
+import com.groovy.ware.employee.dto.EmployeeDto;
 import com.groovy.ware.pass.dto.PassDto;
 import com.groovy.ware.pass.service.PassService;
 
@@ -39,7 +41,7 @@ public class PassController {
 	
 	/* 회원권 등록 */
 	@PostMapping("/regist")
-	public ResponseEntity<ResponseDto> insertPass(@ModelAttribute PassDto passDto){
+	public ResponseEntity<ResponseDto> insertPass(@ModelAttribute PassDto passDto, @AuthenticationPrincipal EmployeeDto employee){
 		
 		passService.insertPass(passDto);
 		
@@ -51,7 +53,7 @@ public class PassController {
 	
 	/* 회원권 조회 */
 	@GetMapping("/list")
-	public ResponseEntity<ResponseDto> findPassList(@RequestParam(name="page", defaultValue="1") int page){
+	public ResponseEntity<ResponseDto> findPassList(@RequestParam(name="page", defaultValue="1") int page, @AuthenticationPrincipal EmployeeDto employee){
 		
 		log.info("[PassController] : findPassList start ==================================== ");
 		log.info("[PassController] : page : {}", page);
@@ -75,7 +77,7 @@ public class PassController {
 	
 	/* 회원권 상세 조회 */
 	@GetMapping("detail/{passCode}")
-	public ResponseEntity<ResponseDto> findPassDetail(@PathVariable Long passCode) {
+	public ResponseEntity<ResponseDto> findPassDetail(@PathVariable Long passCode, @AuthenticationPrincipal EmployeeDto employee) {
 		
 		return ResponseEntity.ok()
 				.body(new ResponseDto(HttpStatus.OK, "회원권 상세 조회 완료", passService.findPassDetail(passCode)));
@@ -83,7 +85,7 @@ public class PassController {
 	
 	/* 회원권 수정 */
 	@PutMapping("/modify")
-	public ResponseEntity<ResponseDto> modifyPass(@ModelAttribute PassDto passDto) {
+	public ResponseEntity<ResponseDto> modifyPass(@ModelAttribute PassDto passDto, @AuthenticationPrincipal EmployeeDto employee) {
 		
 		passService.modifyPass(passDto);
 		

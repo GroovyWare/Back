@@ -3,6 +3,7 @@ package com.groovy.ware.history.entity;
 
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -54,6 +55,8 @@ public class History {
 	@ManyToOne
 	@JoinColumn(name="EMP_CODE")
 	private MemberEmployee employee;
+	
+
 
 }
 

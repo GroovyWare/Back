@@ -1,5 +1,7 @@
 package com.groovy.ware.pass.service;
 
+import java.util.stream.Collectors;
+
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
@@ -9,6 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.groovy.ware.history.entity.History;
+import com.groovy.ware.member.dto.MemberDto;
+import com.groovy.ware.member.entity.Member;
 import com.groovy.ware.pass.dto.PassDto;
 import com.groovy.ware.pass.entity.Pass;
 import com.groovy.ware.pass.repository.PassRepository;
@@ -98,6 +103,9 @@ public class PassService {
 		);
 		
 	}
+	
+
+
 	
 	/* 회원권 삭제 */
 	@Transactional

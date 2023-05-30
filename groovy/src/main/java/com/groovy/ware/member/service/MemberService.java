@@ -85,6 +85,7 @@ public class MemberService {
 		
 	}
 	
+
 	/* 회원 정보 수정 */
 	@Transactional
 	public void modifyMember(MemberDto memberDto) {
@@ -98,16 +99,34 @@ public class MemberService {
 
 		findMember.modify(
 				memberDto.getMemName(), 
-				memberDto.getMemPhone(), 
-				memberDto.getMemDeleteDate(), 
-				memberDto.getMemStartDate(), 
-				memberDto.getMemEndDate(),
-				memberDto.getHistory().stream().map(history -> modelMapper.map(history, History.class)).collect(Collectors.toList())
+				memberDto.getMemPhone()
 				);
 	
 		log.info("[MemberService] : modifyMember end ==================================== ");
 	}
 	
+	/* 회원의 회원권 추가 */
+	@Transactional
+	public void memberAddPass(MemberDto memberDto) {
+		
+		log.info("[MemberService] : modifyMember start ==================================== ");
+		log.info("[MemberService] : memberDto : {}", memberDto);
+		
+		Member findMemberPass = memberRepository.findById(memberDto.getMemCode()).orElseThrow();
+		
+		log.info("[MemberService] : originMember : {}", findMemberPass);
+
+		findMemberPass.addPass(
+				memberDto.getMemCode(),
+				memberDto.getMemDeleteDate(), 
+				memberDto.getMemStartDate(), 
+				memberDto.getMemEndDate(),
+				memberDto.getHistory().stream().map(history -> modelMapper.map(history, History.class)).collect(Collectors.toList())
+				);
+
+
+		log.info("[MemberService] : modifyMember end ==================================== ");
+	}
 	
 	
 	
