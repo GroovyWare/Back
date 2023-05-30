@@ -69,13 +69,15 @@ public class AttendanceService {
     @Transactional
     public void leaveWork(AttendanceDto attendanceDto, EmployeeDto employee) {
         log.info("[AttendanceService] update start ==============");
+        log.info("[AttendanceService] attendanceDto : {}", attendanceDto);
 
         // Attendance originAttendance = attendanceRepository.findOneAttendance(employee.getEmpCode());
+        Attendance originAttendance = attendanceRepository.findById(attendanceDto.getAttCode()).
+        orElseThrow(() -> new IllegalArgumentException("그런 출근기록은 없습니다." + attendanceDto.getAttCode()));
 
-        attendanceDto.setAttEnd(new Time(System.currentTimeMillis()));
+        originAttendance.setAttEnd(new Time(System.currentTimeMillis()));
         
-        attendanceRepository.save(modelMapper.map(attendanceDto, Attendance.class));
-
+       
 
         log.info("[AttendanceService] update end ==============");
 
