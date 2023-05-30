@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 import com.groovy.ware.history.dto.HistoryDto;
 import com.groovy.ware.history.entity.History;
 import com.groovy.ware.history.repository.HistoryRepository;
-import com.groovy.ware.member.entity.Member;
-import com.groovy.ware.member.repository.MemberRepository;
-import com.groovy.ware.pass.repository.PassRepository;
+
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -52,6 +50,8 @@ public class HistoryService {
 		
 		return historyDtoList;
 	}
+	
+
 	
 
 
