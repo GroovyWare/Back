@@ -29,7 +29,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	
 	/* 아이디 중복 검사 */
 	@Query("SELECT e.empId FROM Employee e")
-	List<Employee> findEmpIdList();
+	List<String> selectEmpIdList();
 	
 	/* 민경 조직도 조회 (검색) */
 	List<Employee> findByEmpName(String empName);

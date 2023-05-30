@@ -23,8 +23,10 @@ import com.groovy.ware.common.exception.UserNotFoundException;
 import com.groovy.ware.common.repository.FileRepository;
 import com.groovy.ware.employee.dto.EmployeeDto;
 import com.groovy.ware.employee.entity.Department;
+import com.groovy.ware.employee.entity.EmpAuth;
 import com.groovy.ware.employee.entity.Employee;
 import com.groovy.ware.employee.entity.Position;
+import com.groovy.ware.employee.repository.EmpAuthRepository;
 import com.groovy.ware.employee.repository.EmployeeRepository;
 import com.groovy.ware.util.FileUploadUtils;
 
@@ -36,14 +38,16 @@ public class EmployeeService {
 
 	private EmployeeRepository employeeRepository;
 	private FileRepository fileRepository;
+	private EmpAuthRepository empAuthRepository;
 	private PasswordEncoder passwordEncoder;
 	private ModelMapper modelMapper;
 	
-	public EmployeeService(EmployeeRepository employeeRepository, FileRepository fileRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
+	public EmployeeService(EmployeeRepository employeeRepository, FileRepository fileRepository, EmpAuthRepository empAuthRepository,PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
 		this.employeeRepository = employeeRepository;
 		this.fileRepository = fileRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.modelMapper = modelMapper;
+		this.empAuthRepository = empAuthRepository;
 	}
 	
 	@Value("${image.image-url}")
@@ -111,24 +115,20 @@ public class EmployeeService {
 		
 		try {
 			
-			/* empCode insert 전처리*/
-			employeeDto.getAuths().forEach(auth -> auth.getEmpAuthPK().setEmpCode(0L));
 			employeeDto.setEmpEntDate(new Date());
-			
-			String originalName = employeeDto.getImgUrl().getOriginalFilename();
-			String replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, employeeDto.getImgUrl());
-			
-			FileDto fileDto = new FileDto();
-			fileDto.setFileDiv("프로필");
-			fileDto.setFileOriginalName(originalName);
-			fileDto.setFileSavedName(replaceFileName);
-
-			fileDto.setEmployee(employeeDto);
-			log.info("[EmployeeService] registEmployee fileDto : {}", fileDto);
-			
-
+				
+				String originalName = employeeDto.getImgUrl().getOriginalFilename();
+				String replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, employeeDto.getImgUrl());				
+				FileDto fileDto = new FileDto();
+				fileDto.setFileDiv("프로필");
+				fileDto.setFileOriginalName(originalName);
+				fileDto.setFileSavedName(replaceFileName);
+	
+				fileDto.setEmployee(employeeDto);
+				log.info("[EmployeeService] registEmployee fileDto : {}", fileDto);
+				
+	
 			fileRepository.save(modelMapper.map(fileDto, File.class));
-			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -163,6 +163,10 @@ public class EmployeeService {
 
 			}
 		
+			empAuthRepository.deleteByEmpCode(employeeDto.getEmpCode());
+			
+			if(employeeDto.getAuths() != null) {
+				
 			originEmployee.update(
 					employeeDto.getEmpName(),
 					employeeDto.getEmpPhone(),
@@ -171,8 +175,12 @@ public class EmployeeService {
 					employeeDto.getEmpExDate(),
 					modelMapper.map(employeeDto.getDept(), Department.class),
 					modelMapper.map(employeeDto.getPosition(), Position.class),
-					originEmployee.getFile()
+					originEmployee.getFile(),
+					employeeDto.getAuths().stream().map(auth -> modelMapper.map(auth, EmpAuth.class)).collect(Collectors.toList())
 					);
+			}
+				
+			
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -197,14 +205,11 @@ public class EmployeeService {
 	}
 
 	/* 직원 아이디 리스트 조회 */
-	public List<EmployeeDto> selectEmpIdList() {
+	public List<String> selectEmpIdList() {
 		
-		List<Employee> employeeList = employeeRepository.findEmpIdList();
-		
-		List<EmployeeDto> empIdList = employeeList
-												.stream()
-												.map(employee -> modelMapper.map(employee, EmployeeDto.class)).collect(Collectors.toList());
-		return empIdList;
+		List<String> employeeList = employeeRepository.selectEmpIdList();
+
+		return employeeList;
 	}
 
 

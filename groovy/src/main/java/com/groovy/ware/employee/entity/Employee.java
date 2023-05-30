@@ -77,7 +77,8 @@ public class Employee {
 	@JoinColumn(name="EMP_CODE")
 	private List<EmpAuth> auths;
 	
-	public void update(String empName, String empPhone, String empEmail, String empAddress, Date empExDate, Department dept, Position position, File file) {
+	public void update(String empName, String empPhone, String empEmail, String empAddress, Date empExDate,
+			Department dept, Position position, File file, List<EmpAuth> auths) {
 		this.empName = empName;
 		this.empPhone = empPhone;
 		this.empEmail = empEmail;
@@ -86,6 +87,7 @@ public class Employee {
 		this.dept = dept;
 		this.position = position;
 		this.file = file;
+		this.auths = auths;
 	}
 
 }
