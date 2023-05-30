@@ -82,7 +82,6 @@ public class EmployeeController {
 		
 		log.info("수정 정보 employeeDto : {}", employeeDto);
 		employeeService.updateEmployee(employeeDto);
-		
 		return ResponseEntity
 				.ok()
 				.body(new ResponseDto(HttpStatus.OK, "해당 직원 정보가 수정되었습니다."));
