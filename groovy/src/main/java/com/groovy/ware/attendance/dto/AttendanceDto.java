@@ -16,7 +16,7 @@ public class AttendanceDto {
     private EmployeeDto employee;
     private Time attStart;
     private Time attEnd;
-    private String attDiv;
+   
     private Date attDate;
     private String attLate;
 

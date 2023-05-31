@@ -58,7 +58,7 @@ public class CalendarService {
    @Transactional
    public void addSchedule(CalendarDTO calendarDTO) {
       log.info("[CalendarService] inserting event start");
-      log.info("[Calend0erService] calenderDto : {}", calendarDTO);
+      log.info("[CalendarService] calenderDto : {}", calendarDTO);
 
       calendarRepository.save(modelMapper.map(calendarDTO, Calendar.class));
 
@@ -155,5 +155,32 @@ public class CalendarService {
 
       log.info("[CalendarService] delete end");
    }
+
+
+
+
+
+/* 6. 휴가 삽입 */
+@Transactional
+public void addVacation(CalendarDTO calendarDTO){
+   log.info("[CalendarService] inserting vacation event start");
+   log.info("[CalendarService] calenderDto : {}", calendarDTO);
+
+   calendarRepository.save(modelMapper.map(calendarDTO, Calendar.class));
+
+   log.info("[CalendarService] vacation inserting event end");
+}
+
+
+
+//  @Transactional
+//  public void addSchedule(CalendarDTO calendarDTO) {
+//     log.info("[CalendarService] inserting event start");
+//     log.info("[Calend0erService] calenderDto : {}", calendarDTO);
+
+//     calendarRepository.save(modelMapper.map(calendarDTO, Calendar.class));
+
+//     log.info("[CalendarService] inserting event end");
+//  }
 
 }
