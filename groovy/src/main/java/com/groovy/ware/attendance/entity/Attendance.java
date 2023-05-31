@@ -49,8 +49,6 @@ public class Attendance {
     @Column(name = "ATT_END")
     private Time attEnd;
 
-    @Column(name = "ATT_DIV")
-    private String attDiv;
 
     @Column(name = "ATT_DATE")
     private Date attDate;
