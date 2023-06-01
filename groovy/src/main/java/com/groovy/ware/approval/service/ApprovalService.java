@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.groovy.ware.approval.dto.ApprovalDto;
 import com.groovy.ware.approval.entity.Approval;
@@ -167,6 +168,20 @@ public class ApprovalService {
 		
 		return employeeDto2;
 	}
+
+	/* 결재권자 이름 찾기 */
+	public List<EmployeeDto> searchApproveLine(List<EmployeeDto> employeeDto) {
+		
+		List<Long> employeeCodes = employeeDto.stream().map(row -> row.getEmpCode()).collect(Collectors.toList());
+		
+		List<Employee> employeeList = employeeRepository.findAllById(employeeCodes);
+		List<EmployeeDto> employeeDtoList = employeeList.stream().map(row -> modelMapper.map(row, EmployeeDto.class)).collect(Collectors.toList());
+		
+		return employeeDtoList;
+	}
+	
+	/* 결재권자 이름 조회 */
+	
 	
 	
 	

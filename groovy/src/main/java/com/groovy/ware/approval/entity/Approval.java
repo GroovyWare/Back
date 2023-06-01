@@ -56,8 +56,8 @@ public class Approval {
 	@Column(name="APV_CONTEXT")
 	private String apvContext;
 	
-	@Column(name="APV_COUNT")
-	private Integer apvCount;
+//	@Column(name="APV_COUNT")
+//	private Integer apvCount;
 	
 	@OneToMany(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="APV_CODE")
