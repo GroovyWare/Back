@@ -162,7 +162,7 @@ public class CalendarService {
 
 
 
-/* 6. 휴가 삽입 */
+/* 6. 휴가 삽입(캘린더 메인으로 가면서 변경 = get method와 postmethod는 겹치지 않기 때문에 가능하다.) */
 @Transactional
 public void addVacation(CalendarDTO calendarDTO){
    log.info("[CalendarService] inserting vacation event start");

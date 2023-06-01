@@ -80,10 +80,11 @@ public class ApprovalService {
 		return searchDeptDto;
 	}
 
-	/* 결재 */
+	/* 결재 (이부분에서 날짜 핸들링)*/
 	@Transactional
 	public void saveVacationHtml(ApprovalDto approvalDto) {
-
+		
+		
 		approvalRepository.save(modelMapper.map(approvalDto, Approval.class));
 
 	}

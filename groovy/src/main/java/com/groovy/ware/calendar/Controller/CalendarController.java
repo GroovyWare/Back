@@ -73,7 +73,7 @@ public ResponseEntity<ResponseDto> getAllSchedules(@AuthenticationPrincipal Empl
 
 
     /* 2. 일정추가 */
-    @PostMapping("/schedule")
+    @PostMapping("/schedule/insert")
     public ResponseEntity<ResponseDto> addingSchedule(@RequestBody CalendarDTO calendarDto, 
     @AuthenticationPrincipal  EmployeeDto writer) {
         /* 로그인 처리가 완료 될때까지 임시로 부여한다. */
@@ -168,19 +168,19 @@ public ResponseEntity<ResponseDto> getAllSchedules(@AuthenticationPrincipal Empl
 
 
     
-        /*6. 휴가 삽입 */
-        @PostMapping("/schedule/vacation")
-        public ResponseEntity<ResponseDto> addVacations(@RequestBody CalendarDTO calendarDTO, 
-        @AuthenticationPrincipal EmployeeDto writer)
-        {
-            calendarDTO.setSchWriter(writer);
-            calendarDTO.setDept(writer.getDept());
-            calendarDTO.setColor("#9b7eed");
-            calendarDTO.setTextColor("#ffffff");
-            calendarService.addVacation(calendarDTO);
+        // /*6. 휴가 삽입 */
+        // @PostMapping("/schedule/vacation")
+        // public ResponseEntity<ResponseDto> addVacations(@RequestBody CalendarDTO calendarDTO, 
+        // @AuthenticationPrincipal EmployeeDto writer)
+        // {
+        //     calendarDTO.setSchWriter(writer);
+        //     calendarDTO.setDept(writer.getDept());
+        //     calendarDTO.setColor("#9b7eed");
+        //     calendarDTO.setTextColor("#ffffff");
+        //     calendarService.addVacation(calendarDTO);
 
-            return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "휴가가삽입되었습니다."));
-        }
+        //     return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "휴가가삽입되었습니다."));
+        // }
 
         // /* 6-1. 휴가삽입의 조건 */
         // @GetMapping("/schedule/vacation/condition")
