@@ -58,7 +58,8 @@ public class CalendarService {
    @Transactional
    public void addSchedule(CalendarDTO calendarDTO) {
       log.info("[CalendarService] inserting event start");
-      log.info("[CalendarService] calenderDto : {}", calendarDTO);
+      log.info("[CalendarService] calenderDto : {}", calendarDTO); 
+      calendarDTO.setSchDiv("휴가");
 
       calendarRepository.save(modelMapper.map(calendarDTO, Calendar.class));
 

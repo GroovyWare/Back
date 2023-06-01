@@ -45,5 +45,9 @@ public interface CalendarRepository extends JpaRepository<Calendar, Long> {
       // @EntityGraph(attributePaths = {"schWriter"})
       // Calendar findBySchWriter();
 
+
+
+   // @Query("SELECT ")
+
       
 }
