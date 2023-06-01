@@ -11,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -73,54 +74,62 @@ public class ApprovalController {
 	/* 결재 요청 목록 조회 */
 	@GetMapping("/request")
 	public ResponseEntity<ResponseDto> searchRequest(@RequestParam(name = "page", defaultValue = "1") int page,
-	        @AuthenticationPrincipal EmployeeDto employeeDto) {
+			@AuthenticationPrincipal EmployeeDto employeeDto) {
 
-	    Map<String, Object> requestList = approvalService.searchRequest(page, employeeDto);
-	    Page<ApprovalDto> approvalDtoPage = (Page<ApprovalDto>) requestList.get("approvalDto");
-	    List<EmployeeDto> employeeDtoList = (List<EmployeeDto>)requestList.get("employeeDto");
+		Map<String, Object> requestList = approvalService.searchRequest(page, employeeDto);
+		Page<ApprovalDto> approvalDtoPage = (Page<ApprovalDto>) requestList.get("approvalDto");
+		List<EmployeeDto> employeeDtoList = (List<EmployeeDto>) requestList.get("employeeDto");
 
-	    PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(approvalDtoPage);
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(approvalDtoPage);
 
-	    ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
-	    responseDtoWithPaging.setPageInfo(pageInfo);
-	    
-	    Map<String, Object> data = new HashMap<>();
-	    data.put("approvalDtoContent", approvalDtoPage.getContent());
-	    data.put("employeeDtoList", employeeDtoList);
-	    responseDtoWithPaging.setData(data);
+		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
 
-	    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+		Map<String, Object> data = new HashMap<>();
+		data.put("approvalDtoContent", approvalDtoPage.getContent());
+		data.put("employeeDtoList", employeeDtoList);
+		responseDtoWithPaging.setData(data);
+
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 	}
-	
+
 	/* 결재 요청 목록 디테일 조회 */
 	@GetMapping("/context")
-	public ResponseEntity<ResponseDto> searchContext(@RequestParam Integer apvCode){
-		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", approvalService.searchContext(apvCode)));
+	public ResponseEntity<ResponseDto> searchContext(@RequestParam Integer apvCode) {
+		return ResponseEntity.ok()
+				.body(new ResponseDto(HttpStatus.OK, "조회 성공", approvalService.searchContext(apvCode)));
 	}
-	
+
 	/* 결재 대기 목록 조회 */
 	@GetMapping("/wait")
 	public ResponseEntity<ResponseDto> searchWait(@RequestParam(name = "page", defaultValue = "1") int page,
-	        @AuthenticationPrincipal EmployeeDto employeeDto) {
+			@AuthenticationPrincipal EmployeeDto employeeDto) {
 
-		
-		Page<ApprovalDto> requestList = approvalService.searchWait(page, employeeDto);
+		Page<ApprovalDto> waitList = approvalService.searchWait(page, employeeDto);
 
-	    PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(requestList);
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(waitList);
 
-	    ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
-	    responseDtoWithPaging.setPageInfo(pageInfo);
-	    responseDtoWithPaging.setData(requestList.getContent());
+		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(waitList.getContent());
 
-	    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 	}
-	
+
 	/* 현재 로그인한 사람 정보 찾기 */
 	@GetMapping("/now")
-	public ResponseEntity<ResponseDto> searchNow(@AuthenticationPrincipal EmployeeDto employeeDto){
-		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 완료", approvalService.searchNow(employeeDto)));
+	public ResponseEntity<ResponseDto> searchNow(@AuthenticationPrincipal EmployeeDto employeeDto) {
+		return ResponseEntity.ok()
+				.body(new ResponseDto(HttpStatus.OK, "조회 완료", approvalService.searchNow(employeeDto)));
 	}
-	
+
+	/* 결재권자 이름 찾기 */
+	@GetMapping("/searchApproveLine")
+	public ResponseEntity<ResponseDto> searchApproveLine(@RequestBody List<EmployeeDto> employeeDto){
+		log.info("EmployeeDto {}", employeeDto.toString());
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 완료", approvalService.searchApproveLine(employeeDto)));
+	}
+
 //	/* 조회수 증가 */
 //	@PostMapping("/count")
 //	public ResponseEntity<ResponseDto> addCount(@RequestParam Integer apvCode, @RequestBody Integer count){

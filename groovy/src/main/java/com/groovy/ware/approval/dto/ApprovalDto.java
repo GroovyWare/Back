@@ -21,7 +21,7 @@ public class ApprovalDto {
 	private EmployeeDto employee;
 	private DocumentDto document;
 	private String apvContext;
-	private Integer apvCount;
+//	private Integer apvCount;
 	private List<ApproveLineDto> approveLine;
 	private List<ReaderDto> readerLine;
 }
