@@ -47,7 +47,8 @@ public interface CalendarRepository extends JpaRepository<Calendar, Long> {
 
 
 
-   // @Query("SELECT ")
+   @Query(value = "SELECT * FROM GRV_SCHEDULE WHERE", nativeQuery = true)
+   List<Calendar> findbyVacationcalender(@Param("empcode") Long empCode);
 
       
 }
