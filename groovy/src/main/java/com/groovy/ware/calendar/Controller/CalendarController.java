@@ -182,8 +182,14 @@ public ResponseEntity<ResponseDto> getAllSchedules(@AuthenticationPrincipal Empl
             return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "휴가가삽입되었습니다."));
         }
 
-
-
+        // /* 6-1. 휴가삽입의 조건 */
+        // @GetMapping("/schedule/vacation/condition")
+        // public ResponseEntity<ResponseDto> vacationCondition(
+        // @AuthenticationPrincipal EmployeeDto writer)
+        // {
+          
+        //     return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "휴가 조건이 성립되었습니다.", calendarService.vacationCondition(writer)));
+        // }
 
 }
 
