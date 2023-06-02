@@ -46,4 +46,8 @@ public class ApproveLine implements Serializable{
 	@Column(name="APL_YN")
 	private String aplYn;
 
+	public Integer getId() {
+		return empCode;
+	}
+
 }

@@ -39,5 +39,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
 	/* 민경 결재권자 목록 조회 */
 	List<Employee> findByEmpCodeIn(List<Long> empCodes);
+
+
 	
 }
