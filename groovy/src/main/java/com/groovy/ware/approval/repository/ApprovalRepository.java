@@ -32,4 +32,7 @@ public interface ApprovalRepository extends JpaRepository<Approval, Integer>{
 	/* 결재 대기 목록 조회 */
 	Page<Approval> findByApproveLineIn(Pageable pageable, List<ApproveLine> approveLines);
 
+	/* 결재 목록에 맞는 결재권자 찾기 */
+	List<Approval> findAllByApvCode(Integer apvCode);
+
 }

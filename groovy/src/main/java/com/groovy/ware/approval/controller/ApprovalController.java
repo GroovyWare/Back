@@ -3,6 +3,7 @@ package com.groovy.ware.approval.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -124,10 +125,22 @@ public class ApprovalController {
 	}
 
 	/* 결재권자 이름 찾기 */
-	@GetMapping("/searchApproveLine")
-	public ResponseEntity<ResponseDto> searchApproveLine(@RequestBody List<EmployeeDto> employeeDto){
-		log.info("EmployeeDto {}", employeeDto.toString());
-		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 완료", approvalService.searchApproveLine(employeeDto)));
+	@PostMapping("/searchApproveLine")
+	public ResponseEntity<ResponseDto> searchApproveLine(@RequestBody List<String> empCodes){
+		
+		List<Long> empCode = empCodes.stream().map(row -> Long.parseLong(row)).collect(Collectors.toList());
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 완료", approvalService.searchApproveLine(empCode)));
+	}
+	
+	/* 결재 상태 변경 */
+	@PostMapping("/status")
+	public ResponseEntity<ResponseDto> updateStatus(@AuthenticationPrincipal EmployeeDto employeeDto, @RequestBody ApprovalDto approvalDto){
+		log.info(approvalDto.toString());
+		
+		approvalService.updateStatus(employeeDto, approvalDto);
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "변경 성공"));
 	}
 
 //	/* 조회수 증가 */
