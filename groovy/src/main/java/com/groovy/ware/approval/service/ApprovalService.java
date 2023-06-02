@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.groovy.ware.approval.dto.ApprovalDto;
+import com.groovy.ware.approval.dto.ApproveLineDto;
 import com.groovy.ware.approval.entity.Approval;
 import com.groovy.ware.approval.entity.ApproveLine;
 import com.groovy.ware.approval.repository.ApprovalRepository;
@@ -161,30 +163,47 @@ public class ApprovalService {
 		return searchRequestDto;
 	}
 
-	/* 현재 로그인 한 사람의 정보 찾기 */ 
+	/* 현재 로그인 한 사람의 정보 찾기 */
 	public EmployeeDto searchNow(EmployeeDto employeeDto) {
-		
-		Employee employee = employeeRepository.findByEmpId(employeeDto.getEmpId()).orElseThrow(() -> new IllegalArgumentException("일치하는 직원이 없습니다."));
-		EmployeeDto employeeDto2  = modelMapper.map(employee, EmployeeDto.class);
-		
+
+		Employee employee = employeeRepository.findByEmpId(employeeDto.getEmpId())
+				.orElseThrow(() -> new IllegalArgumentException("일치하는 직원이 없습니다."));
+		EmployeeDto employeeDto2 = modelMapper.map(employee, EmployeeDto.class);
+
 		return employeeDto2;
 	}
 
 	/* 결재권자 이름 찾기 */
-	public List<EmployeeDto> searchApproveLine(List<EmployeeDto> employeeDto) {
-		
-		List<Long> employeeCodes = employeeDto.stream().map(row -> row.getEmpCode()).collect(Collectors.toList());
-		
-		List<Employee> employeeList = employeeRepository.findAllById(employeeCodes);
-		List<EmployeeDto> employeeDtoList = employeeList.stream().map(row -> modelMapper.map(row, EmployeeDto.class)).collect(Collectors.toList());
-		
+	public List<EmployeeDto> searchApproveLine(List<Long> empCode) {
+
+		List<Employee> employeeList = employeeRepository.findAllById(empCode);
+		List<EmployeeDto> employeeDtoList = employeeList.stream().map(row -> modelMapper.map(row, EmployeeDto.class))
+				.collect(Collectors.toList());
+
 		return employeeDtoList;
 	}
-	
-	/* 결재권자 이름 조회 */
-	
-	
-	
-	
 
+	/* 승인 반려 상태 업데이트 */
+	public void updateStatus(EmployeeDto employeeDto, ApprovalDto approvalDto) {
+
+		Integer empCode = Integer.parseInt(employeeDto.getEmpCode().toString());
+
+		Approval approval = approvalRepository.findByApvCode(approvalDto.getApvCode());
+
+		List<ApproveLine> approveLines = approval.getApproveLine();
+
+		approveLines.stream().filter(approveLine -> approveLine.getEmpCode().equals(empCode))
+				.forEach(matchingApproveLine -> {
+					matchingApproveLine.setAplStatus(approvalDto.getApproveLine().get(0).getAplStatus());
+					matchingApproveLine.setAplDate(approvalDto.getApproveLine().get(0).getAplDate());
+				});
+
+		ApprovalDto approvalDto2 = modelMapper.map(approval, ApprovalDto.class);
+		
+		if(approveLines.stream().allMatch(approveLine -> approveLine.getAplStatus().equals("승인"))) {
+			approval.setApvStatus("승인");
+		}
+		
+		approvalRepository.save(approval);
+	}
 }
