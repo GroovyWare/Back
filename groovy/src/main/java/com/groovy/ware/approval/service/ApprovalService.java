@@ -189,8 +189,6 @@ public class ApprovalService {
 
 		Approval approval = approvalRepository.findByApvCode(approvalDto.getApvCode());
 
-		log.info("approval {}", approvalDto);
-
 		List<ApproveLine> approveLines = approval.getApproveLine();
 
 		approveLines.stream().filter(approveLine -> approveLine.getEmpCode().equals(empCode))
@@ -200,9 +198,11 @@ public class ApprovalService {
 				});
 
 		ApprovalDto approvalDto2 = modelMapper.map(approval, ApprovalDto.class);
-
-		log.info(approvalDto2.toString());
-
+		
+		if(approveLines.stream().allMatch(approveLine -> approveLine.getAplStatus().equals("승인"))) {
+			approval.setApvStatus("승인");
+		}
+		
 		approvalRepository.save(approval);
 	}
 }
