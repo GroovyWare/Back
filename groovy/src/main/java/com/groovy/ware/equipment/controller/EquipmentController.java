@@ -67,7 +67,7 @@ public class EquipmentController {
     
     /* 기구 등록 */
     @PostMapping
-    public ResponseEntity<ResponseDto> createEquipment(@ModelAttribute EquipmentDto equipmentDto) {
+    public ResponseEntity<ResponseDto> createEquipment(@RequestBody EquipmentDto equipmentDto) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         EmployeeDto employeeDto = (EmployeeDto) authentication.getPrincipal();

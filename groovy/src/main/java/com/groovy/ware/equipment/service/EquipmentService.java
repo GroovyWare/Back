@@ -75,6 +75,7 @@ public class EquipmentService {
         // Convert DTO to Entity
     	Equipment equipment = modelMapper.map(equipmentDto, Equipment.class);
     	equipment.setEmployee(employee);  // Set the employee
+    	equipment.setEqpStatus("NEW");
 
         equipmentRepository.save(equipment);
 }
