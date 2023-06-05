@@ -154,7 +154,9 @@ public class ApprovalService {
 
 	/* 결재 대기 목록 조회 */
 	public Page<ApprovalDto> searchWait(int page, EmployeeDto employeeDto) {
-
+		
+		log.info("hello");
+		
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("apvCode").ascending());
 		Employee employee = employeeRepository.findByEmpId(employeeDto.getEmpId())
 				.orElseThrow(() -> new IllegalArgumentException("해당 사원이 없습니다."));
@@ -164,6 +166,8 @@ public class ApprovalService {
 
 		Page<Approval> searchRequest = approvalRepository.findByApproveLineIn(pageable, approveLines);
 		Page<ApprovalDto> searchRequestDto = searchRequest.map(row -> modelMapper.map(row, ApprovalDto.class));
+		
+		log.info("hi");
 
 		return searchRequestDto;
 	}
@@ -215,5 +219,17 @@ public class ApprovalService {
 		}
 		
 		approvalRepository.save(approval);
+	}
+	
+	/* 결재 목록 조회 */
+	public Page<ApprovalDto> searchList(int page, EmployeeDto employeeDto) {
+		
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("apvCode").ascending());
+		
+		Employee employee = employeeRepository.findById(employeeDto.getEmpCode()).orElseThrow(() -> new IllegalArgumentException("일치하는 회원이 없습니다."));
+		Page<Approval> approvalList = approvalRepository.findByEmployee(pageable, employee);
+		Page<ApprovalDto> approvalDto = approvalList.map(row -> modelMapper.map(row, ApprovalDto.class));
+		
+		return approvalDto;
 	}
 }
