@@ -2,23 +2,23 @@ package com.groovy.ware.attendance.service;
 
 import java.sql.Date;
 import java.sql.Time;
-import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.groovy.ware.attendance.dto.AttendanceDto;
 import com.groovy.ware.attendance.entity.Attendance;
 import com.groovy.ware.attendance.repository.AttendanceRepository;
 import com.groovy.ware.employee.dto.EmployeeDto;
-import com.groovy.ware.employee.entity.Employee;
 import com.groovy.ware.employee.repository.DepartmentRepository;
 import com.groovy.ware.employee.repository.EmployeeRepository;
-import com.groovy.ware.employee.service.EmployeeService;
 
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -83,5 +83,50 @@ public class AttendanceService {
 
 
     }
+    
+    
+    
+    
+    /* 전체 직원 근태 조회 */
+    public Page<AttendanceDto> findAttendanceListAll(int page) {
+    	
+		log.info("[AttendanceService] findAttendanceListAll start ==================");
+		
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("attCode").descending());
+		
+		Page<Attendance> attList = attendanceRepository.findAll(pageable);
+		Page<AttendanceDto> attDtoList = attList.map(attendance -> modelMapper.map(attendance, AttendanceDto.class));
+
+		log.info("[AttendanceService] findAttendanceListAll end ==================");
+		
+    	return attDtoList;
+    }
+    
+    /* 직원 개인 근태 조회 */
+    public AttendanceDto findAttendanceDetail(Long memCode) {
+    	
+		log.info("[AttendanceService] findAttendanceListAll start ==================");
+		log.info("[AttendanceService] : memCode : {}", memCode);
+		
+		Attendance attendance = attendanceRepository.findById(memCode).orElseThrow();
+		
+		AttendanceDto attendanceDto = modelMapper.map(attendance, AttendanceDto.class);
+    	
+		log.info("[AttendanceService] attendanceDto : {}", attendanceDto);
+		log.info("[AttendanceService] findAttendanceListAll end ==================");
+		
+    	return attendanceDto;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 }
