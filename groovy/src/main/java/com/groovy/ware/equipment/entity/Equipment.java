@@ -12,7 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.groovy.ware.employee.dto.EmployeeDto;
 import com.groovy.ware.employee.entity.Employee;
 
 import lombok.Getter;

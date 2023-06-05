@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.groovy.ware.employee.entity.Employee;
 import com.groovy.ware.equipment.entity.Equipment;
 
 public interface EquipmentRepository extends JpaRepository<Equipment, Long> {

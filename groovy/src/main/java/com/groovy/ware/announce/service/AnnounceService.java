@@ -93,7 +93,6 @@ public class AnnounceService {
 
             announceRepository.save(announce);
         } catch (FileUploadException e) {
-            LOGGER.error("Failed to create announce", e);
             throw e;
         }
     }
@@ -124,7 +123,6 @@ public class AnnounceService {
 
             originAnnounce.update(announceDto.getAnnTitle(), announceDto.getAnnContent());
         } catch (FileUploadException e) {
-            LOGGER.error("Failed to update announce", e);
             throw e;
         }
     }

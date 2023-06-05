@@ -1,9 +1,7 @@
 package com.groovy.ware.equipment.service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.security.Principal;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -13,16 +11,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.groovy.ware.announce.dto.AnnounceDto;
-import com.groovy.ware.announce.entity.Announce;
-import com.groovy.ware.announce.exception.FileUploadException;
-import com.groovy.ware.common.dto.FileDto;
 import com.groovy.ware.employee.dto.EmployeeDto;
 import com.groovy.ware.employee.entity.Employee;
 import com.groovy.ware.employee.repository.EmployeeRepository;
@@ -91,7 +82,6 @@ public class EquipmentService {
             originEquipment.update(equipmentDto.getEqpTitle(), equipmentDto.getEqpInspector(), equipmentDto.getEqpDate(), equipmentDto.getEqpStatus());
 
         } catch (Exception e) {
-            LOGGER.error("Failed to update equipment", e);
             throw e;
         }
     }
