@@ -207,7 +207,7 @@ public class ApprovalService {
 		if(approveLines.stream().allMatch(approveLine -> approveLine.getAplStatus().equals("승인"))) {
 			approval.setApvStatus("승인");
 			approval.setApvEndDate(new Date());
-			calendarService.addVacation(calendarDTO, approvalDto, employeeDto);
+			calendarService.addVacation(calendarDTO, approvalDto);
 			
 		}else if(approveLines.stream().anyMatch(approveLine -> approveLine.getAplStatus().equals("반려"))){
 			approval.setApvStatus("반려");

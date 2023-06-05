@@ -146,7 +146,7 @@ public class CalendarService {
 // ...
 
 @Transactional
-public void addVacation(CalendarDTO calendarDTO, ApprovalDto approvalDto, EmployeeDto employeeDto) {
+public void addVacation(CalendarDTO calendarDTO, ApprovalDto approvalDto) {
    log.info("[CalendarService] inserting vacation event start");
    log.info("[CalendarService] calendarDto: {}", calendarDTO);
 

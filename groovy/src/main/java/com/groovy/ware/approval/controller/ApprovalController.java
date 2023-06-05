@@ -139,10 +139,10 @@ public class ApprovalController {
 	
 	/* 결재 상태 변경 */
 	@PostMapping("/status")
-	public ResponseEntity<ResponseDto> updateStatus(@AuthenticationPrincipal EmployeeDto employeeDto, @RequestBody ApprovalDto approvalDto, @RequestBody CalendarDTO calendarDTO){
+	public ResponseEntity<ResponseDto> updateStatus(@AuthenticationPrincipal EmployeeDto employeeDto, @RequestBody ApprovalDto approvalDto, CalendarDTO CalendarDTO){
 		log.info(approvalDto.toString());
 		
-		approvalService.updateStatus(employeeDto, approvalDto, calendarDTO);
+		approvalService.updateStatus(employeeDto, approvalDto, null);
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "변경 성공"));
 	}
