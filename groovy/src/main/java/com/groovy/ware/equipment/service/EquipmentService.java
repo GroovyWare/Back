@@ -1,16 +1,28 @@
 package com.groovy.ware.equipment.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.security.Principal;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.groovy.ware.announce.dto.AnnounceDto;
+import com.groovy.ware.announce.entity.Announce;
+import com.groovy.ware.announce.exception.FileUploadException;
+import com.groovy.ware.common.dto.FileDto;
 import com.groovy.ware.employee.dto.EmployeeDto;
 import com.groovy.ware.employee.entity.Employee;
 import com.groovy.ware.employee.repository.EmployeeRepository;
@@ -20,6 +32,8 @@ import com.groovy.ware.equipment.repository.EquipmentRepository;
 
 @Service
 public class EquipmentService {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(EquipmentService.class);
 
     private final EquipmentRepository equipmentRepository;
     private final EmployeeRepository employeeRepository;
@@ -53,18 +67,34 @@ public class EquipmentService {
 
     
     /* 기구 등록 */
-    public void createEquipment(EquipmentDto equipmentDto) {
-        Equipment equipment = modelMapper.map(equipmentDto, Equipment.class);
+    @Transactional
+    public void createEquipment(EquipmentDto equipmentDto, Long empCode) {
+    	Employee employee = employeeRepository.findById(empCode)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+
+        // Convert DTO to Entity
+    	Equipment equipment = modelMapper.map(equipmentDto, Equipment.class);
+    	equipment.setEmployee(employee);  // Set the employee
+
         equipmentRepository.save(equipment);
-    }
+}
+
 
     /* 기구 수정 */
+    @Transactional
     public void updateEquipment(EquipmentDto equipmentDto) {
-        Equipment equipment = equipmentRepository.findById(equipmentDto.getEqpCode()).orElseThrow(
-            () -> new RuntimeException("Equipment not found with id " + equipmentDto.getEqpCode()));
-        modelMapper.map(equipmentDto, equipment);
-        equipmentRepository.save(equipment);
+        Equipment originEquipment = equipmentRepository.findById(equipmentDto.getEqpCode())
+                .orElseThrow(() -> new IllegalArgumentException("해당 코드의 기구가 없습니다. eqpCode=" + equipmentDto.getEqpCode()));
+
+        try {
+            originEquipment.update(equipmentDto.getEqpTitle(), equipmentDto.getEqpInspector(), equipmentDto.getEqpDate(), equipmentDto.getEqpStatus());
+
+        } catch (Exception e) {
+            LOGGER.error("Failed to update equipment", e);
+            throw e;
+        }
     }
+
 
     /* 기구 삭제 */
     public void deleteEquipment(Long eqpCode) {
@@ -81,7 +111,7 @@ public class EquipmentService {
             case "eqpStatus":
                 equipments = equipmentRepository.findByEqpStatusLike(keyword, pageable);
                 break;
-            // ... 여기에 다른 조건을 추가할 수 있습니다. ...
+                // ... 여기에 다른 조건을 추가할 수 있습니다. ...
             default:
                 throw new IllegalArgumentException("Invalid search condition: " + condition);
         }

@@ -1,17 +1,25 @@
 package com.groovy.ware.equipment.controller;
 
+import java.security.Principal;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.groovy.ware.equipment.dto.EquipmentDto;
 import com.groovy.ware.equipment.service.EquipmentService;
+import com.groovy.ware.announce.dto.AnnounceDto;
 import com.groovy.ware.common.ResponseDto;
 import com.groovy.ware.common.paging.Pagenation;
 import com.groovy.ware.common.paging.PagingButtonInfo;
 import com.groovy.ware.common.paging.ResponseDtoWithPaging;
+import com.groovy.ware.employee.dto.EmployeeDto;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -59,9 +67,16 @@ public class EquipmentController {
     
     /* 기구 등록 */
     @PostMapping
-    public ResponseEntity<ResponseDto> createEquipment(@RequestBody EquipmentDto equipmentDto) {
-        equipmentService.createEquipment(equipmentDto);
-        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "기구가 등록되었습니다."));
+    public ResponseEntity<ResponseDto> createEquipment(@ModelAttribute EquipmentDto equipmentDto) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        EmployeeDto employeeDto = (EmployeeDto) authentication.getPrincipal();
+
+        Long empCode = employeeDto.getEmpCode();
+
+        equipmentService.createEquipment(equipmentDto, empCode);
+        
+        return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "기구 정보가 등록되었습니다."));
     }
 
     /* 기구 수정 */

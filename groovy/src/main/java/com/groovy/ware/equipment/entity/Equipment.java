@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.groovy.ware.employee.dto.EmployeeDto;
 import com.groovy.ware.employee.entity.Employee;
 
 import lombok.Getter;
@@ -31,6 +32,9 @@ public class Equipment {
 
     @Column(name = "EQP_TITLE")
     private String eqpTitle;
+    
+    @Column(name = "EQP_INSPECTOR")
+    private String eqpInspector;
 
     @Column(name = "EQP_PURCHASE")
     private Date eqpPurchase;
@@ -44,5 +48,12 @@ public class Equipment {
     @ManyToOne
     @JoinColumn(name="EMP_CODE")
     private Employee employee;
+    
+    public void update(String eqpTitle, String eqpInspector, Date eqpDate, String eqpStatus) {
+        this.eqpTitle = eqpTitle;
+        this.eqpInspector = eqpInspector;
+        this.eqpDate = eqpDate;
+        this.eqpStatus = eqpStatus;
+    }
 
 }
