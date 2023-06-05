@@ -68,7 +68,7 @@ public class ApprovalController {
 		approvalDto.setEmployee(employeeDto);
 		approvalDto.setDocument(document);
 		approvalService.saveVacationHtml(approvalDto);
-
+		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "저장 완료"));
 	}
 

@@ -1,6 +1,7 @@
 package com.groovy.ware.approval.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -196,11 +197,13 @@ public class ApprovalService {
 					matchingApproveLine.setAplStatus(approvalDto.getApproveLine().get(0).getAplStatus());
 					matchingApproveLine.setAplDate(approvalDto.getApproveLine().get(0).getAplDate());
 				});
-
-		ApprovalDto approvalDto2 = modelMapper.map(approval, ApprovalDto.class);
 		
 		if(approveLines.stream().allMatch(approveLine -> approveLine.getAplStatus().equals("승인"))) {
 			approval.setApvStatus("승인");
+			approval.setApvEndDate(new Date());
+		}else if(approveLines.stream().anyMatch(approveLine -> approveLine.getAplStatus().equals("반려"))){
+			approval.setApvStatus("반려");
+			approval.setApvEndDate(new Date());
 		}
 		
 		approvalRepository.save(approval);
