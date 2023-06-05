@@ -51,6 +51,13 @@ public class HistoryService {
 		return historyDtoList;
 	}
 	
+	/* 회원의 회원권 추가 */
+	public void memberAddPass(HistoryDto historyDto) {
+		
+		historyRepository.save(modelMapper.map(historyDto, History.class));
+		
+	}
+	
 
 	
 

@@ -105,28 +105,44 @@ public class MemberService {
 		log.info("[MemberService] : modifyMember end ==================================== ");
 	}
 	
-	/* 회원의 회원권 추가 */
-	@Transactional
-	public void memberAddPass(MemberDto memberDto) {
+//	/* 회원의 회원권 추가 */
+//	@Transactional
+//	public void memberAddPass(MemberDto memberDto) {
+//		
+//		log.info("[MemberService] : modifyMember start ==================================== ");
+//		log.info("[MemberService] : memberDto : {}", memberDto);
+//		
+//		Member findMemberPass = memberRepository.findById(memberDto.getMemCode()).orElseThrow();
+//		
+//		log.info("[MemberService] : originMember : {}", findMemberPass);
+//
+//		findMemberPass.addPass(
+//				memberDto.getMemCode(),
+//				memberDto.getMemDeleteDate(), 
+//				memberDto.getMemStartDate(), 
+//				memberDto.getMemEndDate(),
+//				memberDto.getHistory().stream().map(history -> modelMapper.map(history, History.class)).collect(Collectors.toList())
+//				);
+//
+//
+//		log.info("[MemberService] : modifyMember end ==================================== ");
+//	}
+	
+	/* 회원명 검색 목록 조회 */
+	public Page<MemberDto> selectMemberListByMemName(int page, String memName){
 		
-		log.info("[MemberService] : modifyMember start ==================================== ");
-		log.info("[MemberService] : memberDto : {}", memberDto);
+		log.info("[MemberService] : selectMemberListByMemName start ==================================== ");
+
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("memCode").descending());
 		
-		Member findMemberPass = memberRepository.findById(memberDto.getMemCode()).orElseThrow();
+		Page<Member> memberList = memberRepository.findByMemName(pageable, memName);
+		Page<MemberDto> memberDtoList = memberList.map(member -> modelMapper.map(member, MemberDto.class));
 		
-		log.info("[MemberService] : originMember : {}", findMemberPass);
-
-		findMemberPass.addPass(
-				memberDto.getMemCode(),
-				memberDto.getMemDeleteDate(), 
-				memberDto.getMemStartDate(), 
-				memberDto.getMemEndDate(),
-				memberDto.getHistory().stream().map(history -> modelMapper.map(history, History.class)).collect(Collectors.toList())
-				);
-
-
-		log.info("[MemberService] : modifyMember end ==================================== ");
+		log.info("[MemberService] : selectMemberListByMemName end ==================================== ");
+		
+		return memberDtoList;
 	}
+	
 	
 	
 	
