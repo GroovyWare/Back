@@ -62,13 +62,15 @@ public class Employee {
 	@Column(name="EMP_EX_DATE")
 	private Date empExDate;
 	@Column(name="EMP_STATUS")
-	private String EmpStatus;
+	private String empStatus;
 	@ManyToOne
 	@JoinColumn(name="DEPT_CODE")
 	private Department dept;
 	@ManyToOne
 	@JoinColumn(name="POSITION_CODE")
 	private Position position;
+	@Column(name="VAC_REMAIN")
+	private Long vacRemain;
 
 	@OneToOne(mappedBy="employee")
 	private File file;
@@ -77,12 +79,13 @@ public class Employee {
 	@JoinColumn(name="EMP_CODE")
 	private List<EmpAuth> auths;
 	
-	public void update(String empName, String empPhone, String empEmail, String empAddress, Date empExDate,
+	public void update(String empName, String empPhone, String empEmail, String empAddress, Date empEntDate, Date empExDate,
 			Department dept, Position position, File file, List<EmpAuth> auths) {
 		this.empName = empName;
 		this.empPhone = empPhone;
 		this.empEmail = empEmail;
 		this.empAddress = empAddress;
+		this.empEntDate = empEntDate;
 		this.empExDate = empExDate;
 		this.dept = dept;
 		this.position = position;
