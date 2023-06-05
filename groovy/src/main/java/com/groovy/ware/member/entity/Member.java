@@ -60,21 +60,22 @@ public class Member {
 	
 	
 	/* Member entity 수정 용도의 메소드 */
-	public void modify(String memName, String memPhone, Date memDeleteDate, Date memStartDate,
-			Date memEndDate, List<History> history) {
+	public void modify(String memName, String memPhone) {
 		
 		this.memName = memName;
 		this.memPhone = memPhone;
+	}
+
+	
+	/* Member entity 수정 용도의 메소드 */
+	public void addPass(Long memCode, Date memDeleteDate, Date memStartDate, Date memEndDate, List<History> history) {
+		
+		this.memCode = memCode;
 		this.memDeleteDate = memDeleteDate;
 		this.memStartDate = memStartDate;
 		this.memEndDate= memEndDate;
 		this.history = history;
-		
 	}
 	
 	
-	
-	
-
-
 }

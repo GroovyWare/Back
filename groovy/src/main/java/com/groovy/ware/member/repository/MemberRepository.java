@@ -30,6 +30,9 @@ public interface MemberRepository extends JpaRepository<Member, Long>{
 			)
 	Page<Member> findByMemCode(Pageable pageable, @Param("memCode")Long memCode);
 
+	
+	/* 회원명 검색 목록 조회 */
+	Page<Member> findByMemName(Pageable pageable, String memName);
 
 	
 	/* 회원 상세 조회 */

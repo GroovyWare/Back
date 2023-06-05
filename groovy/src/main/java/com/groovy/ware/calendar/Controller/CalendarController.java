@@ -54,7 +54,9 @@ public class CalendarController {
 public ResponseEntity<ResponseDto> getAllSchedules(@AuthenticationPrincipal EmployeeDto writer) {
     log.info("[CalendarController] start ============================");
     
-    /* 테스트용임 아래 5코드는 추후 지울것 + empDTO 새로 짜서 필요한 정보만 가져오는게 효율며7ㄴ에서 이득 */
+    /* 테스트용임 아래 5코드는 추후 지울것 + empDTO 새로 짜서 필요한 정보만 가져오는게 효율며7ㄴ에서 이득 
+     * 효율면에서 이득이나 로직이 추가됨으로 확장성 면에서 그냥 사용하는게 더 낫다고 판단함
+    */
     // writer= new EmployeeDto();
     // writer.setEmpCode(1L);
     // DepartmentDto dept = new DepartmentDto();
@@ -164,4 +166,41 @@ public ResponseEntity<ResponseDto> getAllSchedules(@AuthenticationPrincipal Empl
 
     // }
 
+
+    
+        /*6. 휴가 삽입 */
+        @PostMapping("/schedule/vacation")
+        public ResponseEntity<ResponseDto> addVacations(@RequestBody CalendarDTO calendarDTO, 
+        @AuthenticationPrincipal EmployeeDto writer)
+        {
+            calendarDTO.setSchWriter(writer);
+            calendarDTO.setDept(writer.getDept());
+            calendarDTO.setColor("#9b7eed");
+            calendarDTO.setTextColor("#ffffff");
+            calendarService.addVacation(calendarDTO);
+
+            return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "휴가가삽입되었습니다."));
+        }
+
+        // /* 6-1. 휴가삽입의 조건 */
+        // @GetMapping("/schedule/vacation/condition")
+        // public ResponseEntity<ResponseDto> vacationCondition(
+        // @AuthenticationPrincipal EmployeeDto writer)
+        // {
+          
+        //     return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "휴가 조건이 성립되었습니다.", calendarService.vacationCondition(writer)));
+        // }
+
 }
+
+// @PostMapping("/schedule")
+// public ResponseEntity<ResponseDto> addingSchedule(@RequestBody CalendarDTO calendarDto, 
+// @AuthenticationPrincipal  EmployeeDto writer) {
+//     /* 로그인 처리가 완료 될때까지 임시로 부여한다. */
+//     // writer.setEmpCode(1L);
+//     calendarDto.setSchWriter(writer);
+//     calendarService.addSchedule(calendarDto);
+
+//     return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "삽입되었습니다."));
+
+// }

@@ -42,6 +42,5 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	/* 직원명으로 검색*/
 	Page<Employee> findByEmpNameContainsAndEmpStatus(Pageable pageable, String empName, String string);
 
-
 	
 }

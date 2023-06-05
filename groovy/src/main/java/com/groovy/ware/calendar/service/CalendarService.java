@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.groovy.ware.calendar.dto.CalendarDTO;
 import com.groovy.ware.calendar.entity.Calendar;
 import com.groovy.ware.calendar.repository.CalendarRepository;
+import com.groovy.ware.common.exception.UserNotFoundException;
 import com.groovy.ware.employee.dto.EmployeeDto;
 import com.groovy.ware.employee.entity.Employee;
 import com.groovy.ware.employee.repository.EmployeeRepository;
@@ -58,7 +59,8 @@ public class CalendarService {
    @Transactional
    public void addSchedule(CalendarDTO calendarDTO) {
       log.info("[CalendarService] inserting event start");
-      log.info("[Calend0erService] calenderDto : {}", calendarDTO);
+      log.info("[CalendarService] calenderDto : {}", calendarDTO); 
+      calendarDTO.setSchDiv("휴가");
 
       calendarRepository.save(modelMapper.map(calendarDTO, Calendar.class));
 
@@ -155,5 +157,40 @@ public class CalendarService {
 
       log.info("[CalendarService] delete end");
    }
+
+
+
+
+
+/* 6. 휴가 삽입 */
+@Transactional
+public void addVacation(CalendarDTO calendarDTO){
+   log.info("[CalendarService] inserting vacation event start");
+   log.info("[CalendarService] calenderDto : {}", calendarDTO);
+
+   calendarRepository.save(modelMapper.map(calendarDTO, Calendar.class));
+
+   log.info("[CalendarService] vacation inserting event end");
+}
+
+// /* 6-1. 휴가의 조건 */
+// public CalendarDTO vacationCondition(EmployeeDto writer) {
+
+//    log.info("[CalendarService] condition start ==========================");
+//    // Employee employee = employeeRepository.findById(writer.getEmpCode())
+//    // .orElseThrow(() -> new UserNotFoundException("없는 사람입니다."));
+   
+   
+//    Calendar calendar2 = calendarRepository.findVacationConditions(writer.getEmpCode())
+//    .orElseThrow('')
+//    CalendarDTO calendarDto = modelMapper.map(calendar2, CalendarDTO.class);
+//    log.info("[CalendarService] condition end ==========================");
+   
+//    return calendarDto;
+// }
+
+
+
+
 
 }

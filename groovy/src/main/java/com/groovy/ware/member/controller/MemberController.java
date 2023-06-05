@@ -5,6 +5,7 @@ package com.groovy.ware.member.controller;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,6 +20,7 @@ import com.groovy.ware.common.ResponseDto;
 import com.groovy.ware.common.paging.Pagenation;
 import com.groovy.ware.common.paging.PagingButtonInfo;
 import com.groovy.ware.common.paging.ResponseDtoWithPaging;
+import com.groovy.ware.employee.dto.EmployeeDto;
 import com.groovy.ware.member.dto.MemberDto;
 import com.groovy.ware.member.service.MemberService;
 
@@ -38,10 +40,10 @@ public class MemberController {
 	
 	/* 전체 회원 리스트 */
 	@GetMapping("/list")
-	public ResponseEntity<ResponseDto> findMemberListAll(@RequestParam(name="page", defaultValue="1") int page){
+	public ResponseEntity<ResponseDto> findMemberListAll(@RequestParam(name="page", defaultValue="1") int page, @AuthenticationPrincipal EmployeeDto employee){
 		
-		log.info("[MemberController] : findMemberListAll start ==================================== ");
-		log.info("[MemberController] : page : {}", page);
+
+
 		
 		Page<MemberDto> memberDtoList = memberService.findMemberListAll(page);
 
@@ -65,7 +67,7 @@ public class MemberController {
 	
 	/* 회원 상세 조회 */
 	@GetMapping("/detail/{memCode}")
-	public ResponseEntity<ResponseDto> findMemberDetail(@PathVariable Long memCode){
+	public ResponseEntity<ResponseDto> findMemberDetail(@PathVariable Long memCode, @AuthenticationPrincipal EmployeeDto employee){
 		
 			
 		return ResponseEntity.ok()
@@ -76,7 +78,7 @@ public class MemberController {
 		
 	/* 회원등록 */
 	@PostMapping("/regist")
-	public ResponseEntity<ResponseDto> insertMemeber(@ModelAttribute MemberDto memberDto) {
+	public ResponseEntity<ResponseDto> insertMemeber(@ModelAttribute MemberDto memberDto, @AuthenticationPrincipal EmployeeDto employee) {
 		
 		memberService.insertMember(memberDto);
 						
@@ -87,7 +89,7 @@ public class MemberController {
 	
 	/* 회원 수정 */
 	@PutMapping("/modify")
-	public ResponseEntity<ResponseDto> modifyMember(@ModelAttribute MemberDto memberDto) {
+	public ResponseEntity<ResponseDto> modifyMember(@ModelAttribute MemberDto memberDto, @AuthenticationPrincipal EmployeeDto employee) {
 		
 		memberService.modifyMember(memberDto);
 		
@@ -95,6 +97,61 @@ public class MemberController {
 				.body(new ResponseDto(HttpStatus.OK, "회원 수정 성공"));
 		
 	}
+	
+//	/* 회원의 회원권 추가 */
+//	@PostMapping("/add")
+//	public ResponseEntity<ResponseDto> memberAddPass(@ModelAttribute MemberDto memberDto, @AuthenticationPrincipal EmployeeDto employee) {
+//		
+//		memberService.memberAddPass(memberDto);
+//		
+//		return ResponseEntity.ok()
+//				.body(new ResponseDto(HttpStatus.OK, "회원권 추가 성공"));
+//		
+//	}
+	
+	
+	/* 회원명 검색 목록 조회*/
+	@GetMapping("/members/search")
+	public ResponseEntity<ResponseDto> selectMemberListByMemName(
+			@RequestParam(name="page", defaultValue="1") int page, @RequestParam(name="search") String memName){
+		
+		log.info("[memberController] : selectMemberListByMemName start ===========================");
+		log.info("[memberController] : page : {}", page);
+		log.info("[memberController] : memName : {}", memName);
+		
+		Page<MemberDto> memberDtoList = memberService.selectMemberListByMemName(page, memName);
+		
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(memberDtoList);
+		
+		log.info("[memberController] : pageInfo : {}", pageInfo);
+		
+		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(memberDtoList.getContent());
+		
+	
+		return ResponseEntity.ok()
+				.body(new ResponseDto(HttpStatus.OK, "회원명 기준 조회 완료", responseDtoWithPaging));
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
  
 

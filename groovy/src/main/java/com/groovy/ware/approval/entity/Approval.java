@@ -56,8 +56,11 @@ public class Approval {
 	@Column(name="APV_CONTEXT")
 	private String apvContext;
 	
-	@Column(name="APV_COUNT")
-	private Integer apvCount;
+	@Column(name="VAC_START_DATE")
+	private Date vacStartDate;
+	
+	@Column(name="VAC_END_DATE")
+	private Date vacEndDate;
 	
 	@OneToMany(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="APV_CODE")
