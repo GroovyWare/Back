@@ -14,6 +14,5 @@ public class ApproveLineDto {
 	private String aplNum;
 	private String aplStatus;
 	private Date aplDate;
-	private String aplYn;
 
 }
