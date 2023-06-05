@@ -106,15 +106,6 @@ public class AnnounceController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         // 인증된 사용자의 정보를 EmployeeDto 타입으로 변환합니다. 
         EmployeeDto employeeDto = (EmployeeDto) authentication.getPrincipal();
-        
-        // 클라이언트로부터 받은 공지사항 제목이 없을 경우 디폴트 값으로 설정합니다.
-        if (announceDto.getAnnTitle() == null) {
-        	announceDto.setAnnTitle("Default Title");
-        }
-        // 클라이언트로부터 받은 공지사항 내용이 없을 경우 디폴트 값으로 설정합니다.
-        if (announceDto.getAnnContent() == null) {
-        	announceDto.setAnnContent("Default Content");
-        }
 
         // 클라이언트로부터 받은 파일이 있는지 확인하고, 파일이 있는 경우 파일 처리 로직을 실행합니다.
         if (multipartFile != null && !multipartFile.isEmpty()) {
