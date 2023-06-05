@@ -114,8 +114,8 @@ public class EmployeeService {
 		String imageName = UUID.randomUUID().toString().replace("-", ""); 
 		
 		try {
-			
-			employeeDto.setEmpEntDate(new Date());
+			if(employeeDto.getImgUrl() != null) {
+				employeeDto.setEmpEntDate(new Date());
 				
 				String originalName = employeeDto.getImgUrl().getOriginalFilename();
 				String replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, employeeDto.getImgUrl());				
@@ -127,8 +127,13 @@ public class EmployeeService {
 				fileDto.setEmployee(employeeDto);
 				log.info("[EmployeeService] registEmployee fileDto : {}", fileDto);
 				
-	
-			fileRepository.save(modelMapper.map(fileDto, File.class));
+				fileRepository.save(modelMapper.map(fileDto, File.class));
+			} else {
+				employeeRepository.save(modelMapper.map(employeeDto, Employee.class));
+			}
+			
+			
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -172,16 +177,16 @@ public class EmployeeService {
 					employeeDto.getEmpPhone(),
 					employeeDto.getEmpEmail(),
 					employeeDto.getEmpAddress(),
+					employeeDto.getEmpEntDate(),
 					employeeDto.getEmpExDate(),
 					modelMapper.map(employeeDto.getDept(), Department.class),
 					modelMapper.map(employeeDto.getPosition(), Position.class),
-					originEmployee.getFile(),
+					(originEmployee.getFile() != null) ? originEmployee.getFile() : null, 
 					employeeDto.getAuths().stream().map(auth -> modelMapper.map(auth, EmpAuth.class)).collect(Collectors.toList())
 					);
 			}
 				
-			
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -204,13 +209,39 @@ public class EmployeeService {
 		return employeeDto;
 	}
 
-	/* 직원 아이디 리스트 조회 */
-	public List<String> selectEmpIdList() {
+	/* 아이디 중복 검사 */
+	public boolean idDoubleCheck(String empId) {
 		
-		List<String> employeeList = employeeRepository.selectEmpIdList();
-
-		return employeeList;
+		boolean result = employeeRepository.existsByEmpId(empId);
+		
+		log.info("[idcheck] : {}", result);
+		return result;
 	}
+
+	/* 직원명을 검색 */
+	public Page<EmployeeDto> selectEmployeeListByEmpName(int page, String empName) {
+		
+	log.info("[ProductService] selectProductListByProductName start ============================== ");
+		
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("empCode").descending());
+		
+		Page<Employee> employeeList = employeeRepository.findByEmpNameContainsAndEmpStatus(pageable, empName, "N");
+		Page<EmployeeDto> employeeDtoList = employeeList.map(employee -> modelMapper.map(employee, EmployeeDto.class));
+
+		employeeDtoList.forEach(employee -> {
+		    if (employee.getFile() != null) {
+		        employee.getFile().setFileSavedName(IMAGE_URL + employee.getFile().getFileSavedName());
+		    }
+		});
+		
+		log.info("[ProductService] productDtoList.getContent() : {}", employeeDtoList.getContent());
+		
+		log.info("[ProductService] selectProductListByProductName end ============================== ");
+		
+		return employeeDtoList;
+	}
+	
+
 
 
 

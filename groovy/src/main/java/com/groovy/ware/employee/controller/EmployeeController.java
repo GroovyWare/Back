@@ -99,13 +99,35 @@ public class EmployeeController {
 	}
 	
 	/* 중복검사 */
-	@GetMapping("/empidlist")
-	public ResponseEntity<ResponseDto> selectEmpIdList() {
-				
+	@GetMapping("/idCheck/{empId}")
+	public ResponseEntity<Boolean> idDoubleCheck(@PathVariable String empId) {
+		log.info("[Controller] idcheck : {}", empId);
+		
 		return ResponseEntity
 				.ok()
-				.body(new ResponseDto(HttpStatus.OK, "조회 완료", employeeService.selectEmpIdList()));
+				.body(employeeService.idDoubleCheck(empId));
 	}
 	
-	
+	/* 직원명 검색 */
+	@GetMapping("/emps/search")
+	public ResponseEntity<ResponseDto> selectEmpListByEmpName(
+			@RequestParam(name="page", defaultValue="1") int page, @RequestParam(name="search") String empName) {
+		
+		log.info("[ProductController] : page : {}", page);
+		log.info("[ProductController] : empName : {}", empName);
+		
+		Page<EmployeeDto> employeeDtoList = employeeService.selectEmployeeListByEmpName(page, empName);
+		
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(employeeDtoList);
+		
+		log.info("[ProductController] : pageInfo : {}", pageInfo);
+		
+		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(employeeDtoList.getContent());
+		
+		log.info("[ProductController] : selectEmpListByEmpName end ==================================== ");
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+	}
 }

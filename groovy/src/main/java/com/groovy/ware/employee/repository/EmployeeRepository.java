@@ -28,8 +28,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	Optional<Employee> findByEmpId(String empId);
 	
 	/* 아이디 중복 검사 */
-	@Query("SELECT e.empId FROM Employee e")
-	List<String> selectEmpIdList();
+	boolean existsByEmpId(String empId);
 	
 	/* 민경 조직도 조회 (검색) */
 	List<Employee> findByEmpName(String empName);
@@ -40,6 +39,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	/* 민경 결재권자 목록 조회 */
 	List<Employee> findByEmpCodeIn(List<Long> empCodes);
 
+	/* 직원명으로 검색*/
+	Page<Employee> findByEmpNameContainsAndEmpStatus(Pageable pageable, String empName, String string);
 
 	
 }
