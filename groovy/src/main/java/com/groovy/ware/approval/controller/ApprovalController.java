@@ -142,6 +142,22 @@ public class ApprovalController {
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "변경 성공"));
 	}
+	
+	/* 결재 완료 목록 조회 */
+	@GetMapping("/list")
+	public ResponseEntity<ResponseDto> searchList(@RequestParam(name = "page", defaultValue = "1") int page,
+			@AuthenticationPrincipal EmployeeDto employeeDto){
+		
+		Page<ApprovalDto> lists = approvalService.searchList(page, employeeDto);
+
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(lists);
+
+		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(lists.getContent());
+
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+	}
 
 //	/* 조회수 증가 */
 //	@PostMapping("/count")
