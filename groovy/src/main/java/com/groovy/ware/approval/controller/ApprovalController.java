@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.groovy.ware.approval.dto.ApprovalDto;
 import com.groovy.ware.approval.service.ApprovalService;
+import com.groovy.ware.calendar.dto.CalendarDTO;
 import com.groovy.ware.calendar.service.CalendarService;
 import com.groovy.ware.common.dto.ResponseDto;
 import com.groovy.ware.common.paging.Pagenation;
@@ -138,10 +139,10 @@ public class ApprovalController {
 	
 	/* 결재 상태 변경 */
 	@PostMapping("/status")
-	public ResponseEntity<ResponseDto> updateStatus(@AuthenticationPrincipal EmployeeDto employeeDto, @RequestBody ApprovalDto approvalDto){
+	public ResponseEntity<ResponseDto> updateStatus(@AuthenticationPrincipal EmployeeDto employeeDto, @RequestBody ApprovalDto approvalDto, @RequestBody CalendarDTO calendarDTO){
 		log.info(approvalDto.toString());
 		
-		approvalService.updateStatus(employeeDto, approvalDto);
+		approvalService.updateStatus(employeeDto, approvalDto, calendarDTO);
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "변경 성공"));
 	}
