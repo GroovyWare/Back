@@ -1,6 +1,8 @@
 package com.groovy.ware.approval.service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +26,10 @@ import com.groovy.ware.approval.entity.Approval;
 import com.groovy.ware.approval.entity.ApproveLine;
 import com.groovy.ware.approval.repository.ApprovalRepository;
 import com.groovy.ware.approval.repository.ApproveLineRepository;
+import com.groovy.ware.calendar.dto.CalendarDTO;
+import com.groovy.ware.calendar.entity.Calendar;
+import com.groovy.ware.calendar.repository.CalendarRepository;
+import com.groovy.ware.calendar.service.CalendarService;
 import com.groovy.ware.document.dto.DocumentDto;
 import com.groovy.ware.document.repository.DocumentRepository;
 import com.groovy.ware.employee.dto.DepartmentDto;
@@ -45,18 +51,21 @@ public class ApprovalService {
 	private final DocumentRepository documentRepository;
 	private final ApproveLineRepository approveLineRepository;
 	private final ModelMapper modelMapper;
+	private final CalendarRepository calendarRepository;
+	private final CalendarService calendarService;
 
 	public ApprovalService(EmployeeRepository employeeRepository, ApprovalRepository approvalRepository,
 			ModelMapper modelMapper, DepartmentRepository departmentRepository, DocumentRepository documentRepository,
-			ApproveLineRepository approveLineRepository) {
+			ApproveLineRepository approveLineRepository, CalendarService calendarService, CalendarRepository calendarRepository) {
 		this.employeeRepository = employeeRepository;
 		this.approvalRepository = approvalRepository;
 		this.departmentRepository = departmentRepository;
 		this.documentRepository = documentRepository;
 		this.approveLineRepository = approveLineRepository;
+		this.calendarRepository = calendarRepository;
 		this.modelMapper = modelMapper;
+		this.calendarService = calendarService;
 	}
-
 	/* 조직도 회원 목록 조회 */
 	public List<EmployeeDto> searchMember(String empName) {
 
@@ -83,10 +92,11 @@ public class ApprovalService {
 		return searchDeptDto;
 	}
 
-	/* 결재 */
+	/* 결재 (이부분에서 날짜 핸들링)*/
 	@Transactional
 	public void saveVacationHtml(ApprovalDto approvalDto) {
-
+		
+		
 		approvalRepository.save(modelMapper.map(approvalDto, Approval.class));
 
 	}
@@ -188,6 +198,7 @@ public class ApprovalService {
 	}
 
 	/* 승인 반려 상태 업데이트 */
+
 	public void updateStatus(EmployeeDto employeeDto, ApprovalDto approvalDto) {
 
 		Integer empCode = Integer.parseInt(employeeDto.getEmpCode().toString());
@@ -195,6 +206,7 @@ public class ApprovalService {
 		Approval approval = approvalRepository.findByApvCode(approvalDto.getApvCode());
 
 		List<ApproveLine> approveLines = approval.getApproveLine();
+
 
 		approveLines.stream().filter(approveLine -> approveLine.getEmpCode().equals(empCode))
 				.forEach(matchingApproveLine -> {
@@ -205,14 +217,36 @@ public class ApprovalService {
 		if(approveLines.stream().allMatch(approveLine -> approveLine.getAplStatus().equals("승인"))) {
 			approval.setApvStatus("승인");
 			approval.setApvEndDate(new Date());
+		
 		}else if(approveLines.stream().anyMatch(approveLine -> approveLine.getAplStatus().equals("반려"))){
 			approval.setApvStatus("반려");
 			approval.setApvEndDate(new Date());
 		}
-		
-		approvalRepository.save(approval);
-	}
+		log.info("이야야야야야야야야야야야야야야야야야야야야ㅑ양야야야야야야야야야야야야야야야야야야야야야야야야야양야야야야");
+		log.info("approvalDTO {}", approvalDto.getEmployee());
 	
+		approvalRepository.save(approval);
+	
+		if (approveLines.stream().allMatch(approveLine -> approveLine.getAplStatus().equals("승인"))) {
+			CalendarDTO calendarDTO = new CalendarDTO();
+			calendarDTO.setSchWriter(approvalDto.getEmployee());
+			calendarDTO.setStart(new Timestamp(approval.getVacStartDate().getTime()));
+			calendarDTO.setEnd(new Timestamp(approval.getVacEndDate().getTime()));
+			calendarDTO.setColor("#0000ff");
+			calendarDTO.setTextColor("#ffffff");
+			calendarDTO.setTitle("연차");
+			calendarDTO.setContext("휴가입니다.");
+			calendarDTO.setSchDiv("휴가");
+	
+			Calendar calendar = modelMapper.map(calendarDTO, Calendar.class);
+    		calendarRepository.save(calendar);
+			
+		}
+	
+
+
+	}
+		
 	/* 결재 목록 조회 */
 	public Page<ApprovalDto> searchList(int page, EmployeeDto employeeDto) {
 		

@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.groovy.ware.approval.dto.ApprovalDto;
 import com.groovy.ware.approval.service.ApprovalService;
+import com.groovy.ware.calendar.dto.CalendarDTO;
+import com.groovy.ware.calendar.service.CalendarService;
 import com.groovy.ware.common.dto.ResponseDto;
 import com.groovy.ware.common.paging.Pagenation;
 import com.groovy.ware.common.paging.PagingButtonInfo;
@@ -33,10 +35,12 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/approval")
 public class ApprovalController {
 
+	private final CalendarService calendarService;
 	private final ApprovalService approvalService;
 
-	public ApprovalController(ApprovalService approvalService) {
+	public ApprovalController(ApprovalService approvalService, CalendarService calendarService) {
 		this.approvalService = approvalService;
+		this.calendarService = calendarService;
 	}
 
 	/* 조직도 직원 목록 조회 */
