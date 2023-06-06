@@ -66,7 +66,6 @@ public class ApprovalService {
 		this.modelMapper = modelMapper;
 		this.calendarService = calendarService;
 	}
-
 	/* 조직도 회원 목록 조회 */
 	public List<EmployeeDto> searchMember(String empName) {
 
@@ -224,34 +223,52 @@ public class ApprovalService {
 		}
 
 	
-		if(approval.getApvStatus().equals("승인")){
-			CalendarDTO calendarDTO = new CalendarDTO();
+		approvalRepository.save(approval);
+	
 
-			Date startingDate = approvalDto.getVacStartDate();
-			Date endingDate = approvalDto.getVacEndDate();
-			long startTimes = startingDate.getTime();
-			long endTimes = endingDate.getTime();
+		/* 휴가 표시부 */
+		// if(approveLines.stream().allMatch(approveLine -> approveLine.getAplStatus().equals("승인"))){
+		// 	CalendarDTO calendarDTO = new CalendarDTO();
+
+		// 	Date startingDate = approval.getVacStartDate();
+		// 	Date endingDate = approval.getVacEndDate();
+		// 	long startTimes = startingDate.getTime();
+		// 	long endTimes = endingDate.getTime();
 			
+		// 	calendarDTO.setSchWriter(approvalDto.getEmployee());
+		// 	calendarDTO.setStart(new Timestamp(startTimes));
+		// 	calendarDTO.setEnd(new Timestamp(endTimes));
+		// 	calendarDTO.setColor("#0000ff");
+		// 	calendarDTO.setTextColor("#ffffff");
+		// 	calendarDTO.setDept(approvalDto.getEmployee().getDept());
+		// 	calendarDTO.setTitle("연차");
+		// 	calendarDTO.setContext("휴가입니다.");
+		// 	calendarDTO.setSchDiv("휴가");
+		
 
-			calendarDTO.setStart(new Timestamp(startTimes));
-			calendarDTO.setEnd(new Timestamp(endTimes));
+		// 	Calendar calendar = modelMapper.map(calendarDTO, Calendar.class);
+    	// 	calendarRepository.save(calendar);
+		// }
+
+		if (approveLines.stream().allMatch(approveLine -> approveLine.getAplStatus().equals("승인"))) {
+			CalendarDTO calendarDTO = new CalendarDTO();
+			calendarDTO.setSchWriter(approvalDto.getEmployee());
+			calendarDTO.setStart(new Timestamp(approval.getVacStartDate().getTime()));
+			calendarDTO.setEnd(new Timestamp(approval.getVacEndDate().getTime()));
 			calendarDTO.setColor("#0000ff");
 			calendarDTO.setTextColor("#ffffff");
 			calendarDTO.setDept(approvalDto.getEmployee().getDept());
 			calendarDTO.setTitle("연차");
 			calendarDTO.setContext("휴가입니다.");
 			calendarDTO.setSchDiv("휴가");
-			
-
-			Calendar calendar = modelMapper.map(calendarDTO, Calendar.class);
-    		calendarRepository.save(calendar);
-		}
-		
-		
-		approvalRepository.save(approval);
-		
-	}
 	
+			calendarService.insertVacationEvent(calendarDTO);
+		}
+	
+
+
+	}
+		
 	/* 결재 목록 조회 */
 	public Page<ApprovalDto> searchList(int page, EmployeeDto employeeDto) {
 		
