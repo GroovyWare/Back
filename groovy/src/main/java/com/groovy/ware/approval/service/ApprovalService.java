@@ -56,7 +56,8 @@ public class ApprovalService {
 
 	public ApprovalService(EmployeeRepository employeeRepository, ApprovalRepository approvalRepository,
 			ModelMapper modelMapper, DepartmentRepository departmentRepository, DocumentRepository documentRepository,
-			ApproveLineRepository approveLineRepository, CalendarService calendarService, CalendarRepository calendarRepository) {
+			ApproveLineRepository approveLineRepository, CalendarService calendarService,
+			CalendarRepository calendarRepository) {
 		this.employeeRepository = employeeRepository;
 		this.approvalRepository = approvalRepository;
 		this.departmentRepository = departmentRepository;
@@ -66,6 +67,7 @@ public class ApprovalService {
 		this.modelMapper = modelMapper;
 		this.calendarService = calendarService;
 	}
+
 	/* 조직도 회원 목록 조회 */
 	public List<EmployeeDto> searchMember(String empName) {
 
@@ -92,11 +94,10 @@ public class ApprovalService {
 		return searchDeptDto;
 	}
 
-	/* 결재 (이부분에서 날짜 핸들링)*/
+	/* 결재 (이부분에서 날짜 핸들링) */
 	@Transactional
 	public void saveVacationHtml(ApprovalDto approvalDto) {
-		
-		
+
 		approvalRepository.save(modelMapper.map(approvalDto, Approval.class));
 
 	}
@@ -159,9 +160,9 @@ public class ApprovalService {
 
 	/* 결재 대기 목록 조회 */
 	public Page<ApprovalDto> searchWait(int page, EmployeeDto employeeDto) {
-		
+
 		log.info("hello");
-		
+
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("apvCode").ascending());
 		Employee employee = employeeRepository.findByEmpId(employeeDto.getEmpId())
 				.orElseThrow(() -> new IllegalArgumentException("해당 사원이 없습니다."));
@@ -171,7 +172,7 @@ public class ApprovalService {
 
 		Page<Approval> searchRequest = approvalRepository.findByApproveLineIn(pageable, approveLines);
 		Page<ApprovalDto> searchRequestDto = searchRequest.map(row -> modelMapper.map(row, ApprovalDto.class));
-		
+
 		log.info("hi");
 
 		return searchRequestDto;
@@ -198,7 +199,6 @@ public class ApprovalService {
 	}
 
 	/* 승인 반려 상태 업데이트 */
-
 	public void updateStatus(EmployeeDto employeeDto, ApprovalDto approvalDto) {
 
 		Integer empCode = Integer.parseInt(employeeDto.getEmpCode().toString());
@@ -207,29 +207,19 @@ public class ApprovalService {
 
 		List<ApproveLine> approveLines = approval.getApproveLine();
 
-
 		approveLines.stream().filter(approveLine -> approveLine.getEmpCode().equals(empCode))
 				.forEach(matchingApproveLine -> {
 					matchingApproveLine.setAplStatus(approvalDto.getApproveLine().get(0).getAplStatus());
 					matchingApproveLine.setAplDate(approvalDto.getApproveLine().get(0).getAplDate());
 				});
-		
-		if(approveLines.stream().allMatch(approveLine -> approveLine.getAplStatus().equals("승인"))) {
+
+		if (approveLines.stream().allMatch(approveLine -> approveLine.getAplStatus().equals("승인"))) {
 			approval.setApvStatus("승인");
 			approval.setApvEndDate(new Date());
-		
-		}else if(approveLines.stream().anyMatch(approveLine -> approveLine.getAplStatus().equals("반려"))){
-			approval.setApvStatus("반려");
-			approval.setApvEndDate(new Date());
-		}
-		log.info("이야야야야야야야야야야야야야야야야야야야야ㅑ양야야야야야야야야야야야야야야야야야야야야야야야야야양야야야야");
-		log.info("approvalDTO {}", approvalDto.getEmployee());
-	
-		approvalRepository.save(approval);
-	
-		if (approveLines.stream().allMatch(approveLine -> approveLine.getAplStatus().equals("승인"))) {
+
 			CalendarDTO calendarDTO = new CalendarDTO();
-			calendarDTO.setSchWriter(approvalDto.getEmployee());
+
+			calendarDTO.setSchWriter(modelMapper.map(approval.getEmployee(), EmployeeDto.class));
 			calendarDTO.setStart(new Timestamp(approval.getVacStartDate().getTime()));
 			calendarDTO.setEnd(new Timestamp(approval.getVacEndDate().getTime()));
 			calendarDTO.setColor("#0000ff");
@@ -237,25 +227,28 @@ public class ApprovalService {
 			calendarDTO.setTitle("연차");
 			calendarDTO.setContext("휴가입니다.");
 			calendarDTO.setSchDiv("휴가");
-	
+
 			Calendar calendar = modelMapper.map(calendarDTO, Calendar.class);
-    		calendarRepository.save(calendar);
-			
+			calendarRepository.save(calendar);
+
+		} else if (approveLines.stream().anyMatch(approveLine -> approveLine.getAplStatus().equals("반려"))) {
+			approval.setApvStatus("반려");
+			approval.setApvEndDate(new Date());
 		}
-	
 
-
+		approvalRepository.save(approval);
 	}
-		
+
 	/* 결재 목록 조회 */
 	public Page<ApprovalDto> searchList(int page, EmployeeDto employeeDto) {
-		
+
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("apvCode").ascending());
-		
-		Employee employee = employeeRepository.findById(employeeDto.getEmpCode()).orElseThrow(() -> new IllegalArgumentException("일치하는 회원이 없습니다."));
+
+		Employee employee = employeeRepository.findById(employeeDto.getEmpCode())
+				.orElseThrow(() -> new IllegalArgumentException("일치하는 회원이 없습니다."));
 		Page<Approval> approvalList = approvalRepository.findByEmployee(pageable, employee);
 		Page<ApprovalDto> approvalDto = approvalList.map(row -> modelMapper.map(row, ApprovalDto.class));
-		
+
 		return approvalDto;
 	}
 }
