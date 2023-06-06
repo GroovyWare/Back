@@ -173,13 +173,6 @@ public void addVacation(CalendarDTO calendarDTO, ApprovalDto approvalDto, Employ
 
 }
 
-@Transactional
-public void insertVacationEvent(CalendarDTO calendarDTO) {
 
-   log.info("calender vacation starting ========================");
-   Calendar calendar = modelMapper.map(calendarDTO, Calendar.class);
-   calendarRepository.save(calendar);
-   log.info("calender vacation end ========================");
-}
 
 }

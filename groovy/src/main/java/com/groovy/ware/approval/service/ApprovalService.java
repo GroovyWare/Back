@@ -198,6 +198,7 @@ public class ApprovalService {
 	}
 
 	/* 승인 반려 상태 업데이트 */
+
 	public void updateStatus(EmployeeDto employeeDto, ApprovalDto approvalDto) {
 
 		Integer empCode = Integer.parseInt(employeeDto.getEmpCode().toString());
@@ -221,35 +222,11 @@ public class ApprovalService {
 			approval.setApvStatus("반려");
 			approval.setApvEndDate(new Date());
 		}
-
+		log.info("이야야야야야야야야야야야야야야야야야야야야ㅑ양야야야야야야야야야야야야야야야야야야야야야야야야야양야야야야");
+		log.info("approvalDTO {}", approvalDto.getEmployee());
 	
 		approvalRepository.save(approval);
 	
-
-		/* 휴가 표시부 */
-		// if(approveLines.stream().allMatch(approveLine -> approveLine.getAplStatus().equals("승인"))){
-		// 	CalendarDTO calendarDTO = new CalendarDTO();
-
-		// 	Date startingDate = approval.getVacStartDate();
-		// 	Date endingDate = approval.getVacEndDate();
-		// 	long startTimes = startingDate.getTime();
-		// 	long endTimes = endingDate.getTime();
-			
-		// 	calendarDTO.setSchWriter(approvalDto.getEmployee());
-		// 	calendarDTO.setStart(new Timestamp(startTimes));
-		// 	calendarDTO.setEnd(new Timestamp(endTimes));
-		// 	calendarDTO.setColor("#0000ff");
-		// 	calendarDTO.setTextColor("#ffffff");
-		// 	calendarDTO.setDept(approvalDto.getEmployee().getDept());
-		// 	calendarDTO.setTitle("연차");
-		// 	calendarDTO.setContext("휴가입니다.");
-		// 	calendarDTO.setSchDiv("휴가");
-		
-
-		// 	Calendar calendar = modelMapper.map(calendarDTO, Calendar.class);
-    	// 	calendarRepository.save(calendar);
-		// }
-
 		if (approveLines.stream().allMatch(approveLine -> approveLine.getAplStatus().equals("승인"))) {
 			CalendarDTO calendarDTO = new CalendarDTO();
 			calendarDTO.setSchWriter(approvalDto.getEmployee());
@@ -257,12 +234,13 @@ public class ApprovalService {
 			calendarDTO.setEnd(new Timestamp(approval.getVacEndDate().getTime()));
 			calendarDTO.setColor("#0000ff");
 			calendarDTO.setTextColor("#ffffff");
-			calendarDTO.setDept(approvalDto.getEmployee().getDept());
 			calendarDTO.setTitle("연차");
 			calendarDTO.setContext("휴가입니다.");
 			calendarDTO.setSchDiv("휴가");
 	
-			calendarService.insertVacationEvent(calendarDTO);
+			Calendar calendar = modelMapper.map(calendarDTO, Calendar.class);
+    		calendarRepository.save(calendar);
+			
 		}
 	
 
