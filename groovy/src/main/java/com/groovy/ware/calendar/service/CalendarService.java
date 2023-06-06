@@ -146,13 +146,13 @@ public class CalendarService {
 // ...
 
 @Transactional
-public void addVacation(CalendarDTO calendarDTO, ApprovalDto approvalDto) {
+public void addVacation(CalendarDTO calendarDTO, ApprovalDto approvalDto, EmployeeDto writer) {
    log.info("[CalendarService] inserting vacation event start");
    log.info("[CalendarService] calendarDto: {}", calendarDTO);
 
    Approval approval = approvalRepository.findByApvCode(approvalDto.getApvCode());
 
-   if (approval != null) {
+ 
       
       
 
@@ -160,17 +160,17 @@ public void addVacation(CalendarDTO calendarDTO, ApprovalDto approvalDto) {
       Date vacEndDate = approvalDto.getVacEndDate();
       long startTimestamp = vacStartDate.getTime();
       long endTimestamp = vacEndDate.getTime();
-
+      
+      calendarDTO.setTitle("휴가");
+      calendarDTO.setContext("휴가입니다.");
+      calendarDTO.setDept(writer.getDept());
+      // 
  
       calendarDTO.setStart(new Timestamp(startTimestamp));
       calendarDTO.setEnd(new Timestamp(endTimestamp));
 
       calendarRepository.save(modelMapper.map(calendarDTO, Calendar.class));
 
-      log.info("[CalendarService] vacation inserting event end");
-   } else {
-      throw new IllegalArgumentException("Invalid approval code");
-   }
 }
 
 

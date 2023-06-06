@@ -1,6 +1,8 @@
 package com.groovy.ware.approval.service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +27,8 @@ import com.groovy.ware.approval.entity.ApproveLine;
 import com.groovy.ware.approval.repository.ApprovalRepository;
 import com.groovy.ware.approval.repository.ApproveLineRepository;
 import com.groovy.ware.calendar.dto.CalendarDTO;
+import com.groovy.ware.calendar.entity.Calendar;
+import com.groovy.ware.calendar.repository.CalendarRepository;
 import com.groovy.ware.calendar.service.CalendarService;
 import com.groovy.ware.document.dto.DocumentDto;
 import com.groovy.ware.document.repository.DocumentRepository;
@@ -47,16 +51,18 @@ public class ApprovalService {
 	private final DocumentRepository documentRepository;
 	private final ApproveLineRepository approveLineRepository;
 	private final ModelMapper modelMapper;
+	private final CalendarRepository calendarRepository;
 	private final CalendarService calendarService;
 
 	public ApprovalService(EmployeeRepository employeeRepository, ApprovalRepository approvalRepository,
 			ModelMapper modelMapper, DepartmentRepository departmentRepository, DocumentRepository documentRepository,
-			ApproveLineRepository approveLineRepository, CalendarService calendarService) {
+			ApproveLineRepository approveLineRepository, CalendarService calendarService, CalendarRepository calendarRepository) {
 		this.employeeRepository = employeeRepository;
 		this.approvalRepository = approvalRepository;
 		this.departmentRepository = departmentRepository;
 		this.documentRepository = documentRepository;
 		this.approveLineRepository = approveLineRepository;
+		this.calendarRepository = calendarRepository;
 		this.modelMapper = modelMapper;
 		this.calendarService = calendarService;
 	}
@@ -193,7 +199,7 @@ public class ApprovalService {
 	}
 
 	/* 승인 반려 상태 업데이트 */
-	public void updateStatus(EmployeeDto employeeDto, ApprovalDto approvalDto, CalendarDTO calendarDTO) {
+	public void updateStatus(EmployeeDto employeeDto, ApprovalDto approvalDto) {
 
 		Integer empCode = Integer.parseInt(employeeDto.getEmpCode().toString());
 
@@ -211,14 +217,39 @@ public class ApprovalService {
 		if(approveLines.stream().allMatch(approveLine -> approveLine.getAplStatus().equals("승인"))) {
 			approval.setApvStatus("승인");
 			approval.setApvEndDate(new Date());
-			calendarService.addVacation(calendarDTO, approvalDto);
-			
+		
 		}else if(approveLines.stream().anyMatch(approveLine -> approveLine.getAplStatus().equals("반려"))){
 			approval.setApvStatus("반려");
 			approval.setApvEndDate(new Date());
 		}
+
+	
+		if(approval.getApvStatus().equals("승인")){
+			CalendarDTO calendarDTO = new CalendarDTO();
+
+			Date startingDate = approvalDto.getVacStartDate();
+			Date endingDate = approvalDto.getVacEndDate();
+			long startTimes = startingDate.getTime();
+			long endTimes = endingDate.getTime();
+			
+
+			calendarDTO.setStart(new Timestamp(startTimes));
+			calendarDTO.setEnd(new Timestamp(endTimes));
+			calendarDTO.setColor("#0000ff");
+			calendarDTO.setTextColor("#ffffff");
+			calendarDTO.setDept(approvalDto.getEmployee().getDept());
+			calendarDTO.setTitle("연차");
+			calendarDTO.setContext("휴가입니다.");
+			calendarDTO.setSchDiv("휴가");
+			
+
+			Calendar calendar = modelMapper.map(calendarDTO, Calendar.class);
+    		calendarRepository.save(calendar);
+		}
+		
 		
 		approvalRepository.save(approval);
+		
 	}
 	
 	/* 결재 목록 조회 */
