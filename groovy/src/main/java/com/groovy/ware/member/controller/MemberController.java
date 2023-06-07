@@ -49,7 +49,7 @@ public class MemberController {
 
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(memberDtoList);
 		
-		log.info("[MemberController] : pageInfo : {}", pageInfo);
+
 		
 		
 		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
@@ -57,7 +57,6 @@ public class MemberController {
 		responseDtoWithPaging.setData(memberDtoList.getContent());
 		
 		
-		log.info("[MemberController] : findMemberListAll end ==================================== ");
 		
 		return ResponseEntity.ok()
 				.body(new ResponseDto(HttpStatus.OK, "회원 조회가 완료되었습니다.", responseDtoWithPaging));
@@ -98,32 +97,16 @@ public class MemberController {
 		
 	}
 	
-//	/* 회원의 회원권 추가 */
-//	@PostMapping("/add")
-//	public ResponseEntity<ResponseDto> memberAddPass(@ModelAttribute MemberDto memberDto, @AuthenticationPrincipal EmployeeDto employee) {
-//		
-//		memberService.memberAddPass(memberDto);
-//		
-//		return ResponseEntity.ok()
-//				.body(new ResponseDto(HttpStatus.OK, "회원권 추가 성공"));
-//		
-//	}
-	
-	
 	/* 회원명 검색 목록 조회*/
 	@GetMapping("/members/search")
 	public ResponseEntity<ResponseDto> selectMemberListByMemName(
 			@RequestParam(name="page", defaultValue="1") int page, @RequestParam(name="search") String memName){
 		
-		log.info("[memberController] : selectMemberListByMemName start ===========================");
-		log.info("[memberController] : page : {}", page);
-		log.info("[memberController] : memName : {}", memName);
 		
 		Page<MemberDto> memberDtoList = memberService.selectMemberListByMemName(page, memName);
 		
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(memberDtoList);
 		
-		log.info("[memberController] : pageInfo : {}", pageInfo);
 		
 		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
 		responseDtoWithPaging.setPageInfo(pageInfo);

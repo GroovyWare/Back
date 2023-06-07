@@ -134,12 +134,14 @@ public class AttendanceController {
   
     
     /* 직원 개인 근태 조회 */
-    @GetMapping("/detail/{memCode}")
-    public ResponseEntity<ResponseDto> findAttendanceDetail(@PathVariable Long memCode){
+    @GetMapping("/detail/{empCode}")
+    public ResponseEntity<ResponseDto> findAttendanceDetail(@PathVariable Long empCode){
     	
     	return ResponseEntity.ok()
-    			.body(new ResponseDto(HttpStatus.OK, "직원 개인 근태 조회 완료", attendanceService.findAttendanceDetail(memCode)));
+    			.body(new ResponseDto(HttpStatus.OK, "직원 개인 근태 조회 완료", attendanceService.findAttendanceDetail(empCode)));
     }
+    
+
     
     
     

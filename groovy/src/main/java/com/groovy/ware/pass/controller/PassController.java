@@ -54,21 +54,17 @@ public class PassController {
 	/* 회원권 조회 */
 	@GetMapping("/list")
 	public ResponseEntity<ResponseDto> findPassList(@RequestParam(name="page", defaultValue="1") int page, @AuthenticationPrincipal EmployeeDto employee){
-		
-		log.info("[PassController] : findPassList start ==================================== ");
-		log.info("[PassController] : page : {}", page);
+
 		
 		Page<PassDto> passDtoList = passService.findPassList(page);
 		
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(passDtoList);
-		
-		log.info("[PassController] : pageInfo : {}", pageInfo);
+
 		
 		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
 		responseDtoWithPaging.setPageInfo(pageInfo);
 		responseDtoWithPaging.setData(passDtoList.getContent());
-		
-		log.info("[PassController] : findPassList end ==================================== ");
+
 		
 		
 		return ResponseEntity.ok()
