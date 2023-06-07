@@ -34,19 +34,14 @@ public class HistoryService {
 	/* 회원 개인 이력 상세 조회 */
 	public Page<HistoryDto> findMemberHistoryDetail(int page, Long memCode) {
 		
-		log.info("[HistoryService] findMemberDetail start ==================");
 
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("resHistory").descending());
 		
-		log.info("[HistoryService] memCode : {}", memCode);
-
 		
 		Page<History> historyList = historyRepository.findByMemCode(pageable, memCode);
 		Page<HistoryDto> historyDtoList = historyList.map(history -> modelMapper.map(history, HistoryDto.class));
 
-		
-		log.info("[HistoryService] historyDtoList : {}", historyDtoList.getContent());
-		log.info("[HistoryService] findMemberDetail start ==================");
+
 		
 		return historyDtoList;
 	}
