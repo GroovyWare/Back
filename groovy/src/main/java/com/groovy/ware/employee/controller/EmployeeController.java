@@ -1,6 +1,5 @@
 package com.groovy.ware.employee.controller;
 
-import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -39,9 +38,7 @@ public class EmployeeController {
 	@GetMapping("/emp")
 	public ResponseEntity<ResponseDto> selectEmployeeList(@RequestParam(name="page", defaultValue="1") int page) {
 		
-		log.info("[EmployeeController] : selectEmployeeList start ==================================");
-		log.info("[EmployeeController] : page : {}", page);
-		
+
 		Page<EmployeeDto> employeeDtoList = employeeService.selectEmployeeList(page);
 		
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(employeeDtoList);
@@ -51,7 +48,6 @@ public class EmployeeController {
 		responseDtoWithPaging.setPageInfo(pageInfo);
 		responseDtoWithPaging.setData(employeeDtoList.getContent());
 		
-		log.info("[EmployeeController] : selectEmployeeList end ==================================");
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "전체 직원 목록이 조회 되었습니다.",responseDtoWithPaging));
 	}
@@ -113,21 +109,14 @@ public class EmployeeController {
 	public ResponseEntity<ResponseDto> selectEmpListByEmpName(
 			@RequestParam(name="page", defaultValue="1") int page, @RequestParam(name="search") String empName) {
 		
-		log.info("[ProductController] : page : {}", page);
-		log.info("[ProductController] : empName : {}", empName);
-		
 		Page<EmployeeDto> employeeDtoList = employeeService.selectEmployeeListByEmpName(page, empName);
 		
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(employeeDtoList);
 		
-		log.info("[ProductController] : pageInfo : {}", pageInfo);
-		
 		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
 		responseDtoWithPaging.setPageInfo(pageInfo);
 		responseDtoWithPaging.setData(employeeDtoList.getContent());
-		
-		log.info("[ProductController] : selectEmpListByEmpName end ==================================== ");
-		
+			
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 	}
 }

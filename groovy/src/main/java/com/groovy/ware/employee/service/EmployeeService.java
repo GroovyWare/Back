@@ -33,7 +33,6 @@ import com.groovy.ware.util.FileUploadUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Slf4j
 public class EmployeeService {
 
 	private EmployeeRepository employeeRepository;
@@ -59,8 +58,6 @@ public class EmployeeService {
 	/* 직원 목록 조회 */
 	public Page<EmployeeDto> selectEmployeeList(int page) {
 		
-		log.info("[EmployeeService] selectEmployeeList start ============================================");
-		
 		Pageable pageable = PageRequest.of(page -1, 10, Sort.by("empCode").descending());
 		
 		Page<Employee> employeeList = employeeRepository.findAll(pageable);
@@ -70,8 +67,6 @@ public class EmployeeService {
 				if(employeeDto.getFile() != null)
 				employeeDto.getFile().setFileSavedName(IMAGE_URL + employeeDto.getFile().getFileSavedName());
 		}
-			
-		log.info("[EmployeeService] selectEmployeeList end ============================================");
 		
 		return employeeDtoList;
 	}
@@ -79,8 +74,6 @@ public class EmployeeService {
 	/* 직원 상세 조회 */
 	public EmployeeDto selectEmployee(Long empCode) {
 		
-		log.info("[EmployeeService] selectEmployee start ============================================");
-		log.info("[EmployeeService] selectEmployee empCode : {}", empCode);
 		
 		Employee employee = employeeRepository.findById(empCode)
 												.orElseThrow(() -> new IllegalArgumentException("해당 코드의 직원이 없습니다."));
@@ -89,7 +82,6 @@ public class EmployeeService {
 
 		employeeDto.getFile().setFileSavedName(IMAGE_URL + employeeDto.getFile().getFileSavedName());
 
-		log.info("[EmployeeService] selectEmployee end ==============================================");
 		
 		return employeeDto;
 	}	
@@ -98,12 +90,9 @@ public class EmployeeService {
 	@Transactional
 	public void insertEmployee(EmployeeDto employeeDto) {
 		
-		log.info("[EmployeeService] registEmployee start ============================================");
-		log.info("[EmployeeService] registEmployee employeeDto : {}", employeeDto);
-	
 		/* 아이디 중복 확인 */
 		if(employeeRepository.idCheck(employeeDto.getEmpId()) != null) {
-			log.info("[EmployeeService] 이미 해당 아이디가 있습니다.");
+
 			throw new DuplicatedEmpIdException("아이디가 이미 존재합니다.");
 		}
 		
@@ -125,7 +114,6 @@ public class EmployeeService {
 				fileDto.setFileSavedName(replaceFileName);
 	
 				fileDto.setEmployee(employeeDto);
-				log.info("[EmployeeService] registEmployee fileDto : {}", fileDto);
 				
 				fileRepository.save(modelMapper.map(fileDto, File.class));
 			} else {
@@ -144,8 +132,6 @@ public class EmployeeService {
 	@Transactional
 	public void updateEmployee(EmployeeDto employeeDto) {
 		
-		log.info("[EmployeeService] updateEmployee start ===============================================");
-		log.info("[EmployeeService] employeeDto : {}", employeeDto);
 		
 		Employee originEmployee = employeeRepository.findById(employeeDto.getEmpCode())	
 				.orElseThrow(() -> new IllegalArgumentException("해당 코드의 직원이 없습니다."));
@@ -154,15 +140,11 @@ public class EmployeeService {
 			if(employeeDto.getImgUrl() != null) {
 				
 				String imageName = UUID.randomUUID().toString().replace("-", "");
-				log.info("[변경할 원본파일명 변경] imageName : {}", imageName);
 				
 				String replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, employeeDto.getImgUrl());	
-				log.info("[변경할 저장파일명] FileSavedName : {}", replaceFileName);
-				
-				log.info("[삭제할 파일명] delete image : {}", originEmployee.getFile().getFileSavedName());
+			
 				FileUploadUtils.deleteFile(IMAGE_DIR, originEmployee.getFile().getFileSavedName());
 				
-				log.info("[originalEmployee.getFile()] : {}", originEmployee.getFile());
 				originEmployee.getFile().setFileSavedName(replaceFileName);
 				originEmployee.getFile().setFileOriginalName(employeeDto.getImgUrl().getOriginalFilename());
 
@@ -191,12 +173,11 @@ public class EmployeeService {
 			e.printStackTrace();
 		}
 
-		log.info("변경 후 {}", employeeDto);
 	}
 
 	/* 내정보 조회 */
 	public EmployeeDto selectMyInfo(Long empCode) {
-		log.info("[EmployeeService] selectMyInfo empCode : {}", empCode);
+
 		Employee employee = employeeRepository.findById(empCode)
 				.orElseThrow(() -> new UserNotFoundException(empCode + "를 찾을 수 없습니다."));
 		
@@ -204,7 +185,7 @@ public class EmployeeService {
 		if(employeeDto.getFile() != null) {
 			employeeDto.getFile().setFileSavedName(IMAGE_URL + employeeDto.getFile().getFileSavedName());
 		}
-		log.info("[EmployeeService] employeeDto empCode : {}", empCode);
+
 		
 		return employeeDto;
 	}
@@ -214,14 +195,12 @@ public class EmployeeService {
 		
 		boolean result = employeeRepository.existsByEmpId(empId);
 		
-		log.info("[idcheck] : {}", result);
 		return result;
 	}
 
 	/* 직원명을 검색 */
 	public Page<EmployeeDto> selectEmployeeListByEmpName(int page, String empName) {
 		
-	log.info("[ProductService] selectProductListByProductName start ============================== ");
 		
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("empCode").descending());
 		
@@ -234,9 +213,6 @@ public class EmployeeService {
 		    }
 		});
 		
-		log.info("[ProductService] productDtoList.getContent() : {}", employeeDtoList.getContent());
-		
-		log.info("[ProductService] selectProductListByProductName end ============================== ");
 		
 		return employeeDtoList;
 	}
