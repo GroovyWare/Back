@@ -208,19 +208,21 @@ public class ApprovalService {
 			approval.setApvStatus("승인");
 			approval.setApvEndDate(new Date());
 
-			CalendarDTO calendarDTO = new CalendarDTO();
+			if (approvalDto.getVacEndDate() != null) {
+				CalendarDTO calendarDTO = new CalendarDTO();
 
-			calendarDTO.setSchWriter(modelMapper.map(approval.getEmployee(), EmployeeDto.class));
-			calendarDTO.setStart(new Timestamp(approval.getVacStartDate().getTime()));
-			calendarDTO.setEnd(new Timestamp(approval.getVacEndDate().getTime()));
-			calendarDTO.setColor("#9b83fa");
-			calendarDTO.setTextColor("#ffffff");
-			calendarDTO.setTitle("연차");
-			calendarDTO.setContext("휴가입니다.");
-			calendarDTO.setSchDiv("휴가");
+				calendarDTO.setSchWriter(modelMapper.map(approval.getEmployee(), EmployeeDto.class));
+				calendarDTO.setStart(new Timestamp(approval.getVacStartDate().getTime()));
+				calendarDTO.setEnd(new Timestamp(approval.getVacEndDate().getTime()));
+				calendarDTO.setColor("#9b83fa");
+				calendarDTO.setTextColor("#ffffff");
+				calendarDTO.setTitle("연차");
+				calendarDTO.setContext("휴가입니다.");
+				calendarDTO.setSchDiv("휴가");
 
-			Calendar calendar = modelMapper.map(calendarDTO, Calendar.class);
-			calendarRepository.save(calendar);
+				Calendar calendar = modelMapper.map(calendarDTO, Calendar.class);
+				calendarRepository.save(calendar);
+			}
 
 		} else if (approveLines.stream().anyMatch(approveLine -> approveLine.getAplStatus().equals("반려"))) {
 			approval.setApvStatus("반려");
