@@ -1,7 +1,5 @@
 package com.groovy.ware.equipment.controller;
 
-import java.security.Principal;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -9,17 +7,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.groovy.ware.equipment.dto.EquipmentDto;
-import com.groovy.ware.equipment.service.EquipmentService;
-import com.groovy.ware.announce.dto.AnnounceDto;
 import com.groovy.ware.common.ResponseDto;
 import com.groovy.ware.common.paging.Pagenation;
 import com.groovy.ware.common.paging.PagingButtonInfo;
 import com.groovy.ware.common.paging.ResponseDtoWithPaging;
 import com.groovy.ware.employee.dto.EmployeeDto;
+import com.groovy.ware.equipment.dto.EquipmentDto;
+import com.groovy.ware.equipment.service.EquipmentService;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -37,21 +42,15 @@ public class EquipmentController {
     @GetMapping
     public ResponseEntity<ResponseDto> getEquipments(@RequestParam(name="page", defaultValue="1") int page,
             @RequestParam(name="size", defaultValue="10") int size) {
-        log.info("[EquipmentController] : getEquipments start ==================================== ");
-        log.info("[EquipmentController] : page : {}", page);
 
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<EquipmentDto> equipments = equipmentService.getEquipments(pageable);
 
         PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(equipments);
 
-        log.info("[EquipmentController] : pageInfo : {}", pageInfo);
-
         ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
         responseDtoWithPaging.setPageInfo(pageInfo);
         responseDtoWithPaging.setData(equipments.getContent());
-
-        log.info("[EquipmentController] : getEquipments end ==================================== ");
 
         return ResponseEntity.ok()
                 .body(new ResponseDto(HttpStatus.OK, "기구 목록 조회가 완료되었습니다.", responseDtoWithPaging));
@@ -67,7 +66,7 @@ public class EquipmentController {
     
     /* 기구 등록 */
     @PostMapping
-    public ResponseEntity<ResponseDto> createEquipment(@ModelAttribute EquipmentDto equipmentDto) {
+    public ResponseEntity<ResponseDto> createEquipment(@RequestBody EquipmentDto equipmentDto) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         EmployeeDto employeeDto = (EmployeeDto) authentication.getPrincipal();
