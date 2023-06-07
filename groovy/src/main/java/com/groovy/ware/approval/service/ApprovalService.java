@@ -71,15 +71,10 @@ public class ApprovalService {
 	/* 조직도 회원 목록 조회 */
 	public List<EmployeeDto> searchMember(String empName) {
 
-		log.info("service start=========");
-		log.info(empName);
 		List<Employee> searchEmpList = employeeRepository.findByEmpName(empName);
 		log.info("searchMemberList {}", searchEmpList.toString());
 		List<EmployeeDto> searchEmpDtoList = searchEmpList.stream().map(row -> modelMapper.map(row, EmployeeDto.class))
 				.collect(Collectors.toList());
-		log.info(searchEmpDtoList.toString());
-
-		log.info("service end===========");
 
 		return searchEmpDtoList;
 	}
@@ -161,8 +156,6 @@ public class ApprovalService {
 	/* 결재 대기 목록 조회 */
 	public Page<ApprovalDto> searchWait(int page, EmployeeDto employeeDto) {
 
-		log.info("hello");
-
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("apvCode").ascending());
 		Employee employee = employeeRepository.findByEmpId(employeeDto.getEmpId())
 				.orElseThrow(() -> new IllegalArgumentException("해당 사원이 없습니다."));
@@ -172,8 +165,6 @@ public class ApprovalService {
 
 		Page<Approval> searchRequest = approvalRepository.findByApproveLineIn(pageable, approveLines);
 		Page<ApprovalDto> searchRequestDto = searchRequest.map(row -> modelMapper.map(row, ApprovalDto.class));
-
-		log.info("hi");
 
 		return searchRequestDto;
 	}
