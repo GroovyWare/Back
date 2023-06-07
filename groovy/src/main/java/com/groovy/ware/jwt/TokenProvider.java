@@ -23,7 +23,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+
 @Component
 public class TokenProvider {
 
@@ -74,7 +74,7 @@ public class TokenProvider {
 	public Authentication getAuthentication(String jwt) {
 
 		Claims claims = parseClaims(jwt);
-		log.info(claims.toString());
+		
 		UserDetails userDetails = userDetailsService.loadUserByUsername(claims.getSubject());
 		
 		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());

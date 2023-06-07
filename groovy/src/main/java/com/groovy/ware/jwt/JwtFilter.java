@@ -18,7 +18,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
@@ -34,9 +34,7 @@ public class JwtFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		
-		log.info("[JwtFilter] : doFilterInternal start =====================================");
-			
+
 		String jwt = resolveToken(request);
 		
 		try {
@@ -47,18 +45,18 @@ public class JwtFilter extends OncePerRequestFilter {
 			}		
 		
 		} catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-			log.info("[JwtFilter] : 잘못 된 JWT 서명입니다.");
+			
 		} catch (ExpiredJwtException e) {
-			log.info("[JwtFilter] : 만료 된 JWT 서명입니다.");
+		
 		} catch (UnsupportedJwtException e) {
-			log.info("[JwtFilter] : 지원 되지 않는 JWT 서명입니다.");
+	
 		} catch (IllegalArgumentException e) {
-			log.info("[JwtFilter] : JWT 토큰이 잘못 되었습니다.");
+	
 		} 
 	
 		filterChain.doFilter(request, response);
 		
-		log.info("[JwtFilter] : doFilterInternal end =====================================");
+	
 	}
 
 	private String resolveToken(HttpServletRequest request) {
