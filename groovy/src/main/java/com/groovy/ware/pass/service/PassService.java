@@ -1,5 +1,7 @@
 package com.groovy.ware.pass.service;
 
+import java.util.stream.Collectors;
+
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
@@ -9,6 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.groovy.ware.history.entity.History;
+import com.groovy.ware.member.dto.MemberDto;
+import com.groovy.ware.member.entity.Member;
 import com.groovy.ware.pass.dto.PassDto;
 import com.groovy.ware.pass.entity.Pass;
 import com.groovy.ware.pass.repository.PassRepository;
@@ -34,29 +39,23 @@ public class PassService {
 	/* 회원권 등록 */
 	@Transactional
 	public void insertPass(PassDto passDto) {
-		
-		log.info("[PassService] insertPass start =====================================");
-		log.info("[PassService] passDto : {}", passDto);
+
 		
 		passRepository.save(modelMapper.map(passDto, Pass.class));
-		
-		log.info("[PassService] insertPass end =====================================");
+
 	}
 	
 	
 	/* 회원권 조회*/
 	public Page<PassDto> findPassList(int page){
 		
-		log.info("[PassService] findPassList start =====================================");
+
 		
-		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("passCode").descending());
+		Pageable pageable = PageRequest.of(page - 1, 8, Sort.by("passCode").descending());
 		
 		Page<Pass> passList = passRepository.findAll(pageable);
 		Page<PassDto> passDtoList = passList.map(pass -> modelMapper.map(pass, PassDto.class));
-		
-		log.info("[PassService] findPassList.getContent() : {}", passDtoList.getContent());
-		
-		log.info("[PassService] findPassList end =====================================");
+
 		
 		return passDtoList;
 	}
@@ -64,16 +63,11 @@ public class PassService {
 	/* 회원권 상세 조회 */
 	public PassDto findPassDetail(Long passCode) {
 		
-		log.info("[PassService] : findPassDetail start ==================================== ");
-		log.info("[PassService] : passCode : {}", passCode);
 		
 		Pass pass = passRepository.findById(passCode).orElseThrow();
 		
 		PassDto passDto = modelMapper.map(pass, PassDto.class);
-		
-		
-		log.info("[PassService] : passDto : {}", passDto);
-		log.info("[PassService] : findPassDetail end ==================================== ");
+
 		
 		return passDto;
 	}
@@ -82,12 +76,11 @@ public class PassService {
 	
 	/* 회원권 수정 */
 	@Transactional
-	public void modifyPass(PassDto passDto, Long passCode) {
-		log.info("[PassService] modifyPass start =====================================");
-		log.info("[PassService] passDto : {}", passDto);
+	public void modifyPass(PassDto passDto) {
+
 		
-		Pass originPass = passRepository.findById(passCode).orElseThrow();
-		
+		Pass originPass = passRepository.findById(passDto.getPassCode()).orElseThrow();
+				
 		originPass.modify(
 				
 				passDto.getPassType(), 
@@ -99,10 +92,12 @@ public class PassService {
 		
 	}
 	
+
+
+	
 	/* 회원권 삭제 */
 	@Transactional
 	public void deletePass(Long passCode) {
-		log.info("[PassService] deletePass start =====================================");
 
 		passRepository.deleteById(passCode);
 		

@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 import com.groovy.ware.history.dto.HistoryDto;
 import com.groovy.ware.history.entity.History;
 import com.groovy.ware.history.repository.HistoryRepository;
-import com.groovy.ware.member.entity.Member;
-import com.groovy.ware.member.repository.MemberRepository;
-import com.groovy.ware.pass.repository.PassRepository;
+
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,22 +34,26 @@ public class HistoryService {
 	/* 회원 개인 이력 상세 조회 */
 	public Page<HistoryDto> findMemberHistoryDetail(int page, Long memCode) {
 		
-		log.info("[HistoryService] findMemberDetail start ==================");
 
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("resHistory").descending());
 		
-		log.info("[HistoryService] memCode : {}", memCode);
-
 		
 		Page<History> historyList = historyRepository.findByMemCode(pageable, memCode);
 		Page<HistoryDto> historyDtoList = historyList.map(history -> modelMapper.map(history, HistoryDto.class));
 
-		
-		log.info("[HistoryService] historyDtoList : {}", historyDtoList.getContent());
-		log.info("[HistoryService] findMemberDetail start ==================");
+
 		
 		return historyDtoList;
 	}
+	
+	/* 회원의 회원권 추가 */
+	public void memberAddPass(HistoryDto historyDto) {
+		
+		historyRepository.save(modelMapper.map(historyDto, History.class));
+		
+	}
+	
+
 	
 
 

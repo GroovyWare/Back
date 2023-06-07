@@ -1,6 +1,5 @@
 package com.groovy.ware.employee.controller;
 
-import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -39,9 +38,7 @@ public class EmployeeController {
 	@GetMapping("/emp")
 	public ResponseEntity<ResponseDto> selectEmployeeList(@RequestParam(name="page", defaultValue="1") int page) {
 		
-		log.info("[EmployeeController] : selectEmployeeList start ==================================");
-		log.info("[EmployeeController] : page : {}", page);
-		
+
 		Page<EmployeeDto> employeeDtoList = employeeService.selectEmployeeList(page);
 		
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(employeeDtoList);
@@ -51,7 +48,6 @@ public class EmployeeController {
 		responseDtoWithPaging.setPageInfo(pageInfo);
 		responseDtoWithPaging.setData(employeeDtoList.getContent());
 		
-		log.info("[EmployeeController] : selectEmployeeList end ==================================");
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "전체 직원 목록이 조회 되었습니다.",responseDtoWithPaging));
 	}
@@ -80,8 +76,8 @@ public class EmployeeController {
 	@PutMapping("/emp")
 	public ResponseEntity<ResponseDto> updateEmployee(@ModelAttribute EmployeeDto employeeDto) {
 		
+		log.info("수정 정보 employeeDto : {}", employeeDto);
 		employeeService.updateEmployee(employeeDto);
-		
 		return ResponseEntity
 				.ok()
 				.body(new ResponseDto(HttpStatus.OK, "해당 직원 정보가 수정되었습니다."));
@@ -99,13 +95,28 @@ public class EmployeeController {
 	}
 	
 	/* 중복검사 */
-	@GetMapping("/empidlist")
-	public ResponseEntity<ResponseDto> selectEmpIdList() {
-				
+	@GetMapping("/idCheck/{empId}")
+	public ResponseEntity<Boolean> idDoubleCheck(@PathVariable String empId) {
+		log.info("[Controller] idcheck : {}", empId);
+		
 		return ResponseEntity
 				.ok()
-				.body(new ResponseDto(HttpStatus.OK, "조회 완료", employeeService.selectEmpIdList()));
+				.body(employeeService.idDoubleCheck(empId));
 	}
 	
-	
+	/* 직원명 검색 */
+	@GetMapping("/emps/search")
+	public ResponseEntity<ResponseDto> selectEmpListByEmpName(
+			@RequestParam(name="page", defaultValue="1") int page, @RequestParam(name="search") String empName) {
+		
+		Page<EmployeeDto> employeeDtoList = employeeService.selectEmployeeListByEmpName(page, empName);
+		
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(employeeDtoList);
+		
+		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(employeeDtoList.getContent());
+			
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+	}
 }

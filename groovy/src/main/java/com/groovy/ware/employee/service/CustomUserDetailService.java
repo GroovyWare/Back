@@ -30,9 +30,6 @@ public class CustomUserDetailService implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-
-		log.info("[CustomUserDetailService] loadUserByUsername start ======================================");
-		log.info("[CustomUserDetailService] userId : {}", userId);
 		
 		return employeeRepository.findByEmpId(userId) 
 				.map(user -> addAuthorities(user)) 
@@ -45,8 +42,7 @@ public class CustomUserDetailService implements UserDetailsService {
 
 		employeeDto.setAuthorities(employeeDto.getAuths().stream()
 				.map(auth -> new SimpleGrantedAuthority(auth.getAuth().getAuthName())).collect(Collectors.toList()));
-		log.info("[CustomUserDetailService] addAuthorities employeeDto:{}", employeeDto);
-		
+
 		return employeeDto;
 	}
 	

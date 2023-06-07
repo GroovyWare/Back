@@ -1,20 +1,24 @@
 package com.groovy.ware.attendance.service;
 
-import java.util.List;
+import java.sql.Date;
+import java.sql.Time;
+
+import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.groovy.ware.attendance.dto.AttendanceDto;
 import com.groovy.ware.attendance.entity.Attendance;
 import com.groovy.ware.attendance.repository.AttendanceRepository;
 import com.groovy.ware.employee.dto.EmployeeDto;
-import com.groovy.ware.employee.entity.Employee;
 import com.groovy.ware.employee.repository.DepartmentRepository;
 import com.groovy.ware.employee.repository.EmployeeRepository;
-import com.groovy.ware.employee.service.EmployeeService;
 
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -39,9 +43,8 @@ public class AttendanceService {
     /* 개인 출근 퇴근 시간의 조회(메인에서 기본적으로 띄워준다) */
     public AttendanceDto viewMain(EmployeeDto employeeDto) {
 
-        log.info("[AttendanceService] start==============");
-        log.info("[AttendanceService] employeeDto : {}", employeeDto);
-
+      
+        
         Attendance attendance = attendanceRepository.findOneAttendance(employeeDto.getEmpCode());
         AttendanceDto attendanceDto = modelMapper.map(attendance, AttendanceDto.class);
 
@@ -49,7 +52,68 @@ public class AttendanceService {
         return attendanceDto;
     }
 
+    /* 출근 버튼을 누를때 */
+    @Transactional
     public void addGoWork(AttendanceDto attendanceDto) {
+    
+        attendanceDto.setAttDate(new Date(System.currentTimeMillis()));
+        attendanceRepository.save(modelMapper.map(attendanceDto, Attendance.class));
+
+
     }
     
+
+    /* 퇴근 버튼을 누를때 (수정) */
+    @Transactional
+    public void leaveWork(AttendanceDto attendanceDto, EmployeeDto employee) {
+   
+
+        // Attendance originAttendance = attendanceRepository.findOneAttendance(employee.getEmpCode());
+        Attendance originAttendance = attendanceRepository.findById(attendanceDto.getAttCode()).orElseThrow(() -> new IllegalArgumentException("그런 출근기록은 없습니다." + attendanceDto.getAttCode()));
+
+        originAttendance.setAttEnd(new Time(System.currentTimeMillis()));
+        
+       
+        
+        
+
+       
+
+
+    }
+    
+
+    /* 전체 직원 근태 조회 */
+    public Page<AttendanceDto> findAttendanceListAll(int page) {
+    	
+		
+		
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("attCode").descending());
+		
+		Page<Attendance> attList = attendanceRepository.findAll(pageable);
+		Page<AttendanceDto> attDtoList = attList.map(attendance -> modelMapper.map(attendance, AttendanceDto.class));
+
+		
+    	return attDtoList;
+    }
+    
+    /* 직원 개인 근태 조회 */
+    public AttendanceDto findAttendanceDetail(Long empCode) {
+    	
+
+		
+		Attendance attendance = attendanceRepository.findById(empCode).orElseThrow();
+		
+		AttendanceDto attendanceDto = modelMapper.map(attendance, AttendanceDto.class);
+    	
+		
+		
+    	return attendanceDto;
+    }
+    
+
+    
+    
+    
+
 }

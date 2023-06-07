@@ -45,5 +45,23 @@ public interface CalendarRepository extends JpaRepository<Calendar, Long> {
       // @EntityGraph(attributePaths = {"schWriter"})
       // Calendar findBySchWriter();
 
+
+//       @Query(value = "SELECT * FROM ("
+//       + "SELECT * FROM GRV_SCHEDULE A "
+//       + "JOIN GRV_EMPLOYEE B ON (A.SCH_WRITER = B.EMP_CODE) "
+//       + "RIGHT JOIN GRV_APPROVAL C ON (C.EMP_CODE = B.EMP_CODE) "
+//       + "RIGHT JOIN GRV_DOCUMENT D ON (D.DOC_CODE = C.DOC_CODE) "
+//       + "JOIN GRV_APPROVELINE E ON (C.APV_CODE = E.APV_CODE) "
+//       + "WHERE D.DOC_TITLE LIKE '%휴가%' "
+//       + "AND E.EMP_CODE = 1 AND E.APL_STATUS LIKE '%승인%' "
+//       + "AND C.EMP_CODE = :empCode "
+//       + "ORDER BY C.APV_END_DATE DESC) "
+//       + "WHERE ROWNUM = 1", nativeQuery = true)
+// Optional<Calendar> findVacationConditions(@Param("empCode") Long empCode);
+
+
       
+ 
 }
+
+

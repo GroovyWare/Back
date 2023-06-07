@@ -1,9 +1,13 @@
 package com.groovy.ware.approval.service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -14,12 +18,18 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.groovy.ware.approval.dto.ApprovalDto;
+import com.groovy.ware.approval.dto.ApproveLineDto;
 import com.groovy.ware.approval.entity.Approval;
 import com.groovy.ware.approval.entity.ApproveLine;
 import com.groovy.ware.approval.repository.ApprovalRepository;
 import com.groovy.ware.approval.repository.ApproveLineRepository;
+import com.groovy.ware.calendar.dto.CalendarDTO;
+import com.groovy.ware.calendar.entity.Calendar;
+import com.groovy.ware.calendar.repository.CalendarRepository;
+import com.groovy.ware.calendar.service.CalendarService;
 import com.groovy.ware.document.dto.DocumentDto;
 import com.groovy.ware.document.repository.DocumentRepository;
 import com.groovy.ware.employee.dto.DepartmentDto;
@@ -41,30 +51,30 @@ public class ApprovalService {
 	private final DocumentRepository documentRepository;
 	private final ApproveLineRepository approveLineRepository;
 	private final ModelMapper modelMapper;
+	private final CalendarRepository calendarRepository;
+	private final CalendarService calendarService;
 
 	public ApprovalService(EmployeeRepository employeeRepository, ApprovalRepository approvalRepository,
 			ModelMapper modelMapper, DepartmentRepository departmentRepository, DocumentRepository documentRepository,
-			ApproveLineRepository approveLineRepository) {
+			ApproveLineRepository approveLineRepository, CalendarService calendarService,
+			CalendarRepository calendarRepository) {
 		this.employeeRepository = employeeRepository;
 		this.approvalRepository = approvalRepository;
 		this.departmentRepository = departmentRepository;
 		this.documentRepository = documentRepository;
 		this.approveLineRepository = approveLineRepository;
+		this.calendarRepository = calendarRepository;
 		this.modelMapper = modelMapper;
+		this.calendarService = calendarService;
 	}
 
 	/* 조직도 회원 목록 조회 */
 	public List<EmployeeDto> searchMember(String empName) {
 
-		log.info("service start=========");
-		log.info(empName);
 		List<Employee> searchEmpList = employeeRepository.findByEmpName(empName);
 		log.info("searchMemberList {}", searchEmpList.toString());
 		List<EmployeeDto> searchEmpDtoList = searchEmpList.stream().map(row -> modelMapper.map(row, EmployeeDto.class))
 				.collect(Collectors.toList());
-		log.info(searchEmpDtoList.toString());
-
-		log.info("service end===========");
 
 		return searchEmpDtoList;
 	}
@@ -79,7 +89,7 @@ public class ApprovalService {
 		return searchDeptDto;
 	}
 
-	/* 결재 */
+	/* 결재 (이부분에서 날짜 핸들링) */
 	@Transactional
 	public void saveVacationHtml(ApprovalDto approvalDto) {
 
@@ -159,16 +169,77 @@ public class ApprovalService {
 		return searchRequestDto;
 	}
 
-	/* 현재 로그인 한 사람의 정보 찾기 */ 
+	/* 현재 로그인 한 사람의 정보 찾기 */
 	public EmployeeDto searchNow(EmployeeDto employeeDto) {
-		
-		Employee employee = employeeRepository.findByEmpId(employeeDto.getEmpId()).orElseThrow(() -> new IllegalArgumentException("일치하는 직원이 없습니다."));
-		EmployeeDto employeeDto2  = modelMapper.map(employee, EmployeeDto.class);
-		
+
+		Employee employee = employeeRepository.findByEmpId(employeeDto.getEmpId())
+				.orElseThrow(() -> new IllegalArgumentException("일치하는 직원이 없습니다."));
+		EmployeeDto employeeDto2 = modelMapper.map(employee, EmployeeDto.class);
+
 		return employeeDto2;
 	}
-	
-	
-	
 
+	/* 결재권자 이름 찾기 */
+	public List<EmployeeDto> searchApproveLine(List<Long> empCode) {
+
+		List<Employee> employeeList = employeeRepository.findAllById(empCode);
+		List<EmployeeDto> employeeDtoList = employeeList.stream().map(row -> modelMapper.map(row, EmployeeDto.class))
+				.collect(Collectors.toList());
+
+		return employeeDtoList;
+	}
+
+	/* 승인 반려 상태 업데이트 */
+	public void updateStatus(EmployeeDto employeeDto, ApprovalDto approvalDto) {
+
+		Integer empCode = Integer.parseInt(employeeDto.getEmpCode().toString());
+
+		Approval approval = approvalRepository.findByApvCode(approvalDto.getApvCode());
+
+		List<ApproveLine> approveLines = approval.getApproveLine();
+
+		approveLines.stream().filter(approveLine -> approveLine.getEmpCode().equals(empCode))
+				.forEach(matchingApproveLine -> {
+					matchingApproveLine.setAplStatus(approvalDto.getApproveLine().get(0).getAplStatus());
+					matchingApproveLine.setAplDate(approvalDto.getApproveLine().get(0).getAplDate());
+				});
+
+		if (approveLines.stream().allMatch(approveLine -> approveLine.getAplStatus().equals("승인"))) {
+			approval.setApvStatus("승인");
+			approval.setApvEndDate(new Date());
+
+			CalendarDTO calendarDTO = new CalendarDTO();
+
+			calendarDTO.setSchWriter(modelMapper.map(approval.getEmployee(), EmployeeDto.class));
+			calendarDTO.setStart(new Timestamp(approval.getVacStartDate().getTime()));
+			calendarDTO.setEnd(new Timestamp(approval.getVacEndDate().getTime()));
+			calendarDTO.setColor("#9b83fa");
+			calendarDTO.setTextColor("#ffffff");
+			calendarDTO.setTitle("연차");
+			calendarDTO.setContext("휴가입니다.");
+			calendarDTO.setSchDiv("휴가");
+
+			Calendar calendar = modelMapper.map(calendarDTO, Calendar.class);
+			calendarRepository.save(calendar);
+
+		} else if (approveLines.stream().anyMatch(approveLine -> approveLine.getAplStatus().equals("반려"))) {
+			approval.setApvStatus("반려");
+			approval.setApvEndDate(new Date());
+		}
+
+		approvalRepository.save(approval);
+	}
+
+	/* 결재 목록 조회 */
+	public Page<ApprovalDto> searchList(int page, EmployeeDto employeeDto) {
+
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("apvCode").ascending());
+
+		Employee employee = employeeRepository.findById(employeeDto.getEmpCode())
+				.orElseThrow(() -> new IllegalArgumentException("일치하는 회원이 없습니다."));
+		Page<Approval> approvalList = approvalRepository.findByEmployee(pageable, employee);
+		Page<ApprovalDto> approvalDto = approvalList.map(row -> modelMapper.map(row, ApprovalDto.class));
+
+		return approvalDto;
+	}
 }

@@ -1,7 +1,8 @@
 package com.groovy.ware.attendance.entity;
 
 import java.sql.Date;
-import java.time.LocalTime;
+import java.sql.Time;
+
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,8 +14,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.DynamicInsert;
 
@@ -42,14 +41,12 @@ public class Attendance {
 
    
     @Column(name = "ATT_START")
-    private LocalTime attStart;
+    private Time attStart;
 
   
     @Column(name = "ATT_END")
-    private LocalTime attEnd;
+    private Time attEnd;
 
-    @Column(name = "ATT_DIV")
-    private String attDiv;
 
     @Column(name = "ATT_DATE")
     private Date attDate;

@@ -1,6 +1,7 @@
 package com.groovy.ware.attendance.dto;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -13,9 +14,9 @@ public class AttendanceDto {
     
     private Long attCode;
     private EmployeeDto employee;
-    private LocalTime attStart;
-    private LocalTime attEnd;
-    private String attDiv;
+    private Time attStart;
+    private Time attEnd;
+   
     private Date attDate;
     private String attLate;
 
