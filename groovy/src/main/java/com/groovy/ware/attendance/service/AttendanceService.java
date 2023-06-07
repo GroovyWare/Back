@@ -43,9 +43,8 @@ public class AttendanceService {
     /* 개인 출근 퇴근 시간의 조회(메인에서 기본적으로 띄워준다) */
     public AttendanceDto viewMain(EmployeeDto employeeDto) {
 
-        log.info("[AttendanceService] start==============");
-        log.info("[AttendanceService] employeeDto : {}", employeeDto);
-
+      
+        
         Attendance attendance = attendanceRepository.findOneAttendance(employeeDto.getEmpCode());
         AttendanceDto attendanceDto = modelMapper.map(attendance, AttendanceDto.class);
 
@@ -56,8 +55,7 @@ public class AttendanceService {
     /* 출근 버튼을 누를때 */
     @Transactional
     public void addGoWork(AttendanceDto attendanceDto) {
-        log.info("[AttendanceService] start==============");
-        log.info("[AttendanceService] attendanceDto : {}", attendanceDto);
+    
         attendanceDto.setAttDate(new Date(System.currentTimeMillis()));
         attendanceRepository.save(modelMapper.map(attendanceDto, Attendance.class));
 
@@ -68,7 +66,7 @@ public class AttendanceService {
     /* 퇴근 버튼을 누를때 (수정) */
     @Transactional
     public void leaveWork(AttendanceDto attendanceDto, EmployeeDto employee) {
-        log.info("[AttendanceService] update start ==============");
+   
 
         // Attendance originAttendance = attendanceRepository.findOneAttendance(employee.getEmpCode());
         Attendance originAttendance = attendanceRepository.findById(attendanceDto.getAttCode()).orElseThrow(() -> new IllegalArgumentException("그런 출근기록은 없습니다." + attendanceDto.getAttCode()));
@@ -79,7 +77,7 @@ public class AttendanceService {
         
         
 
-        log.info("[AttendanceService] update end ==============");
+       
 
 
     }
@@ -90,14 +88,13 @@ public class AttendanceService {
     /* 전체 직원 근태 조회 */
     public Page<AttendanceDto> findAttendanceListAll(int page) {
     	
-		log.info("[AttendanceService] findAttendanceListAll start ==================");
+		
 		
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("attCode").descending());
 		
 		Page<Attendance> attList = attendanceRepository.findAll(pageable);
 		Page<AttendanceDto> attDtoList = attList.map(attendance -> modelMapper.map(attendance, AttendanceDto.class));
 
-		log.info("[AttendanceService] findAttendanceListAll end ==================");
 		
     	return attDtoList;
     }
@@ -105,15 +102,13 @@ public class AttendanceService {
     /* 직원 개인 근태 조회 */
     public AttendanceDto findAttendanceDetail(Long memCode) {
     	
-		log.info("[AttendanceService] findAttendanceListAll start ==================");
-		log.info("[AttendanceService] : memCode : {}", memCode);
+	
 		
 		Attendance attendance = attendanceRepository.findById(memCode).orElseThrow();
 		
 		AttendanceDto attendanceDto = modelMapper.map(attendance, AttendanceDto.class);
     	
-		log.info("[AttendanceService] attendanceDto : {}", attendanceDto);
-		log.info("[AttendanceService] findAttendanceListAll end ==================");
+		
 		
     	return attendanceDto;
     }

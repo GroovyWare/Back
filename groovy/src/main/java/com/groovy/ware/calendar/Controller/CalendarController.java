@@ -35,7 +35,7 @@ import com.groovy.ware.employee.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@Slf4j
+
 @RequestMapping("/calendar")
 public class CalendarController {
 
@@ -52,19 +52,9 @@ public class CalendarController {
 @GetMapping("/schedule")
 
 public ResponseEntity<ResponseDto> getAllSchedules(@AuthenticationPrincipal EmployeeDto writer) {
-    log.info("[CalendarController] start ============================");
-    
-    /* 테스트용임 아래 5코드는 추후 지울것 + empDTO 새로 짜서 필요한 정보만 가져오는게 효율며7ㄴ에서 이득 
-     * 효율면에서 이득이나 로직이 추가됨으로 확장성 면에서 그냥 사용하는게 더 낫다고 판단함
-    */
-    // writer= new EmployeeDto();
-    // writer.setEmpCode(1L);
-    // DepartmentDto dept = new DepartmentDto();
-    // dept.setDeptCode(1L);
-    // writer.setDept(dept);
-    
-    
-    log.info("[CalendarController] writer " + writer);
+   
+
+  
 
     return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회완료!", calendarService.viewAllSchedule(writer)));
 }
@@ -91,21 +81,17 @@ public ResponseEntity<ResponseDto> getAllSchedules(@AuthenticationPrincipal Empl
             @RequestParam(name = "title") String title,
             @RequestParam(name = "page", defaultValue = "1") int page,
             @AuthenticationPrincipal  EmployeeDto writer) {
-        log.info("[CalendarController] start ============================");
-        log.info("[CalendarController] schedule " + title);
-        log.info("[CalendarController] page" + page);
-
+     
         Page<CalendarDTO> scheduleList = calendarService.selectScheduleListbyTitle(page, title, writer);
 
         PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(scheduleList);
 
-        log.info("[CalendarController] : pageInfo : {}", pageInfo);
-
+       
         ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
         responseDtoWithPaging.setPageInfo(pageInfo);
         responseDtoWithPaging.setData(scheduleList.getContent());
 
-        log.info("[CalendarController] end ============================");
+       
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "검색 조회 성공", responseDtoWithPaging));
     }
 
@@ -134,18 +120,6 @@ public ResponseEntity<ResponseDto> getAllSchedules(@AuthenticationPrincipal Empl
                 .body(new ResponseDto(HttpStatus.OK, "수정 완료"));
     }
 
-    /* 4-1. 일정을 드래그로 수정하기 */
-    // @PutMapping("/schedule/{id}")
-    // public ResponseEntity<ResponseDto> dragCalendar(
-    //     @RequestBody CalendarDTO calendarDTO, @AuthenticationPrincipal EmployeeDto writer,
-    //     @PathVariable Long id
-    // ) {
-
-
-        
-    //     return ResponseEntity.ok()
-    //             .body(new ResponseDto(HttpStatus.OK, "수정 완료"));
-    // }
 
 
 
@@ -159,48 +133,4 @@ public ResponseEntity<ResponseDto> getAllSchedules(@AuthenticationPrincipal Empl
     }
 
 
-    /* 한개 특정 조회 */
-    // @GetMapping("/schedule/{id}")
-    // public ResponseEntity<ResponseDto> justoneSchedule(@PathVariable Long id, @AuthenticationPrincipal  EmployeeDto writer)
-    // {
-
-    // }
-
-
-    
-        // /*6. 휴가 삽입 */
-        // @PostMapping("/schedule/vacation")
-        // public ResponseEntity<ResponseDto> addVacations(@RequestBody CalendarDTO calendarDTO, 
-        // @AuthenticationPrincipal EmployeeDto writer)
-        // {
-        //     calendarDTO.setSchWriter(writer);
-        //     calendarDTO.setDept(writer.getDept());
-        //     calendarDTO.setColor("#9b7eed");
-        //     calendarDTO.setTextColor("#ffffff");
-        //     calendarService.addVacation(calendarDTO);
-
-        //     return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "휴가가삽입되었습니다."));
-        // }
-
-        // /* 6-1. 휴가삽입의 조건 */
-        // @GetMapping("/schedule/vacation/condition")
-        // public ResponseEntity<ResponseDto> vacationCondition(
-        // @AuthenticationPrincipal EmployeeDto writer)
-        // {
-          
-        //     return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "휴가 조건이 성립되었습니다.", calendarService.vacationCondition(writer)));
-        // }
-
 }
-
-// @PostMapping("/schedule")
-// public ResponseEntity<ResponseDto> addingSchedule(@RequestBody CalendarDTO calendarDto, 
-// @AuthenticationPrincipal  EmployeeDto writer) {
-//     /* 로그인 처리가 완료 될때까지 임시로 부여한다. */
-//     // writer.setEmpCode(1L);
-//     calendarDto.setSchWriter(writer);
-//     calendarService.addSchedule(calendarDto);
-
-//     return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "삽입되었습니다."));
-
-// }

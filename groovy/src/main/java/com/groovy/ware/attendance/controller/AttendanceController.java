@@ -44,9 +44,7 @@ public class AttendanceController {
     @GetMapping("/main")
     
     public ResponseEntity<ResponseDto> getMain(@AuthenticationPrincipal EmployeeDto employee){
-        log.info("[AttendanceController] start ====================-");
-
-        log.info("[AttendanceController] employee" + employee);
+  
 
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "근태 조회 완료", attendanceService.viewMain(employee)));
     }
@@ -57,12 +55,12 @@ public class AttendanceController {
     public ResponseEntity<ResponseDto> goWork(@RequestBody AttendanceDto attendanceDto, @AuthenticationPrincipal EmployeeDto employee) 
     {
 
-        log.info("[AttendanceController] start ====================-");
+      
         attendanceDto.setAttDate(new Date(System.currentTimeMillis()));
         attendanceDto.setEmployee(employee);
         attendanceDto.setAttStart(new Time(System.currentTimeMillis()));
         attendanceService.addGoWork(attendanceDto);
-        log.info("[AttendanceController] end ====================-");
+      
         
     
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "출근되었습니다."));
@@ -74,7 +72,7 @@ public class AttendanceController {
     public ResponseEntity<ResponseDto> leaveWork(@ModelAttribute AttendanceDto attendanceDto, @AuthenticationPrincipal EmployeeDto employee) 
     {
     
-        log.info("[AttendanceController] start ====================-");
+    
        
     
         attendanceDto.setAttDate(new Date(System.currentTimeMillis()));
@@ -88,9 +86,7 @@ public class AttendanceController {
        
     
         attendanceService.leaveWork(attendanceDto, employee); 
-        log.info("[AttendanceController] attendenceDto: {}", attendanceDto);
-        log.info("[AttendanceController] end ====================-");
-    
+     
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "퇴근되었습니다."));
     }
    
@@ -101,10 +97,6 @@ public class AttendanceController {
     public ResponseEntity<ResponseDto> goVacation(@RequestBody AttendanceDto attendanceDto, @AuthenticationPrincipal EmployeeDto employee)
     {   
 
-
-        log.info("[AttendanceController] goVacation start ==========");
-
-
         return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "휴가처리되었습니다."));
     }
     
@@ -114,19 +106,17 @@ public class AttendanceController {
     @GetMapping("/list")
     public ResponseEntity<ResponseDto> findAttendanceListAll(@RequestParam(name="page", defaultValue="1") int page){
     	
-		log.info("[AttendanceController] : findAttendanceListAll start ==================================== ");
-		
+	
 		Page<AttendanceDto> attDtoList = attendanceService.findAttendanceListAll(page);
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(attDtoList);
 		
 		
-		log.info("[AttendanceController] pageInfo : {}", pageInfo);
+	
 		
 		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
 		responseDtoWithPaging.setPageInfo(pageInfo);
 		responseDtoWithPaging.setData(attDtoList.getContent());
     	
-		log.info("[AttendanceController] : findAttendanceListAll end ==================================== ");
 		
     	return ResponseEntity.ok()
     			.body(new ResponseDto(HttpStatus.OK, "전체 직원 근태 조회 완료", responseDtoWithPaging));
