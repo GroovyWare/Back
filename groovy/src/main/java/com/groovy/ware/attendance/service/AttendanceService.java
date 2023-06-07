@@ -82,9 +82,7 @@ public class AttendanceService {
 
     }
     
-    
-    
-    
+
     /* 전체 직원 근태 조회 */
     public Page<AttendanceDto> findAttendanceListAll(int page) {
     	
@@ -100,11 +98,11 @@ public class AttendanceService {
     }
     
     /* 직원 개인 근태 조회 */
-    public AttendanceDto findAttendanceDetail(Long memCode) {
+    public AttendanceDto findAttendanceDetail(Long empCode) {
     	
-	
+
 		
-		Attendance attendance = attendanceRepository.findById(memCode).orElseThrow();
+		Attendance attendance = attendanceRepository.findById(empCode).orElseThrow();
 		
 		AttendanceDto attendanceDto = modelMapper.map(attendance, AttendanceDto.class);
     	
@@ -113,13 +111,7 @@ public class AttendanceService {
     	return attendanceDto;
     }
     
-    
-    
-    
-    
-    
-    
-    
+
     
     
     

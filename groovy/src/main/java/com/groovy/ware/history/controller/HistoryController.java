@@ -43,23 +43,17 @@ public class HistoryController {
 	public ResponseEntity<ResponseDto> findMemberHistoryDetail(
 			@RequestParam(name="page", defaultValue="1") int page, @PathVariable Long memCode) {
 		
-		log.info("[HistoryController] : findMemberDetail start ==================================== ");
-		log.info("[HistoryController] : page : {}", page);
-		log.info("[HistoryController] : memCode : {}", memCode);
 		
 		Page<HistoryDto> historyDtoList = historyService.findMemberHistoryDetail(page, memCode);
 		
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(historyDtoList);
 		
-		log.info("[HistoryController] : pageInfo : {}", pageInfo);
 		
 		ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
 		responseDtoWithPaging.setPageInfo(pageInfo);
 		responseDtoWithPaging.setData(historyDtoList.getContent());
 		
-		
-		log.info("[HistoryController] : historyDtoList.getContent : {} ", historyDtoList.getContent());
-		log.info("[HistoryController] : findMemberDetail end ==================================== ");
+
 		
 		return ResponseEntity.ok()
 				.body(new ResponseDto(HttpStatus.OK, "회원 이력 조회 성공", responseDtoWithPaging));
