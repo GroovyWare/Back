@@ -69,8 +69,8 @@ public class Employee {
 	@ManyToOne
 	@JoinColumn(name="POSITION_CODE")
 	private Position position;
-//	@Column(name="VAC_REMAIN")
-//	private Long vacRemain;
+	@Column(name="VAC_REMAIN")
+	private Long vacRemain;
 
 	@OneToOne(mappedBy="employee")
 	private File file;
