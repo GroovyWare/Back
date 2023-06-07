@@ -140,7 +140,7 @@ public class ApprovalController {
 	/* 결재 상태 변경 */
 	@PostMapping("/status")
 	public ResponseEntity<ResponseDto> updateStatus(@AuthenticationPrincipal EmployeeDto employeeDto, @RequestBody ApprovalDto approvalDto){
-		log.info(approvalDto.toString());
+	
 		
 		approvalService.updateStatus(employeeDto, approvalDto);
 		

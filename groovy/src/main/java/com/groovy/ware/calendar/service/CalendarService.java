@@ -65,13 +65,12 @@ public class CalendarService {
    /* 2. 일정 생성하기 */
    @Transactional
    public void addSchedule(CalendarDTO calendarDTO) {
-      log.info("[CalendarService] inserting event start");
-      log.info("[CalendarService] calenderDto : {}", calendarDTO); 
+   
      
 
       calendarRepository.save(modelMapper.map(calendarDTO, Calendar.class));
 
-      log.info("[CalendarService] inserting event end");
+     
    }
 
    /* 3. 검색한 스케쥴 제목으로 리스트 보여주기 */
@@ -82,7 +81,7 @@ public class CalendarService {
       Page<Calendar> scheduleList = calendarRepository.findByTitle(pageable, schTitle, writer.getEmpCode(),
             writer.getDept().getDeptCode());
       Page<CalendarDTO> scheduleDtoList = scheduleList.map(calendar -> modelMapper.map(calendar, CalendarDTO.class));
-      log.info("[CalenderService] scheduleList : {}", scheduleList);
+ 
 
       return scheduleDtoList;
    }
@@ -102,8 +101,7 @@ public class CalendarService {
    /* 4. 개인일정 수정하기 */
    @Transactional
    public void modifyCalendar(CalendarDTO calendarDTO, EmployeeDto writer) {
-      log.info("[CalendarService] modify start");
-      log.info("[CalendarService] calendarDto : {}", calendarDTO);
+    
 
       Calendar originCalendar = calendarRepository.findById(calendarDTO.getId())
             .orElseThrow(() -> new IllegalArgumentException("그런 스케줄은 없습니다" + calendarDTO.getId()));
@@ -122,18 +120,18 @@ public class CalendarService {
          throw new RuntimeException("수정할 권한이 없습니다.");
       }
 
-      log.info("[CalendarService] modify end");
+  
    }
 
   
    /* 5. 일정 삭제하기 */
    @Transactional
    public void deleteSchedule(EmployeeDto writer, Long id) {
-      log.info("[CalendarService] deletestart");
+      
 
       calendarRepository.deleteById(id);
 
-      log.info("[CalendarService] delete end");
+    
    }
 
 
@@ -147,8 +145,7 @@ public class CalendarService {
 
 @Transactional
 public void addVacation(CalendarDTO calendarDTO, ApprovalDto approvalDto, EmployeeDto writer) {
-   log.info("[CalendarService] inserting vacation event start");
-   log.info("[CalendarService] calendarDto: {}", calendarDTO);
+
 
    Approval approval = approvalRepository.findByApvCode(approvalDto.getApvCode());
 

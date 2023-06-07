@@ -50,22 +50,20 @@ public class AnnounceController {
     @GetMapping
     public ResponseEntity<ResponseDto> getAnnounces(@RequestParam(name="page", defaultValue="1") int page,
             @RequestParam(name="size", defaultValue="10") int size) {
-        log.info("[AnnounceController] : getAnnounces start ==================================== ");
-        log.info("[AnnounceController] : page : {}", page);
+      
 
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<AnnounceDto> announces = announceService.getAnnounces(pageable);
 
         PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(announces);
 
-        log.info("[AnnounceController] : pageInfo : {}", pageInfo);
+
 
         ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
         responseDtoWithPaging.setPageInfo(pageInfo);
         responseDtoWithPaging.setData(announces.getContent());
 
-        log.info("[AnnounceController] : getAnnounces end ==================================== ");
-
+      
         return ResponseEntity.ok()
                 .body(new ResponseDto(HttpStatus.OK, "공지사항 목록 조회가 완료되었습니다.", responseDtoWithPaging));
     }

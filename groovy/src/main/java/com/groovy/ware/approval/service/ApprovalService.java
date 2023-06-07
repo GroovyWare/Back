@@ -222,7 +222,7 @@ public class ApprovalService {
 			calendarDTO.setSchWriter(modelMapper.map(approval.getEmployee(), EmployeeDto.class));
 			calendarDTO.setStart(new Timestamp(approval.getVacStartDate().getTime()));
 			calendarDTO.setEnd(new Timestamp(approval.getVacEndDate().getTime()));
-			calendarDTO.setColor("#0000ff");
+			calendarDTO.setColor("#9b83fa");
 			calendarDTO.setTextColor("#ffffff");
 			calendarDTO.setTitle("연차");
 			calendarDTO.setContext("휴가입니다.");
